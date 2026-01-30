@@ -3,8 +3,8 @@ class_name GridManager
 
 # Grid configuration
 const TILE_SIZE = 64  # Size of each grid cell in pixels
-const GRID_WIDTH = 20  # Number of tiles wide
-const GRID_HEIGHT = 15  # Number of tiles tall
+const GRID_WIDTH = 30  # Number of tiles wide (1920 / 64)
+const GRID_HEIGHT = 17  # Number of tiles tall (1088 / 64, rounded up)
 var grid_offset = Vector2.ZERO  # Offset for centering the grid if needed
 
 # Collision tracking
