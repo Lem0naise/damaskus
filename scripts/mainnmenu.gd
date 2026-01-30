@@ -2,7 +2,7 @@ extends Control
 
 # -- Configuration --
 # Path to your main game scene
-const GAME_SCENE_PATH: String = "res://game/levels/level_01.tscn"
+const GAME_SCENE_PATH: String = "res://ingame.tscn"
 
 # -- Nodes (Using Unique Names % for stability in 4.6) --
 @onready var start_btn: Button = %Btn_Start
