@@ -7,6 +7,9 @@ const GRID_WIDTH = 20  # Number of tiles wide
 const GRID_HEIGHT = 15  # Number of tiles tall
 var grid_offset = Vector2.ZERO  # Offset for centering the grid if needed
 
+# Collision tracking
+var solid_tiles: Dictionary = {}  # grid_pos -> true for solid tiles
+
 # Convert world position to grid coordinates
 func world_to_grid(world_pos: Vector2) -> Vector2i:
 	var adjusted_pos = world_pos - grid_offset
@@ -31,3 +34,14 @@ func snap_to_grid(world_pos: Vector2) -> Vector2:
 func is_valid_position(grid_pos: Vector2i) -> bool:
 	return grid_pos.x >= 0 and grid_pos.x < GRID_WIDTH and \
 	       grid_pos.y >= 0 and grid_pos.y < GRID_HEIGHT
+
+# Register a solid tile at a grid position
+func set_solid(grid_pos: Vector2i, is_solid: bool = true):
+	if is_solid:
+		solid_tiles[grid_pos] = true
+	else:
+		solid_tiles.erase(grid_pos)
+
+# Check if a grid position is solid (blocked)
+func is_solid(grid_pos: Vector2i) -> bool:
+	return solid_tiles.has(grid_pos)

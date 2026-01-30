@@ -30,7 +30,7 @@ enum MaskType { NONE, GOLEM, SPIRIT, MIRROR, MIMIC }
 var current_mask: MaskType = MaskType.NONE
 
 # Player state (NULL state by default)
-var is_intangible: bool = true  # Can walk through walls when true
+var is_intangible: bool = false  # Can walk through walls when true
 var properties: Array[String] = []  # Active properties from current mask
 
 func _ready():
@@ -134,13 +134,19 @@ func try_move(direction: Vector2i):
 		move_cooldown = HELD_KEY_DELAY  # Set cooldown for next move
 
 func can_move_to(target_pos: Vector2i) -> bool:
-	# In NULL state (intangible), can move anywhere
-	if is_intangible:
-		return grid_manager.is_valid_position(target_pos)
+	# Check if position is within bounds
+	if not grid_manager.is_valid_position(target_pos):
+		return false
 
-	# When wearing a mask, check for collisions
-	# TODO: Implement collision checking with walls and objects
-	return grid_manager.is_valid_position(target_pos)
+	# In NULL state (intangible), can move through solid objects
+	if is_intangible:
+		return true
+
+	# Check for solid tiles (walls, water, etc.)
+	if grid_manager.is_solid(target_pos):
+		return false
+
+	return true
 
 func animate_movement(delta):
 	var target_world_pos = grid_manager.grid_to_world(grid_position)
@@ -186,12 +192,12 @@ func remove_mask():
 
 func update_mask_properties():
 	properties.clear()
-	is_intangible = true
+	is_intangible = false
 
 	match current_mask:
 		MaskType.NONE:
-			# NULL state - intangible, no properties
-			is_intangible = true
+			# NULL state - solid by default, can't walk through walls
+			is_intangible = false
 
 		MaskType.GOLEM:
 			# SOLID, HEAVY, SINK
