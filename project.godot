@@ -15,6 +15,26 @@ run/main_scene="uid://bueharn71qgng"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
+<<<<<<< HEAD
+=======
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=960
+window/size/window_width_override=1280
+window/size/window_height_override=960
+window/stretch/mode="viewport"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=960
+window/size/window_width_override=1280
+window/size/window_height_override=960
+window/stretch/mode="viewport"
+
+<<<<<<< HEAD
+>>>>>>> 74b17560df4bc5ff714097e6838eb6aa2c0cc696
 [display]
 
 window/size/viewport_width=1920
