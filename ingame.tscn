@@ -1,35 +1,34 @@
-[gd_scene load_steps=5 format=3 uid="uid://oafli3v0rpi8"]
+[gd_scene format=3 uid="uid://oafli3v0rpi8"]
 
-[ext_resource type="Script" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
+[ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
 [ext_resource type="PackedScene" uid="uid://bvw8qm7xj0qqn" path="res://scenes/player.tscn" id="2_player"]
-[ext_resource type="Script" path="res://scripts/core/CameraFollow.gd" id="3_camera"]
-[ext_resource type="Script" path="res://scripts/core/GridDrawer.gd" id="4_griddrawer"]
+[ext_resource type="Script" uid="uid://cunkdau8fdrh" path="res://scripts/core/GridDrawer.gd" id="4_griddrawer"]
 
-[node name="Ingame" type="Node2D"]
+[node name="Ingame" type="Node2D" unique_id=1079480780]
 
-[node name="GridManager" type="Node" parent="."]
+[node name="GridManager" type="Node" parent="." unique_id=873522664]
 script = ExtResource("1_gridmanager")
 
-[node name="GridDrawer" type="Node2D" parent="."]
+[node name="GridDrawer" type="Node2D" parent="." unique_id=1729959547]
 script = ExtResource("4_griddrawer")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=633199670]
 position = Vector2(640, 480)
-zoom = Vector2(1.5, 1.5)
+zoom = Vector2(1, 1)
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(320, 240)
+[node name="Player" parent="." unique_id=1640560224 instance=ExtResource("2_player")]
+position = Vector2(352, 224)
 
-[node name="GridVisualizer" type="Node2D" parent="."]
+[node name="GridVisualizer" type="Node2D" parent="." unique_id=1078227583]
 
-[node name="TestWall1" type="ColorRect" parent="GridVisualizer"]
+[node name="TestWall1" type="ColorRect" parent="GridVisualizer" unique_id=309133848]
 offset_left = 256.0
-offset_top = 176.0
+offset_top = 192.0
 offset_right = 320.0
-offset_bottom = 240.0
+offset_bottom = 256.0
 color = Color(0.5, 0.3, 0.2, 1)
 
-[node name="Label" type="Label" parent="GridVisualizer/TestWall1"]
+[node name="Label" type="Label" parent="GridVisualizer/TestWall1" unique_id=32460399]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 20.0
@@ -38,14 +37,14 @@ offset_bottom = 43.0
 text = "WALL"
 horizontal_alignment = 1
 
-[node name="TestWall2" type="ColorRect" parent="GridVisualizer"]
+[node name="TestWall2" type="ColorRect" parent="GridVisualizer" unique_id=161891203]
 offset_left = 384.0
-offset_top = 176.0
+offset_top = 192.0
 offset_right = 448.0
-offset_bottom = 240.0
+offset_bottom = 256.0
 color = Color(0.5, 0.3, 0.2, 1)
 
-[node name="Label" type="Label" parent="GridVisualizer/TestWall2"]
+[node name="Label" type="Label" parent="GridVisualizer/TestWall2" unique_id=524436542]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 20.0
@@ -54,14 +53,14 @@ offset_bottom = 43.0
 text = "WALL"
 horizontal_alignment = 1
 
-[node name="TestWater" type="ColorRect" parent="GridVisualizer"]
+[node name="TestWater" type="ColorRect" parent="GridVisualizer" unique_id=1628597802]
 offset_left = 192.0
-offset_top = 304.0
+offset_top = 320.0
 offset_right = 256.0
-offset_bottom = 368.0
+offset_bottom = 384.0
 color = Color(0.2, 0.4, 0.8, 1)
 
-[node name="Label" type="Label" parent="GridVisualizer/TestWater"]
+[node name="Label" type="Label" parent="GridVisualizer/TestWater" unique_id=2035368295]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 20.0
