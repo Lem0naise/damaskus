@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvw8qm7xj0qqn"]
+
+[ext_resource type="Script" path="res://scripts/entities/Player.gd" id="1_player"]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_player")
+
+[node name="Sprite" type="ColorRect" parent="."]
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+color = Color(0.3, 0.7, 1, 1)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -10.0
+offset_right = 20.0
+offset_bottom = 10.0
+text = "NULL"
+horizontal_alignment = 1
+vertical_alignment = 1
