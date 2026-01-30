@@ -1,3 +1,40 @@
 [gd_scene format=3 uid="uid://bueharn71qgng"]
 
-[node name="MainMenu" type="Node2D" unique_id=1692234367]
+[node name="MainMenu" type="Control" unique_id=1050467227]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Background" type="TextureRect" parent="." unique_id=955506735]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MaskOverlay" type="TextureRect" parent="." unique_id=716045987]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UI_Layer" type="MarginContainer" parent="." unique_id=1626978155]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MenuBox" type="VBoxContainer" parent="UI_Layer" unique_id=1043295734]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="UI_Layer/MenuBox" unique_id=1058150304]
+layout_mode = 2
+
+[node name="Btn_Start" type="Button" parent="UI_Layer/MenuBox" unique_id=564618523]
+layout_mode = 2
+
+[node name="Btn_Options" type="Button" parent="UI_Layer/MenuBox" unique_id=2081321731]
+layout_mode = 2
+
+[node name="Btn_Quit" type="Button" parent="UI_Layer/MenuBox" unique_id=627072692]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=393215701]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

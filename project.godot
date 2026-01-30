@@ -11,8 +11,14 @@ config_version=5
 [application]
 
 config/name="Damaskus"
+run/main_scene="uid://bueharn71qgng"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 
 [physics]
 
