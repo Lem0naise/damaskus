@@ -21,7 +21,7 @@ func _ready() -> void:
 	_play_intro_anim()
 
 func _play_intro_anim() -> void:
-	# Ensure fade layer starts black and fades out
+	# Ensure fade layer starts black a   nd fades out
 	fade_layer.color = Color.BLACK
 	fade_layer.show()
 	
