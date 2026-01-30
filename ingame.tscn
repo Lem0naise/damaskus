@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://oafli3v0rpi8"]
+[gd_scene format=3 uid="uid://oafli3v0rpi8"]
 
 [ext_resource type="Script" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
 [ext_resource type="PackedScene" uid="uid://bvw8qm7xj0qqn" path="res://scenes/player.tscn" id="2_player"]
