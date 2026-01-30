@@ -12,12 +12,14 @@ layout_mode = 0
 offset_right = 1918.0
 offset_bottom = 1062.0
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=393215701]
+[node name="FadeLayer" type="ColorRect" parent="." unique_id=393215701]
+unique_name_in_owner = true
 layout_mode = 0
 offset_right = 1944.0
 offset_bottom = 1092.0
 
 [node name="MaskOverlay" type="TextureRect" parent="." unique_id=716045987]
+unique_name_in_owner = true
 layout_mode = 0
 offset_right = 1942.0
 offset_bottom = 1078.0
@@ -39,13 +41,16 @@ text = "THAT'S WHAT THE POINT OF DAMASKUS"
 horizontal_alignment = 1
 
 [node name="Btn_Start" type="Button" parent="UI_Layer/MenuBox" unique_id=564618523]
+unique_name_in_owner = true
 layout_mode = 2
 text = "START"
 
 [node name="Btn_Options" type="Button" parent="UI_Layer/MenuBox" unique_id=2081321731]
+unique_name_in_owner = true
 layout_mode = 2
 text = "OPTIONS (non existent)"
 
 [node name="Btn_Quit" type="Button" parent="UI_Layer/MenuBox" unique_id=627072692]
+unique_name_in_owner = true
 layout_mode = 2
 text = "QUIT"
