@@ -54,6 +54,7 @@ offset_top = -32.0
 offset_right = 32.0
 offset_bottom = 32.0
 color = Color(0.5, 0.3, 0.2, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Label" type="Label" parent="GridVisualizer/TestWall2" unique_id=524436542]
 offset_left = -24.0
@@ -62,6 +63,28 @@ offset_right = 24.0
 offset_bottom = 11.0
 text = "WALL"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TestWall3" type="Node2D" parent="GridVisualizer" unique_id=259760287]
+position = Vector2(416, 289)
+script = ExtResource("5_wall")
+
+[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWall3" unique_id=197068206]
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+color = Color(0.5, 0.3, 0.2, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="GridVisualizer/TestWall3" unique_id=1933204903]
+offset_left = -24.0
+offset_top = -12.0
+offset_right = 24.0
+offset_bottom = 11.0
+text = "WALL"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="TestWater" type="Node2D" parent="GridVisualizer" unique_id=1628597802]
 position = Vector2(224, 352)
