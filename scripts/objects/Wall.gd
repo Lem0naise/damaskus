@@ -1,6 +1,6 @@
 @tool
 extends GameObject
-class_name Wall
+class_name Wall2
 
 var sprite: ColorRect
 

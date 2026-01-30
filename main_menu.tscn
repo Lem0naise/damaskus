@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://bueharn71qgng"]
 
 [ext_resource type="Script" uid="uid://ctsvm15dv038b" path="res://scripts/mainnmenu.gd" id="1_06t4h"]
+[ext_resource type="Script" uid="uid://bjvbyqnuj0xmx" path="res://scripts/entities/PlayerMainMenu.gd" id="2_glbon"]
+[ext_resource type="AudioStream" uid="uid://dnpxrx3bvq1mr" path="res://assets/output.wav" id="3_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="3_glbon"]
+[ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="5_glbon"]
 
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
@@ -14,7 +18,6 @@ offset_bottom = 1062.0
 
 [node name="FadeLayer" type="ColorRect" parent="." unique_id=393215701]
 unique_name_in_owner = true
-visible = false
 layout_mode = 0
 offset_right = 1944.0
 offset_bottom = 1092.0
@@ -71,3 +74,30 @@ offset_bottom = 833.0
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 40
 text = "QUIT"
+
+[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1153583541]
+stream = ExtResource("3_fu7sn")
+autoplay = true
+
+[node name="Player2" type="CharacterBody2D" parent="." unique_id=906236154]
+position = Vector2(352, 352)
+scale = Vector2(0.3, 0.3)
+script = ExtResource("2_glbon")
+
+[node name="Sprite" type="Sprite2D" parent="Player2" unique_id=1341756427]
+position = Vector2(96.666664, 110.000015)
+scale = Vector2(1.7, 1.8666669)
+texture = ExtResource("3_glbon")
+
+[node name="Label" type="Label" parent="Player2" unique_id=1005981589]
+visible = false
+offset_left = -20.0
+offset_top = -10.0
+offset_right = 20.0
+offset_bottom = 10.0
+text = "NULL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridManager" type="Node" parent="." unique_id=897976182]
+script = ExtResource("5_glbon")

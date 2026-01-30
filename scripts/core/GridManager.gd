@@ -33,7 +33,7 @@ func snap_to_grid(world_pos: Vector2) -> Vector2:
 # Check if a grid position is valid (within bounds)
 func is_valid_position(grid_pos: Vector2i) -> bool:
 	return grid_pos.x >= 0 and grid_pos.x < GRID_WIDTH and \
-	       grid_pos.y >= 0 and grid_pos.y < GRID_HEIGHT
+		   grid_pos.y >= 0 and grid_pos.y < GRID_HEIGHT
 
 # Register a solid tile at a grid position
 func set_solid(grid_pos: Vector2i, is_solid: bool = true):
