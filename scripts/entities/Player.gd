@@ -124,6 +124,13 @@ func try_move(direction: Vector2i):
 		grid_position = target_grid_pos
 		is_moving = true
 		set_sprite_texture(texture_walking)
+
+		# Flip sprite horizontally based on left/right movement
+		if direction == Vector2i.LEFT:
+			sprite.flip_h = true
+		elif direction == Vector2i.RIGHT:
+			sprite.flip_h = false
+
 		move_cooldown = HELD_KEY_DELAY  # Set cooldown for next move
 
 func can_move_to(target_pos: Vector2i) -> bool:
