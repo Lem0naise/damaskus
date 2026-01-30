@@ -10,7 +10,7 @@ var texture_still: Texture2D = preload("res://assets/gorgeous.png")
 var texture_walking: Texture2D = preload("res://assets/walking.png")
 
 # Sprite size (slightly smaller than grid cell)
-const SPRITE_SIZE = 48.0  # pixels
+const SPRITE_SIZE = 180.0  # pixels
 
 # Movement
 var grid_position: Vector2i = Vector2i.ZERO
@@ -179,7 +179,6 @@ func set_sprite_texture(texture: Texture2D):
 		var texture_size = texture.get_size()
 		var scale_factor = SPRITE_SIZE / max(texture_size.x, texture_size.y)
 		sprite.scale = Vector2(scale_factor, scale_factor)
-		print("Set sprite texture, size: ", texture_size, " scale: ", scale_factor)
 
 # Mask management
 func wear_mask(mask_type: MaskType):

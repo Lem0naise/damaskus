@@ -1,11 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://oafli3v0rpi8"]
+[gd_scene format=3 uid="uid://oafli3v0rpi8"]
 
-[ext_resource type="Script" path="res://scripts/core/IngameManager.gd" id="1_ingamemanager"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
+[ext_resource type="Script" uid="uid://dbfxa2deqsx6x" path="res://scripts/core/IngameManager.gd" id="1_ingamemanager"]
 [ext_resource type="PackedScene" uid="uid://bvw8qm7xj0qqn" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://cunkdau8fdrh" path="res://scripts/core/GridDrawer.gd" id="4_griddrawer"]
-[ext_resource type="Script" path="res://scripts/objects/Wall.gd" id="5_wall"]
-[ext_resource type="Script" path="res://scripts/objects/Water.gd" id="6_water"]
+[ext_resource type="Script" uid="uid://kgm5a4drv1hn" path="res://scripts/objects/Wall.gd" id="5_wall"]
+[ext_resource type="Script" uid="uid://bmyktq68ro5li" path="res://scripts/objects/Water.gd" id="6_water"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")
@@ -18,10 +18,10 @@ script = ExtResource("4_griddrawer")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=633199670]
 position = Vector2(640, 480)
-zoom = Vector2(1, 1)
 
 [node name="Player" parent="." unique_id=1640560224 instance=ExtResource("2_player")]
 position = Vector2(352, 224)
+scale = Vector2(0.3, 0.3)
 
 [node name="GridVisualizer" type="Node2D" parent="." unique_id=1078227583]
 
@@ -29,7 +29,7 @@ position = Vector2(352, 224)
 position = Vector2(288, 224)
 script = ExtResource("5_wall")
 
-[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWall1"]
+[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWall1" unique_id=1609639936]
 offset_left = -32.0
 offset_top = -32.0
 offset_right = 32.0
@@ -37,7 +37,6 @@ offset_bottom = 32.0
 color = Color(0.5, 0.3, 0.2, 1)
 
 [node name="Label" type="Label" parent="GridVisualizer/TestWall1" unique_id=32460399]
-layout_mode = 0
 offset_left = -24.0
 offset_top = -12.0
 offset_right = 24.0
@@ -49,7 +48,7 @@ horizontal_alignment = 1
 position = Vector2(416, 224)
 script = ExtResource("5_wall")
 
-[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWall2"]
+[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWall2" unique_id=537489747]
 offset_left = -32.0
 offset_top = -32.0
 offset_right = 32.0
@@ -57,7 +56,6 @@ offset_bottom = 32.0
 color = Color(0.5, 0.3, 0.2, 1)
 
 [node name="Label" type="Label" parent="GridVisualizer/TestWall2" unique_id=524436542]
-layout_mode = 0
 offset_left = -24.0
 offset_top = -12.0
 offset_right = 24.0
@@ -69,7 +67,7 @@ horizontal_alignment = 1
 position = Vector2(224, 352)
 script = ExtResource("6_water")
 
-[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWater"]
+[node name="Sprite" type="ColorRect" parent="GridVisualizer/TestWater" unique_id=1374413144]
 offset_left = -32.0
 offset_top = -32.0
 offset_right = 32.0
@@ -77,7 +75,6 @@ offset_bottom = 32.0
 color = Color(0.2, 0.4, 0.8, 1)
 
 [node name="Label" type="Label" parent="GridVisualizer/TestWater" unique_id=2035368295]
-layout_mode = 0
 offset_left = -28.0
 offset_top = -12.0
 offset_right = 28.0
