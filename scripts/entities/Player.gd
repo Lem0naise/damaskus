@@ -3,6 +3,14 @@ class_name Player
 
 # References
 @onready var grid_manager: GridManager = get_node("/root/Ingame/GridManager")
+@onready var sprite: Sprite2D = $Sprite
+
+# Textures
+var texture_still: Texture2D = preload("res://assets/gorgeous.png")
+var texture_walking: Texture2D = preload("res://assets/walking.png")
+
+# Sprite size (slightly smaller than grid cell)
+const SPRITE_SIZE = 48.0  # pixels
 
 # Movement
 var grid_position: Vector2i = Vector2i.ZERO
@@ -33,6 +41,9 @@ func _ready():
 
 	# Start in NULL state (no mask)
 	update_mask_properties()
+
+	# Set initial sprite
+	set_sprite_texture(texture_still)
 
 func _process(delta):
 	# Update cooldown timer
@@ -112,6 +123,7 @@ func try_move(direction: Vector2i):
 	if can_move_to(target_grid_pos):
 		grid_position = target_grid_pos
 		is_moving = true
+		set_sprite_texture(texture_walking)
 		move_cooldown = HELD_KEY_DELAY  # Set cooldown for next move
 
 func can_move_to(target_pos: Vector2i) -> bool:
@@ -133,12 +145,28 @@ func animate_movement(delta):
 	if global_position.distance_to(target_world_pos) < 0.1:
 		global_position = target_world_pos
 		is_moving = false
+		set_sprite_texture(texture_still)
 		on_movement_complete()
 
 func on_movement_complete():
 	# Called when player reaches a new grid cell
 	# TODO: Check for pickups, triggers, etc.
 	pass
+
+# Helper function to set sprite texture and scale it to consistent size
+func set_sprite_texture(texture: Texture2D):
+	if not sprite:
+		sprite = $Sprite
+	if not sprite:
+		print("ERROR: Sprite node not found!")
+		return
+
+	sprite.texture = texture
+	if texture:
+		var texture_size = texture.get_size()
+		var scale_factor = SPRITE_SIZE / max(texture_size.x, texture_size.y)
+		sprite.scale = Vector2(scale_factor, scale_factor)
+		print("Set sprite texture, size: ", texture_size, " scale: ", scale_factor)
 
 # Mask management
 func wear_mask(mask_type: MaskType):

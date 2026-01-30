@@ -1,18 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvw8qm7xj0qqn"]
+[gd_scene load_steps=4 format=3 uid="uid://bvw8qm7xj0qqn"]
 
 [ext_resource type="Script" path="res://scripts/entities/Player.gd" id="1_player"]
+[ext_resource type="Texture2D" uid="uid://dpivdtd0ahp0s" path="res://assets/gorgeous.png" id="2_gorgeous"]
+[ext_resource type="Texture2D" uid="uid://dgcqb8mwx8e0b" path="res://assets/walking.png" id="3_walking"]
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_player")
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -24.0
-offset_top = -24.0
-offset_right = 24.0
-offset_bottom = 24.0
-color = Color(0.3, 0.7, 1, 1)
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_gorgeous")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = -20.0
 offset_top = -10.0
 offset_right = 20.0
