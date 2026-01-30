@@ -1,14 +1,40 @@
 [gd_scene format=3 uid="uid://bueharn71qgng"]
 
-[ext_resource type="Script" uid="uid://c0w705cnc0dyp" path="res://scripts/test.gd" id="1_06t4h"]
+[node name="MainMenu" type="Control" unique_id=1050467227]
+layout_mode = 3
+anchors_preset = 0
 
-[node name="MainMenu" type="Node2D" unique_id=1692234367]
-script = ExtResource("1_06t4h")
+[node name="Background" type="TextureRect" parent="." unique_id=955506735]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="." unique_id=1760504763]
-offset_left = 284.0
-offset_top = 127.0
-offset_right = 690.0
-offset_bottom = 289.0
-theme_override_font_sizes/font_size = 40
-text = "YOOOOOOOOOOOOOO"
+[node name="MaskOverlay" type="TextureRect" parent="." unique_id=716045987]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="UI_Layer" type="MarginContainer" parent="." unique_id=1626978155]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MenuBox" type="VBoxContainer" parent="UI_Layer" unique_id=1043295734]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="UI_Layer/MenuBox" unique_id=1058150304]
+layout_mode = 2
+
+[node name="Btn_Start" type="Button" parent="UI_Layer/MenuBox" unique_id=564618523]
+layout_mode = 2
+
+[node name="Btn_Options" type="Button" parent="UI_Layer/MenuBox" unique_id=2081321731]
+layout_mode = 2
+
+[node name="Btn_Quit" type="Button" parent="UI_Layer/MenuBox" unique_id=627072692]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=393215701]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
