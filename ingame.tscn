@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://oafli3v0rpi8"]
+
+[ext_resource type="Script" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
+[ext_resource type="PackedScene" uid="uid://bvw8qm7xj0qqn" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/core/CameraFollow.gd" id="3_camera"]
+[ext_resource type="Script" path="res://scripts/core/GridDrawer.gd" id="4_griddrawer"]
+
+[node name="Ingame" type="Node2D"]
+
+[node name="GridManager" type="Node" parent="."]
+script = ExtResource("1_gridmanager")
+
+[node name="GridDrawer" type="Node2D" parent="."]
+script = ExtResource("4_griddrawer")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 480)
+zoom = Vector2(1.5, 1.5)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(320, 240)
+
+[node name="GridVisualizer" type="Node2D" parent="."]
+
+[node name="TestWall1" type="ColorRect" parent="GridVisualizer"]
+offset_left = 256.0
+offset_top = 176.0
+offset_right = 320.0
+offset_bottom = 240.0
+color = Color(0.5, 0.3, 0.2, 1)
+
+[node name="Label" type="Label" parent="GridVisualizer/TestWall1"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 20.0
+offset_right = 56.0
+offset_bottom = 43.0
+text = "WALL"
+horizontal_alignment = 1
+
+[node name="TestWall2" type="ColorRect" parent="GridVisualizer"]
+offset_left = 384.0
+offset_top = 176.0
+offset_right = 448.0
+offset_bottom = 240.0
+color = Color(0.5, 0.3, 0.2, 1)
+
+[node name="Label" type="Label" parent="GridVisualizer/TestWall2"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 20.0
+offset_right = 56.0
+offset_bottom = 43.0
+text = "WALL"
+horizontal_alignment = 1
+
+[node name="TestWater" type="ColorRect" parent="GridVisualizer"]
+offset_left = 192.0
+offset_top = 304.0
+offset_right = 256.0
+offset_bottom = 368.0
+color = Color(0.2, 0.4, 0.8, 1)
+
+[node name="Label" type="Label" parent="GridVisualizer/TestWater"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 20.0
+offset_right = 60.0
+offset_bottom = 43.0
+text = "WATER"
+horizontal_alignment = 1

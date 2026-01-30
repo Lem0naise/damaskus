@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bueharn71qgng"]
 
+<<<<<<< HEAD
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
 anchors_preset = 0
@@ -38,3 +39,17 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+=======
+[ext_resource type="Script" uid="uid://c0w705cnc0dyp" path="res://scripts/test.gd" id="1_06t4h"]
+
+[node name="MainMenu" type="Node2D" unique_id=1692234367]
+script = ExtResource("1_06t4h")
+
+[node name="Label" type="Label" parent="." unique_id=1760504763]
+offset_left = 284.0
+offset_top = 127.0
+offset_right = 690.0
+offset_bottom = 289.0
+theme_override_font_sizes/font_size = 40
+text = "YOOOOOOOOOOOOOO"
+>>>>>>> c4c524a68990a8cdd57288e506acd2d0d8250acf
