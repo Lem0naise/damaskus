@@ -283,7 +283,7 @@ func update_mask_properties():
 			current_mask_walking = win_mask_walking
 			mask_layer.visible = true
 		MaskType.BATTERING_RAM: 
-			properties = ["BREAK_WALL"]
+			properties = ["BREAK_WALL", "PUSH_ROCKS"]
 			current_mask_still = battering_mask_still
 			current_mask_walking = battering_mask_walking
 			mask_layer.visible = true
