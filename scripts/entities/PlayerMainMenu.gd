@@ -14,7 +14,11 @@ class_name PlayerMainMenu
 # Format: { Vector2i(x,y): "action_name" }
 var button_map: Dictionary = {}
 
+@onready var ui = get_node_or_null("/root/MainMenu/InventoryUI")
 func _ready():
+	
+
+	
 	# 1. Setup Grid
 	if grid_manager:
 		grid_position = grid_manager.world_to_grid(global_position)
@@ -62,10 +66,18 @@ func _process(delta):
 	if held_key_timer > 0: held_key_timer -= delta
 	handle_input()
 	
+	var action = walk_into_menu()
+	if action != "":
+		ui.show_tooltip(action, "Press E!")
+	else:
+		ui.hide_pickup_tooltip()
+		
 	if not is_moving and next_move != Vector2i.ZERO and move_cooldown <= 0:
 		var buffered_move = next_move
 		next_move = Vector2i.ZERO
 		try_move(buffered_move)
+		
+		
 
 func handle_input():
 	# 1. CHECK FOR E PRESSED
@@ -97,6 +109,17 @@ func handle_input():
 		if is_moving: next_move = input_dir
 		elif move_cooldown <= 0: try_move(input_dir)
 
+func walk_into_menu():
+	print("Player walked over: ", grid_position)
+
+	# Check our lookup map for the current position
+	if button_map.has(grid_position):
+		var action = button_map[grid_position]
+		print("Triggers Action: ", action)
+		return action
+	else:
+		return("")
+	
 func interact_with_menu():
 	print("Player interaction at: ", grid_position)
 	
