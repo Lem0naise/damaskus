@@ -1,58 +1,66 @@
 extends CharacterBody2D
 class_name Player
 
-# References
+# --- References ---
 @onready var grid_manager: GridManager = get_node("/root/Ingame/GridManager")
 @onready var sprite: Sprite2D = $Sprite
+# Make sure your TextureRect is named "MaskLayer" or update this path
+@onready var mask_layer: TextureRect = $MaskLayer 
 
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 
-# Textures
-var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
-var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.png")
+# --- ASSETS ---
+# Base Character (Always the same)
+@export var tex_base_still: Texture2D 
+@export var tex_base_walk: Texture2D
 
-# Sprite size (slightly smaller than grid cell)
-const SPRITE_SIZE = 180.0  # pixels
+# Water Mask Overlays
+@export var tex_spirit_still: Texture2D
+@export var tex_spirit_walk: Texture2D 
+
+# --- VISUAL STATE ---
+# What texture should the mask show right now? (null if no mask)
+var active_mask_still: Texture2D = null
+var active_mask_walk: Texture2D = null
+
+# Sprite size
+const SPRITE_SIZE = 180.0 
 
 # Movement Configuration
 var grid_position: Vector2i = Vector2i.ZERO
 var is_moving: bool = false
-# Lower number = Faster, Snappier (e.g. 0.15)
-# Higher number = Slower, Heavier (e.g. 0.3)
 var move_duration: float = 0.18 
 
 # Input buffering
-var next_move: Vector2i = Vector2i.ZERO  # Only buffer one move
+var next_move: Vector2i = Vector2i.ZERO 
 var move_cooldown: float = 0.0
-const HELD_KEY_DELAY = 0.12  # Delay between moves when holding a key
-const HELD_KEY_INITIAL_DELAY = 0.25  # Initial delay before key starts repeating
+const HELD_KEY_DELAY = 0.12 
+const HELD_KEY_INITIAL_DELAY = 0.25 
 var held_key_timer: float = 0.0
 var last_held_direction: Vector2i = Vector2i.ZERO
 
 # Mask system
 enum MaskType { NONE, DIMENSION, WATER, WINNER, BATTERING_RAM }
 var current_mask: MaskType = MaskType.NONE
-var inventory: Array[MaskType] = []  # Masks the player has collected
-
-# Player state (NULL state by default)
-var is_intangible: bool = false  # Can walk through walls when true
-
-# Dimension system
+var inventory: Array[MaskType] = [] 
+var is_intangible: bool = false 
 var current_dimension: int = 0
-const NUM_DIMENSIONS: int = 2  # Change this if you have more dimensions
-
-var properties: Array[String] = []  # Active properties from current mask
+const NUM_DIMENSIONS: int = 2 
+var properties: Array[String] = [] 
 
 func _ready():
-	# Snap to grid at start
+	# Setup Base Visuals
+	sprite.texture = tex_base_still
+	mask_layer.visible = false # Hide mask initially
+
+	# Snap to grid
 	if grid_manager:
 		grid_position = grid_manager.world_to_grid(global_position)
 		global_position = grid_manager.grid_to_world(grid_position)
 
-	# Start in NULL state (no mask)
 	update_mask_properties()
 
-	# Ensure all objects are set to the correct dimension visibility/collision at game start
+	# Sync Objects
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame:
 		for group in ["Walls", "Water"]:
@@ -60,49 +68,28 @@ func _ready():
 				for obj in ingame.get_node(group).get_children():
 					if obj.has_method("update_dimension_visibility"):
 						obj.update_dimension_visibility(current_dimension)
-
-	# Set initial sprite
-	set_sprite_texture(texture_still)
 	
-	# Sync UI
 	update_inventory_ui()
 
 func _process(delta):
-	# Update cooldown timer
-	if move_cooldown > 0:
-		move_cooldown -= delta
+	if move_cooldown > 0: move_cooldown -= delta
+	if held_key_timer > 0: held_key_timer -= delta
 
-	# Update held key timer
-	if held_key_timer > 0:
-		held_key_timer -= delta
-
-	# Handle input
 	handle_input()
 
-	# Handle dimension switching (only if wearing DIMENSION mask)
-	if Input.is_action_just_pressed("ui_accept"):  # Default: spacebar
-		if current_mask == MaskType.DIMENSION:
-			switch_dimension()
+	if Input.is_action_just_pressed("ui_accept"): 
+		if current_mask == MaskType.DIMENSION: switch_dimension()
 
-	# Handle pickup
-	if Input.is_action_just_pressed("pickup"):  # E key
-		try_pickup()
+	if Input.is_action_just_pressed("pickup"): try_pickup()
 
-
-
-	# Process movement buffer (Only if NOT currently moving)
-	# The actual movement is now handled by the Tween, not manual delta updates
 	if not is_moving and next_move != Vector2i.ZERO and move_cooldown <= 0:
-		# Execute the one buffered move
 		var buffered_move = next_move
 		next_move = Vector2i.ZERO
 		try_move(buffered_move)
 
-# Switch dimension and update all objects
 func switch_dimension():
 	current_dimension = (current_dimension + 1) % NUM_DIMENSIONS
 	print("Switched to dimension ", current_dimension)
-	# Notify all objects to update their visibility/collision
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame:
 		for group in ["Walls", "Water"]:
@@ -111,53 +98,34 @@ func switch_dimension():
 					if obj.has_method("update_dimension_visibility"):
 						obj.update_dimension_visibility(current_dimension)
 
-# Try to pick up a mask at the current position
 func try_pickup():
 	var ingame = get_tree().get_root().get_node("Ingame")
-	if not ingame or not ingame.has_node("LevelGenerator/Masks"):
-		return
+	if not ingame or not ingame.has_node("LevelGenerator/Masks"): return
 
-	# Check for masks at current grid position
 	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
 		if mask_obj.has_method("pickup"):
 			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
 			if mask_grid_pos == grid_position:
-				# Pick up the mask
 				var mask_type = mask_obj.mask_type
 				if not inventory.has(mask_type):
 					inventory.append(mask_type)
-					print("Picked up ", MaskType.keys()[mask_type], " mask!")
+					print("Picked up ", MaskType.keys()[mask_type])
 					mask_obj.pickup()
 					update_inventory_ui()
-					# Hide tooltip after pickup
 					var ui = get_node_or_null("/root/Ingame/InventoryUI")
 					if ui: ui.hide_pickup_tooltip()
 				return
 
-# Equip mask at specific inventory index
 func equip_mask_at_index(index: int):
-	if index < 0 or index >= inventory.size():
-		return # Mute invalid index
-		
-	var mask_type = inventory[index]
-	
-	if current_mask == mask_type:
-		# Toggle off if already equipped? Or just stay equipped? 
-		# Let's say toggle off for now, or just do nothing.
-		# User asked to select, usually 1-9 matches slot.
-		# If they press '1' and '1' is equipped, usually nothing happens or it re-equips.
-		pass
-	
-	wear_mask(mask_type)
-	print("Equipped ", MaskType.keys()[mask_type])
+	if index < 0 or index >= inventory.size(): return
+	wear_mask(inventory[index])
+	print("Equipped ", MaskType.keys()[inventory[index]])
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode >= KEY_1 and event.keycode <= KEY_9:
-			var index = event.keycode - KEY_1
-			equip_mask_at_index(index)
+			equip_mask_at_index(event.keycode - KEY_1)
 
-# Update inventory UI
 func update_inventory_ui():
 	var ui = get_node_or_null("/root/Ingame/InventoryUI")
 	if ui and ui.has_method("update_inventory"):
@@ -167,153 +135,109 @@ func handle_input():
 	var input_dir = Vector2i.ZERO
 	var is_just_pressed = false
 
-	# Check for just_pressed input (highest priority - always register)
 	if Input.is_action_just_pressed("ui_right") or Input.is_action_just_pressed("ui_d"):
-		input_dir = Vector2i.RIGHT
-		is_just_pressed = true
-		held_key_timer = HELD_KEY_INITIAL_DELAY
-		last_held_direction = input_dir
+		input_dir = Vector2i.RIGHT; is_just_pressed = true; held_key_timer = HELD_KEY_INITIAL_DELAY
 	elif Input.is_action_just_pressed("ui_left") or Input.is_action_just_pressed("ui_a"):
-		input_dir = Vector2i.LEFT
-		is_just_pressed = true
-		held_key_timer = HELD_KEY_INITIAL_DELAY
-		last_held_direction = input_dir
+		input_dir = Vector2i.LEFT; is_just_pressed = true; held_key_timer = HELD_KEY_INITIAL_DELAY
 	elif Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("ui_s"):
-		input_dir = Vector2i.DOWN
-		is_just_pressed = true
-		held_key_timer = HELD_KEY_INITIAL_DELAY
-		last_held_direction = input_dir
+		input_dir = Vector2i.DOWN; is_just_pressed = true; held_key_timer = HELD_KEY_INITIAL_DELAY
 	elif Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("ui_w"):
-		input_dir = Vector2i.UP
-		is_just_pressed = true
-		held_key_timer = HELD_KEY_INITIAL_DELAY
-		last_held_direction = input_dir
+		input_dir = Vector2i.UP; is_just_pressed = true; held_key_timer = HELD_KEY_INITIAL_DELAY
 
-	# If no just_pressed, check for held keys (only after initial delay)
 	if not is_just_pressed and not is_moving and move_cooldown <= 0 and held_key_timer <= 0:
-		if Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_d"):
-			input_dir = Vector2i.RIGHT
-		elif Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_a"):
-			input_dir = Vector2i.LEFT
-		elif Input.is_action_pressed("ui_down") or Input.is_action_pressed("ui_s"):
-			input_dir = Vector2i.DOWN
-		elif Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_w"):
-			input_dir = Vector2i.UP
-		else:
-			# No keys held, reset timer
-			held_key_timer = 0
-			last_held_direction = Vector2i.ZERO
+		if Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_d"): input_dir = Vector2i.RIGHT
+		elif Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_a"): input_dir = Vector2i.LEFT
+		elif Input.is_action_pressed("ui_down") or Input.is_action_pressed("ui_s"): input_dir = Vector2i.DOWN
+		elif Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_w"): input_dir = Vector2i.UP
+		else: held_key_timer = 0
 
-	# Process the input
 	if input_dir != Vector2i.ZERO:
-		if is_moving:
-			# Only buffer ONE move, and only the most recent
-			next_move = input_dir
-		elif move_cooldown <= 0:
-			# Execute immediately
-			try_move(input_dir)
+		if is_moving: next_move = input_dir
+		elif move_cooldown <= 0: try_move(input_dir)
 
 func try_move(direction: Vector2i):
 	var target_grid_pos = grid_position + direction
 	
-	# Check if moving into a CRUMBLED_WALL with proper equipment
 	var tile_type = grid_manager.get_tile_type(target_grid_pos, current_dimension)
 	if tile_type == GridManager.TileType.CRUMBLED_WALL and has_property("BREAK_WALL"):
-		# Destroy the wall!
 		var ingame = get_tree().get_root().get_node("Ingame")
 		if ingame and ingame.has_node("LevelGenerator/CrumbledWalls"):
 			for wall in ingame.get_node("LevelGenerator/CrumbledWalls").get_children():
 				if grid_manager.world_to_grid(wall.global_position) == target_grid_pos:
 					wall.queue_free()
 					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY, current_dimension)
-					print("Smashed a crumbled wall!")
 					break
 
-	# Check if move is valid
 	if can_move_to(target_grid_pos):
 		grid_position = target_grid_pos
 		is_moving = true
-		set_sprite_texture(texture_walking)
+		
+		# --- UPDATE VISUALS FOR WALK ---
+		update_visuals(true) # true = walking
 
-		# Flip sprite horizontally based on left/right movement
+		# Flip horizontally
 		if direction == Vector2i.LEFT:
 			sprite.flip_h = true
+			# TextureRect doesn't have flip_h, so we flip scale.x
+			# NOTE: Ensure Pivot Offset is set to center in Inspector!
+			mask_layer.scale.x = -1 
 		elif direction == Vector2i.RIGHT:
 			sprite.flip_h = false
+			mask_layer.scale.x = 1
 
 		move_cooldown = HELD_KEY_DELAY
 		
-		# --- NEW SMOOTH TWEEN MOVEMENT ---
 		var target_world_pos = grid_manager.grid_to_world(grid_position)
-		
-		# Create a tween for smooth movement
-		var tween = create_tween()
-		# TRANS_SINE + EASE_OUT gives a natural slide
-		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_property(self, "global_position", target_world_pos, move_duration)
 		tween.tween_callback(on_movement_finished)
 
 func on_movement_finished():
-	# Called when tween finishes
 	is_moving = false
-	set_sprite_texture(texture_still)
+	# --- UPDATE VISUALS FOR IDLE ---
+	update_visuals(false) # false = still
 
 	check_for_mask_tooltip()
 
-	# If player queued a move while sliding, execute it now for responsiveness
 	if next_move != Vector2i.ZERO:
 		var buffered_move = next_move
 		next_move = Vector2i.ZERO
 		try_move(buffered_move)
 
-func can_move_to(target_pos: Vector2i) -> bool:
-	# 1. Bounds check
-	if not grid_manager.is_valid_position(target_pos):
-		return false
-
-	# 2. Intangible check
-	if is_intangible:
-		return true
-
-	# 3. Check what type of tile is there
-	var tile_type = grid_manager.get_tile_type(target_pos, current_dimension)
+# --- NEW VISUAL MANAGER --# --- NEW VISUAL MANAGER ---
+func update_visuals(is_walking: bool):
+	# 1. Update Base Player (Always same)
+	if is_walking:
+		sprite.texture = tex_base_walk
+	else:
+		sprite.texture = tex_base_still
 	
-	match tile_type:
-		GridManager.TileType.WALL:
-			return false # Always blocked by walls
-			
-		GridManager.TileType.WATER:
-			# Only pass if we have FLOAT property
-			if has_property("FLOAT"):
-				return true
-			return false # Blocked by water otherwise
+	# 2. Update Mask Overlay
+	if current_mask != MaskType.NONE and active_mask_still:
+		mask_layer.visible = true
+		if is_walking:
+			mask_layer.texture = active_mask_walk
+		else:
+			mask_layer.texture = active_mask_still
+	else:
+		mask_layer.visible = false
+		
+func can_move_to(target_pos: Vector2i) -> bool:
+	if not grid_manager.is_valid_position(target_pos): return false
+	if is_intangible: return true
 
+	var tile_type = grid_manager.get_tile_type(target_pos, current_dimension)
+	match tile_type:
+		GridManager.TileType.WALL: return false 
+		GridManager.TileType.WATER:
+			if has_property("FLOAT"): return true
+			return false
 		GridManager.TileType.CRUMBLED_WALL:
-			# Only pass if we have BREAK_WALL property
-			if has_property("BREAK_WALL"):
-				return true
-			return false # Blocked by crumbled wall otherwise
-			
-		GridManager.TileType.EMPTY:
-			return true # Free to move
-			
+			if has_property("BREAK_WALL"): return true
+			return false 
+		GridManager.TileType.EMPTY: return true
 	return true
 
-# Helper function to set sprite texture and scale it to consistent size
-func set_sprite_texture(texture: Texture2D):
-	if not sprite:
-		sprite = $Sprite
-	if not sprite:
-		print("ERROR: Sprite node not found!")
-		return
-
-	sprite.texture = texture
-	if texture:
-		var texture_size = texture.get_size()
-		var scale_factor = SPRITE_SIZE / max(texture_size.x, texture_size.y)
-		sprite.scale = Vector2(scale_factor, scale_factor)
-
-# Mask management
 func wear_mask(mask_type: MaskType):
 	current_mask = mask_type
 	update_mask_properties()
@@ -327,32 +251,39 @@ func remove_mask():
 func update_mask_properties():
 	properties.clear()
 	is_intangible = false
+	
+	# Reset Mask Visuals
+	active_mask_still = null
+	active_mask_walk = null
 
 	match current_mask:
 		MaskType.NONE:
-			# NULL state - solid by default, can't walk through walls or water
 			is_intangible = false
 			properties = []
 
 		MaskType.DIMENSION:
-			# DIMENSION - allows switching between dimensions with spacebar
 			is_intangible = false
 			properties = ["DIMENSION_SHIFT"]
+			# Set Dimension mask texture here if you have one
 
 		MaskType.WATER:
-			# WATER - allows floating on water
 			is_intangible = false
 			properties = ["FLOAT"]
+			# --- SET WATER SPIRIT TEXTURES ---
+			active_mask_still = tex_spirit_still
+			active_mask_walk = tex_spirit_walk
 		
 		MaskType.WINNER: 
-			# Win condition
-			
+			get_parent().next_level()
 			get_tree().change_scene_to_file(MENU_SCENE_PATH)
 
 		MaskType.BATTERING_RAM:
-			# BATTERING_RAM - allows breaking crumbled walls
 			is_intangible = false
 			properties = ["BREAK_WALL"]
+			# Set Ram mask texture here if you have one
+				
+	# Refresh view immediately
+	update_visuals(is_moving)
 				
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
@@ -361,35 +292,22 @@ func has_property(property_name: String) -> bool:
 
 func check_for_mask_tooltip():
 	var ingame = get_tree().get_root().get_node("Ingame")
-	if not ingame or not ingame.has_node("LevelGenerator/Masks"):
-		return
+	if not ingame or not ingame.has_node("LevelGenerator/Masks"): return
 		
 	var found_mask = false
-	
-	# Check for masks at current grid position
 	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
 		var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
 		if mask_grid_pos == grid_position:
-			# Found a mask!
 			found_mask = true
 			var ui = get_node_or_null("/root/Ingame/InventoryUI")
 			if ui and ui.has_method("show_pickup_tooltip"):
-				# Determine name and description
-				var mask_type = mask_obj.mask_type
 				var mask_name = "Unknown"
 				var mask_desc = ""
-				
-				# We can get these from the InventoryUI helper or Mask object if we expose it
-				# Let's rely on Mask object since we added it there
-				if mask_obj.has_method("get_mask_name"):
-					mask_name = mask_obj.get_mask_name()
-				if mask_obj.has_method("get_mask_description"):
-					mask_desc = mask_obj.get_mask_description()
-					
+				if mask_obj.has_method("get_mask_name"): mask_name = mask_obj.get_mask_name()
+				if mask_obj.has_method("get_mask_description"): mask_desc = mask_obj.get_mask_description()
 				ui.show_pickup_tooltip(mask_name, mask_desc)
 			break
 	
 	if not found_mask:
 		var ui = get_node_or_null("/root/Ingame/InventoryUI")
-		if ui and ui.has_method("hide_pickup_tooltip"):
-			ui.hide_pickup_tooltip()
+		if ui and ui.has_method("hide_pickup_tooltip"): ui.hide_pickup_tooltip()

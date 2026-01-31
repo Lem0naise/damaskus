@@ -9,7 +9,7 @@ extends Node2D
 @export var wall_scene: PackedScene
 @export var water_scene: PackedScene
 @export var mask_scene: PackedScene
-@export var crumbled_wall_scene: PackedScene = preload("res://scenes/objects/crumbled_wall.tscn")
+@export var crumbled_wall_scene: PackedScene
 
 # 0 = Empty, 1 = Wall, 2 = Water
 # 15 Width x 9 Height
@@ -86,9 +86,43 @@ var level_masks = [
 ]
 ]
 
-func _ready():
-	generate_level(0) # level 2
+var level = 0
+const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 
+func _ready():
+	generate_level(level) # level 1 to start
+func next_level():
+	level += 1
+	if level >2:
+		get_tree().change_scene_to_file(MENU_SCENE_PATH)
+	else:
+		clear_level()
+		generate_level(level)
+func clear_level():
+	# 1. Clear Visual Nodes (The Sprites)
+	for child in walls_container.get_children():
+		child.queue_free()
+		
+	for child in water_container.get_children():
+		child.queue_free()
+		
+	for child in masks_container.get_children():
+		child.queue_free()
+		
+	if has_node("CrumbledWalls"):
+		for child in get_node("CrumbledWalls").get_children():
+			child.queue_free()
+
+	# 2. Clear Logical Grid Data (The Collisions)
+	# We must reset the grid_manager, otherwise invisible walls will remain.
+	# We loop through the known grid size (15x9)
+	for y in range(9): 
+		for x in range(15):
+			var grid_pos = Vector2i(x, y)
+			# Clear logic for both dimensions (0 and 1) just to be safe
+			grid_manager.set_tile(grid_pos, GridManager.TileType.EMPTY, 0)
+			grid_manager.set_tile(grid_pos, GridManager.TileType.EMPTY, 1)
+	
 # --- HELPER FUNCTION ---
 func get_neighbours(layout: Array, grid_pos: Vector2i, whatami: int) -> Dictionary:
 	var neighbours = { "N": false, "S": false, "E": false, "W": false }
