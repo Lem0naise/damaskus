@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://dxyrfk2upegex" path="res://assets/crownWin.png" id="5_smehm"]
 [ext_resource type="Texture2D" uid="uid://djrfkddong1j8" path="res://assets/golemStill.png" id="6_smehm"]
 [ext_resource type="Texture2D" uid="uid://b663uj7osxa27" path="res://assets/golemWalking.png" id="7_ur7pv"]
+[ext_resource type="Texture2D" uid="uid://djlox6rnf2b2h" path="res://assets/ram.png" id="8_y4r1p"]
+[ext_resource type="Texture2D" uid="uid://bgooqr5e7kfyo" path="res://assets/ramWalking.png" id="9_d2wvv"]
 
 [node name="Player" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_player")
@@ -17,8 +19,8 @@ win_mask_still = ExtResource("4_fjrip")
 win_mask_walking = ExtResource("5_smehm")
 golem_mask_still = ExtResource("6_smehm")
 golem_mask_walking = ExtResource("7_ur7pv")
-battering_mask_still = ExtResource("6_smehm")
-battering_mask_walking = ExtResource("7_ur7pv")
+battering_mask_still = ExtResource("8_y4r1p")
+battering_mask_walking = ExtResource("9_d2wvv")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
 scale = Vector2(0.3, 0.3)
