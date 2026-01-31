@@ -85,10 +85,10 @@ var properties: Array[String] = [] # Active properties from current mask
 
 func _ready():
 	# Snap to grid at start
+	
 	if grid_manager:
-		grid_position = grid_manager.world_to_grid(global_position)
-
 		global_position = grid_manager.grid_to_world(grid_position)
+		grid_position = grid_manager.world_to_grid(global_position)
 
 
 	# Start in NULL state (no mask)

@@ -11,6 +11,54 @@ class_name NPC
 var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
 var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.png")
 
+var is_active: bool = false
+
+func activate(start_grid_pos: Vector2i, start_world_pos: Vector2):
+	is_active = true
+	visible = true
+	
+	# --- FIX START: Force initialization if called early ---
+	if not mask_layer:
+		mask_layer = $MaskLayer
+	if not sprite:
+		sprite = $Sprite
+	if not grid_manager:
+		grid_manager = get_node("/root/Ingame/GridManager")
+	# --- FIX END ---
+	
+	grid_position = start_grid_pos
+	global_position = start_world_pos
+	
+	is_moving = false
+	current_mask = MaskType.NONE
+	update_mask_properties()
+	
+	# 1. Setup Initial State
+	if grid_manager:
+		grid_position = grid_manager.world_to_grid(global_position)
+		global_position = grid_manager.grid_to_world(grid_position)
+
+	update_mask_properties()
+	set_sprite_texture(texture_still)
+	
+	# 2. Visual Distinction (Ghostly Look)
+	modulate = Color(0.7, 0.7, 1.0, 0.9) 
+
+	# 3. Connect to Player Signals
+	if not target_player:
+		target_player = get_node_or_null("/root/Ingame/Player")
+	
+	if target_player:
+		target_player.player_moved.connect(_on_player_moved)
+		target_player.player_interacted.connect(_on_player_interacted)
+		
+	
+func deactivate():
+	is_active = false
+	visible = false
+	global_position = Vector2(-1000, -1000)
+	
+
 # Assign these in Inspector just like Player
 @export var water_mask_still: Texture2D
 @export var water_mask_walking: Texture2D
@@ -35,33 +83,18 @@ var properties: Array[String] = []
 @export var target_player: Player
 
 func _ready():
-	# 1. Setup Initial State
-	if grid_manager:
-		grid_position = grid_manager.world_to_grid(global_position)
-		global_position = grid_manager.grid_to_world(grid_position)
-
-	update_mask_properties()
-	set_sprite_texture(texture_still)
+	if not is_active: return
 	
-	# 2. Visual Distinction (Ghostly Look)
-	modulate = Color(0.7, 0.7, 1.0, 0.9) 
-
-	# 3. Connect to Player Signals
-	if not target_player:
-		target_player = get_node_or_null("/root/Ingame/Player")
-	
-	if target_player:
-		target_player.player_moved.connect(_on_player_moved)
-		target_player.player_interacted.connect(_on_player_interacted)
-
 # --- SIGNAL HANDLERS (The "Brain") ---
 
 func _on_player_moved(direction: Vector2i):
+	if not is_active: return
 	# Try to move in the same direction relative to self
 	if not is_moving:
 		try_move(direction)
 
 func _on_player_interacted(action_name: String):
+	if not is_active: return
 	# Mirror actions
 	match action_name:
 		"pickup":
@@ -75,6 +108,7 @@ func _on_player_interacted(action_name: String):
 # --- MOVEMENT LOGIC (Copied from Player, removed UI/Input) ---
 
 func try_move(direction: Vector2i):
+	if not is_active: return
 	var target_grid_pos = grid_position + direction
 	
 	# Check if moving into a ROCK
@@ -137,11 +171,14 @@ func try_move(direction: Vector2i):
 		tween.tween_callback(on_movement_finished)
 
 func on_movement_finished():
+	if not is_active: return
 	is_moving = false
 	update_visuals()
 	# No UI updates here!
 
 func can_move_to(target_pos: Vector2i) -> bool:
+	if not is_active: return false
+	
 	if not grid_manager.is_valid_position(target_pos): return false
 	
 	var tile_type = grid_manager.get_tile_type(target_pos)
@@ -185,6 +222,7 @@ func try_pickup():
 			return
 
 func drop_mask():
+	if not is_active: return
 	if current_mask == MaskType.NONE: return
 	var ingame = get_tree().get_root().get_node("Ingame")
 	var level_gen = ingame.get_node_or_null("LevelGenerator")
@@ -206,6 +244,8 @@ func toggle_phase_mode():
 	print("NPC Toggled Phase Mode")
 
 func update_mask_properties():
+	if not is_active: return
+	
 	properties.clear()
 	is_intangible = false
 	current_mask_still = null
