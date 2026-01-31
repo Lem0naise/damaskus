@@ -167,7 +167,7 @@ func reload_level():
 	generate_level(level)
 func next_level():
 	level += 1
-	if level > 5:
+	if level > len(level_masks) - 1:
 		get_tree().change_scene_to_file(WIN_SCENE_PATH)
 	else:
 		clear_level()
