@@ -640,6 +640,9 @@ func update_mask_properties():
 			is_intangible = false
 			properties = ["DIMENSION_SHIFT"]
 			# Assign Dimension textures here if you have them later
+			current_mask_still = golem_mask_still
+			current_mask_walking = golem_mask_walking
+			mask_layer.visible = true # Make sure to show it!
 
 		MaskType.WATER:
 			# WATER - allows floating on water
@@ -673,13 +676,6 @@ func update_mask_properties():
 			current_mask_walking = battering_mask_walking
 			mask_layer.visible = true # Make sure to show it!
 
-		MaskType.GOLEM:
-			# GOLEM - allows pushing rocks
-			is_intangible = false
-			properties = ["PUSH_ROCKS"]
-			current_mask_still = golem_mask_still
-			current_mask_walking = golem_mask_walking
-			mask_layer.visible = true # Make sure to show it!
 
 	# Force a visual update immediately so it doesn't wait for movement
 	update_visuals()

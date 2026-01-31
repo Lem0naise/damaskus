@@ -376,9 +376,6 @@ func generate_level(level_idx):
 				if cell_value == 4: # BATTERING RAM MASK
 					mask.mask_type = Mask.MaskType.BATTERING_RAM
 
-				if cell_value == 5: # GOLEM MASK
-					mask.mask_type = Mask.MaskType.GOLEM
-
 				masks_container.add_child(mask)
 
 

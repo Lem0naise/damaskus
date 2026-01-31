@@ -127,7 +127,7 @@ func try_move(direction: Vector2i):
 			for rock in ingame.get_node("LevelGenerator/Rocks").get_children():
 				if rock.has_method("get_grid_position") and rock.get_grid_position() == target_grid_pos:
 					# Found the rock at target position
-					if rock.is_on_water and not has_property("PUSH_ROCKS"):
+					if rock.is_on_water:
 						# Rock is a bridge (on water) and we don't have GOLEM
 						# Allow walking on it - skip the push logic
 						break
@@ -270,8 +270,8 @@ func update_mask_properties():
 		MaskType.NONE: pass
 		MaskType.DIMENSION: 
 			properties = ["DIMENSION_SHIFT"]
-			current_mask_still = water_mask_still
-			current_mask_walking = water_mask_walking
+			current_mask_still = golem_mask_still
+			current_mask_walking = golem_mask_walking
 			mask_layer.visible = true
 		MaskType.WATER:
 			properties = ["FLOAT"]
@@ -286,11 +286,6 @@ func update_mask_properties():
 			properties = ["BREAK_WALL", "PUSH_ROCKS"]
 			current_mask_still = battering_mask_still
 			current_mask_walking = battering_mask_walking
-			mask_layer.visible = true
-		MaskType.GOLEM: 
-			properties = ["PUSH_ROCKS"]
-			current_mask_still = golem_mask_still
-			current_mask_walking = golem_mask_walking
 			mask_layer.visible = true
 
 	update_visuals()
