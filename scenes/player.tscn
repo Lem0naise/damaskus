@@ -2,18 +2,12 @@
 
 [ext_resource type="Script" uid="uid://o8ig778kpd1o" path="res://scripts/entities/Player.gd" id="1_player"]
 [ext_resource type="Texture2D" uid="uid://cbau38wwtig6x" path="res://assets/SpriteStillTransparent.png" id="2_g2els"]
-[ext_resource type="Texture2D" uid="uid://cxvo2x3m7iuv2" path="res://assets/maskSpiritWalking.png" id="2_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://cu7s8geb3gt6j" path="res://assets/SpriteMovingTransparent.png" id="3_qlg0r"]
-[ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="4_tuyoq"]
 
 [node name="Player" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_player")
-tex_base_still = ExtResource("2_g2els")
-tex_base_walk = ExtResource("3_qlg0r")
-tex_spirit_still = ExtResource("4_tuyoq")
-tex_spirit_walk = ExtResource("2_qhqgy")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_g2els")
 
 [node name="MaskLayer" type="TextureRect" parent="." unique_id=403206602]
