@@ -188,6 +188,9 @@ func try_pickup():
 
 	# Check for masks at current grid position
 	for mask_obj in level_gen.get_node("Masks").get_children():
+		if mask_obj.get("is_picked_up"): 
+			continue
+			
 		if mask_obj.has_method("pickup"):
 			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
 			

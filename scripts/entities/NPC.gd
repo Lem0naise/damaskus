@@ -211,6 +211,9 @@ func try_pickup():
 	if not level_gen or not level_gen.has_node("Masks"): return
 
 	for mask_obj in level_gen.get_node("Masks").get_children():
+		if mask_obj.get("is_picked_up"): 
+			continue
+			
 		var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
 		if mask_grid_pos == grid_position:
 			if current_mask != MaskType.NONE:
