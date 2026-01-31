@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dlonf04fiy5nb" path="res://scenes/objects/water.tscn" id="6_water"]
 [ext_resource type="Texture2D" uid="uid://c28f11wxipbai" path="res://assets/background.png" id="7_ic5ef"]
 [ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="8_inventory"]
-[ext_resource type="PackedScene" uid="uid://brxn5px8j3xkr" path="res://scenes/objects/mask.tscn" id="9_mask"]
+[ext_resource type="PackedScene" path="res://scenes/objects/mask.tscn" id="9_mask"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")
@@ -29,165 +29,172 @@ script = ExtResource("1_gridmanager")
 script = ExtResource("4_griddrawer")
 
 [node name="Player" parent="." unique_id=1640560224 instance=ExtResource("2_player")]
-position = Vector2(352, 352)
+position = Vector2(382, 489)
 scale = Vector2(0.3, 0.3)
 
 [node name="Walls" type="Node2D" parent="." unique_id=339236577]
 
 [node name="Wall1" parent="Walls" unique_id=193411329 instance=ExtResource("5_wall")]
-position = Vector2(416, 288)
+position = Vector2(480, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall2" parent="Walls" unique_id=645148250 instance=ExtResource("5_wall")]
-position = Vector2(608, 288)
+position = Vector2(672, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall3" parent="Walls" unique_id=1159217957 instance=ExtResource("5_wall")]
-position = Vector2(480, 288)
+position = Vector2(544, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall4" parent="Walls" unique_id=1211422296 instance=ExtResource("5_wall")]
-position = Vector2(736, 288)
+position = Vector2(800, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall5" parent="Walls" unique_id=1661555857 instance=ExtResource("5_wall")]
-position = Vector2(672, 288)
+position = Vector2(736, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall6" parent="Walls" unique_id=121459845 instance=ExtResource("5_wall")]
-position = Vector2(672, 544)
+position = Vector2(736, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall7" parent="Walls" unique_id=1608762357 instance=ExtResource("5_wall")]
-position = Vector2(544, 544)
+position = Vector2(608, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall8" parent="Walls" unique_id=1556159081 instance=ExtResource("5_wall")]
-position = Vector2(480, 544)
+position = Vector2(544, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall13" parent="Walls" unique_id=1130877994 instance=ExtResource("5_wall")]
-position = Vector2(352, 544)
+position = Vector2(416, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall9" parent="Walls" unique_id=1086298045 instance=ExtResource("5_wall")]
-position = Vector2(416, 544)
+position = Vector2(480, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall10" parent="Walls" unique_id=1147903280 instance=ExtResource("5_wall")]
-position = Vector2(736, 544)
+position = Vector2(800, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall11" parent="Walls" unique_id=910667753 instance=ExtResource("5_wall")]
-position = Vector2(608, 544)
+position = Vector2(672, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall12" parent="Walls" unique_id=774506988 instance=ExtResource("5_wall")]
-position = Vector2(544, 288)
+position = Vector2(608, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall14" parent="Walls" unique_id=240254217 instance=ExtResource("5_wall")]
-position = Vector2(288, 288)
+position = Vector2(352, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall15" parent="Walls" unique_id=1535500232 instance=ExtResource("5_wall")]
-position = Vector2(352, 288)
+position = Vector2(416, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall16" parent="Walls" unique_id=588578015 instance=ExtResource("5_wall")]
-position = Vector2(288, 544)
+position = Vector2(352, 608)
 dimension_ids = [0, 1]
 
 [node name="Wall17" parent="Walls" unique_id=1101844957 instance=ExtResource("5_wall")]
-position = Vector2(224, 288)
+position = Vector2(288, 352)
 dimension_ids = [0, 1]
 
 [node name="Wall18" parent="Walls" unique_id=1963182373 instance=ExtResource("5_wall")]
-position = Vector2(224, 480)
+position = Vector2(288, 544)
 dimension_ids = [0, 1]
 
 [node name="Wall19" parent="Walls" unique_id=1900868947 instance=ExtResource("5_wall")]
-position = Vector2(224, 352)
+position = Vector2(288, 416)
 dimension_ids = [0, 1]
 
 [node name="Wall20" parent="Walls" unique_id=1007116767 instance=ExtResource("5_wall")]
-position = Vector2(224, 416)
+position = Vector2(288, 480)
 dimension_ids = [0, 1]
 
 [node name="Wall21" parent="Walls" unique_id=1067806368 instance=ExtResource("5_wall")]
-position = Vector2(224, 544)
+position = Vector2(288, 608)
 dimension_ids = [0, 1]
 
 [node name="Water" type="Node2D" parent="." unique_id=1636455866]
 
 [node name="Water1" parent="Water" unique_id=1069940404 instance=ExtResource("6_water")]
-position = Vector2(480, 736)
+position = Vector2(544, 800)
+dimension_ids = [0, 1]
 
 [node name="Water2" parent="Water" unique_id=1995521747 instance=ExtResource("6_water")]
-position = Vector2(480, 672)
+position = Vector2(544, 736)
+dimension_ids = [0, 1]
 
 [node name="Water18" parent="Water" unique_id=813737547 instance=ExtResource("6_water")]
-position = Vector2(480, 608)
-
-[node name="Water3" parent="Water" unique_id=1711233800 instance=ExtResource("6_water")]
-position = Vector2(480, 1312)
+position = Vector2(544, 672)
+dimension_ids = [0, 1]
 
 [node name="Water4" parent="Water" unique_id=2126841222 instance=ExtResource("6_water")]
-position = Vector2(608, 416)
+position = Vector2(672, 480)
 
 [node name="Water5" parent="Water" unique_id=1927024345 instance=ExtResource("6_water")]
-position = Vector2(608, 480)
+position = Vector2(672, 544)
 
 [node name="Water6" parent="Water" unique_id=1371371859 instance=ExtResource("6_water")]
-position = Vector2(736, 480)
+position = Vector2(800, 544)
 dimension_ids = [1]
 
 [node name="Water7" parent="Water" unique_id=972238219 instance=ExtResource("6_water")]
-position = Vector2(608, 352)
+position = Vector2(672, 416)
 
 [node name="Water8" parent="Water" unique_id=1822422196 instance=ExtResource("6_water")]
-position = Vector2(480, 864)
+position = Vector2(544, 928)
+dimension_ids = [0, 1]
 
 [node name="Water9" parent="Water" unique_id=928695930 instance=ExtResource("6_water")]
-position = Vector2(480, 1248)
+position = Vector2(544, 1312)
+dimension_ids = [0, 1]
 
 [node name="Water17" parent="Water" unique_id=624165737 instance=ExtResource("6_water")]
-position = Vector2(736, 416)
+position = Vector2(800, 480)
 dimension_ids = [1]
 
 [node name="Water10" parent="Water" unique_id=944526456 instance=ExtResource("6_water")]
-position = Vector2(480, 1184)
+position = Vector2(544, 1248)
+dimension_ids = [0, 1]
 
 [node name="Water11" parent="Water" unique_id=1492278661 instance=ExtResource("6_water")]
-position = Vector2(480, 1120)
+position = Vector2(544, 1184)
+dimension_ids = [0, 1]
 
 [node name="Water12" parent="Water" unique_id=629211257 instance=ExtResource("6_water")]
-position = Vector2(480, 1056)
+position = Vector2(544, 1120)
+dimension_ids = [0, 1]
 
 [node name="Water13" parent="Water" unique_id=333128214 instance=ExtResource("6_water")]
-position = Vector2(480, 992)
+position = Vector2(544, 1056)
+dimension_ids = [0, 1]
 
 [node name="Water14" parent="Water" unique_id=529196536 instance=ExtResource("6_water")]
-position = Vector2(480, 928)
+position = Vector2(544, 992)
+dimension_ids = [0, 1]
 
 [node name="Water15" parent="Water" unique_id=1379613661 instance=ExtResource("6_water")]
-position = Vector2(736, 352)
+position = Vector2(800, 416)
 dimension_ids = [1]
 
 [node name="Water16" parent="Water" unique_id=341358967 instance=ExtResource("6_water")]
-position = Vector2(480, 800)
+position = Vector2(544, 864)
+dimension_ids = [0, 1]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=589967515]
 position = Vector2(972, 692)
 
-[node name="InventoryUI" parent="." instance=ExtResource("8_inventory")]
+[node name="InventoryUI" parent="." unique_id=657883488 instance=ExtResource("8_inventory")]
 
-[node name="Masks" type="Node2D" parent="."]
+[node name="Masks" type="Node2D" parent="." unique_id=278298864]
 
-[node name="DimensionMask" parent="Masks" instance=ExtResource("9_mask")]
-position = Vector2(544, 416)
-mask_type = 1
+[node name="DimensionMask" parent="Masks" unique_id=1942528247 instance=ExtResource("9_mask")]
+position = Vector2(608, 480)
 
-[node name="WaterMask" parent="Masks" instance=ExtResource("9_mask")]
-position = Vector2(672, 416)
+[node name="WaterMask" parent="Masks" unique_id=117038911 instance=ExtResource("9_mask")]
+position = Vector2(672, 864)
 mask_type = 2
