@@ -134,7 +134,6 @@ func _process(delta):
 
 	if Input.is_action_just_pressed("ui_accept"): # Default: spacebar
 
-		player_interacted.emit("space") # NPC
 
 		# Check if either player or NPC has DIMENSION mask
 		var npc = get_node_or_null("/root/Ingame/NPC")
@@ -144,15 +143,18 @@ func _process(delta):
 		if player_has_dimension or npc_has_dimension:
 			toggle_phase_mode()
 
+		player_interacted.emit("space") # NPC
+
 
 	# Handle pickup
 
 	if Input.is_action_just_pressed("pickup"): # E key
 		
+		try_pickup()
+		
+		
 		player_interacted.emit("pickup") # NPC
 		
-		try_pickup()
-
 
 	# Process movement buffer (Only if NOT currently moving)
 
@@ -375,7 +377,6 @@ func handle_input():
 func try_move(direction: Vector2i):
 	var target_grid_pos = grid_position + direction
 	
-	player_moved.emit(direction) # emit signal for NPC
 	
 	# Check if moving into a ROCK
 	var tile_type = grid_manager.get_tile_type(target_grid_pos)
@@ -461,6 +462,8 @@ func try_move(direction: Vector2i):
 		move_tween.tween_callback(on_movement_finished)
 
 
+	player_moved.emit(direction) # emit signal for NPC
+	
 func on_movement_finished():
 	# Called when tween finishes
 	is_moving = false
@@ -491,6 +494,24 @@ func can_move_to(target_pos: Vector2i) -> bool:
 		return false
 
 
+	var npc = get_node_or_null("/root/Ingame/NPC")
+	if npc and npc.is_active and npc.grid_position == target_pos:
+		# The NPC is currently blocking us.
+		# However, since the NPC copies our moves, if we move, THEY will move.
+		# We need to check if the NPC has a valid place to go.
+		
+		# Calculate where the NPC would try to go
+		var move_direction = target_pos - grid_position
+		var npc_future_pos = npc.grid_position + move_direction
+		
+		# Ask the NPC: "Can you move to your next spot?"
+		if npc.can_move_to(npc_future_pos):
+			# YES: The NPC will vacate this tile, so we CAN move here.
+			return true 
+		else:
+			# NO: The NPC is blocked (by a wall, etc), so we are effectively blocked.
+			return false
+	
 	# 2. Intangible check
 
 	if is_intangible:
@@ -505,7 +526,7 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	match tile_type:
 		GridManager.TileType.RED_WALL:
 			# Can pass if player OR NPC has DIMENSION mask and in RED mode (universal)
-			var npc = get_node_or_null("/root/Ingame/NPC")
+			
 			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (npc and npc.is_active and npc.has_property("DIMENSION_SHIFT"))
 			if anyone_has_dimension and grid_manager.is_red_mode:
 				return true
@@ -513,7 +534,7 @@ func can_move_to(target_pos: Vector2i) -> bool:
 
 		GridManager.TileType.BLUE_WALL:
 			# Can pass if player OR NPC has DIMENSION mask and in BLUE mode (universal)
-			var npc = get_node_or_null("/root/Ingame/NPC")
+	
 			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (npc and npc.is_active and npc.has_property("DIMENSION_SHIFT"))
 			if anyone_has_dimension and not grid_manager.is_red_mode:
 				return true
