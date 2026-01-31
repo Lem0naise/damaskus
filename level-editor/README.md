@@ -25,13 +25,14 @@ Open browser to `http://localhost:5173`
 | Value | Name | Color | Description |
 |-------|------|-------|-------------|
 | 0 | Empty | Light gray | Walkable space |
-| 1 | Wall | Brown | Solid obstacle |
+| 1 | Wall | Brown | Solid obstacle - blocks movement and lasers |
 | 2 | Water | Blue | Water terrain (deadly without H2O mask) |
-| 3 | Crumbled Wall | Orange | Destructible with RAM mask |
-| 4 | Rock | Gray | Pushable object |
-| 5 | Red Wall | Bright red | Phase column - DOWN in red mode, UP in blue mode |
-| 6 | Blue Wall | Bright blue | Phase column - DOWN in blue mode, UP in red mode |
-| 7 | Quicksand | Sandy orange | Deadly terrain |
+| 3 | Crumbled Wall | Orange | Destructible with RAM mask - blocks lasers |
+| 4 | Rock | Gray | Pushable object - blocks lasers |
+| 5 | Red Wall | Bright red | Phase column - DOWN in red mode, UP in blue mode - blocks lasers when raised |
+| 6 | Blue Wall | Bright blue | Phase column - DOWN in blue mode, UP in red mode - blocks lasers when raised |
+| 7 | Quicksand | Sandy orange | Deadly terrain - does not block lasers |
+| 8 | **Laser Emitter** | Red | Emits deadly laser to paired emitter (pairs with closest aligned emitter) |
 
 ## Mask Types (Mask Layer)
 

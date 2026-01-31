@@ -171,7 +171,8 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	
 	var tile_type = grid_manager.get_tile_type(target_pos)
 	match tile_type:
-		GridManager.TileType.WALL: return false 
+		GridManager.TileType.WALL: return false
+		GridManager.TileType.LASER_EMITTER: return false # Laser emitters are solid like walls
 		GridManager.TileType.WATER:
 			return has_property("FLOAT")
 		GridManager.TileType.CRUMBLED_WALL:
@@ -197,6 +198,7 @@ func reset_state():
 	set_sprite_texture(texture_still)
 
 func die():
+	# TODO flash red
 	remove_mask()
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame and ingame.has_method("reload_level"):
@@ -211,7 +213,7 @@ func try_pickup():
 	if not level_gen or not level_gen.has_node("Masks"): return
 
 	for mask_obj in level_gen.get_node("Masks").get_children():
-		if mask_obj.get("is_picked_up"): 
+		if mask_obj.get("is_picked_up"):
 			continue
 			
 		var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
@@ -250,7 +252,7 @@ func update_mask_properties():
 
 	match current_mask:
 		MaskType.NONE: pass
-		MaskType.DIMENSION: 
+		MaskType.DIMENSION:
 			properties = ["DIMENSION_SHIFT"]
 			current_mask_still = golem_mask_still # Placeholder?
 			current_mask_walking = golem_mask_walking
@@ -264,7 +266,7 @@ func update_mask_properties():
 			current_mask_still = win_mask_still
 			current_mask_walking = win_mask_walking
 			if mask_layer: mask_layer.visible = true
-		MaskType.BATTERING_RAM: 
+		MaskType.BATTERING_RAM:
 			properties = ["BREAK_WALL", "PUSH_ROCKS"]
 			current_mask_still = battering_mask_still
 			current_mask_walking = battering_mask_walking

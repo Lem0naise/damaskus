@@ -8,7 +8,7 @@ const GRID_HEIGHT = 9 # 1080 / 128
 var grid_offset = Vector2.ZERO
 
 # Define Tile Types
-enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL, BLUE_WALL, QUICKSAND}
+enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL, BLUE_WALL, QUICKSAND, LASER_EMITTER}
 
 # Storage: Vector2i -> TileType (single dimension)
 var grid_data: Dictionary = {}
@@ -53,7 +53,8 @@ func get_tile_type(grid_pos: Vector2i) -> TileType:
 func is_solid(grid_pos: Vector2i) -> bool:
 	var type = get_tile_type(grid_pos)
 	return type == TileType.WALL or type == TileType.CRUMBLED_WALL or \
-		   type == TileType.RED_WALL or type == TileType.BLUE_WALL
+		   type == TileType.RED_WALL or type == TileType.BLUE_WALL or \
+		   type == TileType.LASER_EMITTER
 
 func is_deadly(grid_pos: Vector2i) -> bool:
 	print("checking deadliness")

@@ -171,7 +171,21 @@ func _process(delta):
 
 # Toggle phase mode between red and blue (universal state)
 
+func can_toggle_phase() -> bool:
+	var dangerous_tile = GridManager.TileType.RED_WALL if grid_manager.is_red_mode else GridManager.TileType.BLUE_WALL
+	if grid_manager.get_tile_type(grid_position) == dangerous_tile:
+		print("Cannot phase player is blocking position!")
+		return false
+	var npc = get_node_or_null("/root/Ingame/NPC")
+	if npc and npc.is_active:
+		if grid_manager.get_tile_type(npc.grid_position) == dangerous_tile:
+			print("cannot phase npc is blocking position!")
+			return false
+			
+	return true
+	
 func toggle_phase_mode():
+	if not can_toggle_phase(): return # TODO here flash red
 	grid_manager.is_red_mode = not grid_manager.is_red_mode
 	var mode_name = "RED" if grid_manager.is_red_mode else "BLUE"
 	print("Player toggled universal dimension to ", mode_name, " mode")
@@ -546,6 +560,9 @@ func can_move_to(target_pos: Vector2i) -> bool:
 		GridManager.TileType.WALL:
 			return false # Always blocked by walls
 
+		GridManager.TileType.LASER_EMITTER:
+			return false # Laser emitters are solid like walls
+
 		GridManager.TileType.WATER:
 			# Only pass if we have FLOAT property
 			if has_property("FLOAT"):
@@ -586,6 +603,7 @@ func reset_state():
 	set_sprite_texture(texture_still)
 	
 func die():
+	# TODO flash red
 	remove_mask()
 	# Call the IngameManager's reload_level function to reset the current level
 	var ingame = get_tree().get_root().get_node("Ingame")
