@@ -24,6 +24,7 @@ stretch_mode = 4
 
 [node name="FadeLayer" type="ColorRect" parent="." unique_id=393215701]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_right = 1944.0
 offset_bottom = 1092.0
@@ -45,10 +46,21 @@ offset_bottom = 883.0
 unique_name_in_owner = true
 
 [node name="TitleLabel" type="Label" parent="UI_Layer/MenuBox" unique_id=1058150304]
-offset_right = 1541.0
-offset_bottom = 110.0
-theme_override_font_sizes/font_size = 80
-text = "THAT'S WHAT THE POINT OF DAMASKUS"
+offset_left = 144.0
+offset_top = -16.0
+offset_right = 1379.0
+offset_bottom = 94.0
+theme_override_font_sizes/font_size = 60
+text = "THAT'S WHAT THE POINT OF"
+horizontal_alignment = 1
+
+[node name="TitleLabel2" type="Label" parent="UI_Layer/MenuBox" unique_id=2122587757]
+offset_left = -32.0
+offset_top = 26.0
+offset_right = 1509.0
+offset_bottom = 191.0
+theme_override_font_sizes/font_size = 120
+text = " DAMASKUS"
 horizontal_alignment = 1
 
 [node name="Btn_Start" type="Button" parent="UI_Layer/MenuBox" unique_id=564618523]
@@ -91,7 +103,7 @@ scale = Vector2(0.3, 0.3)
 script = ExtResource("2_glbon")
 
 [node name="Sprite" type="Sprite2D" parent="Player2" unique_id=1341756427]
-position = Vector2(96.666664, 110.000015)
+position = Vector2(-69.99999, -299.99994)
 scale = Vector2(1.7, 1.8666669)
 texture = ExtResource("3_glbon")
 
