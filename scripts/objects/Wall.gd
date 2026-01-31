@@ -1,30 +1,18 @@
-@tool
 extends GameObject
-class_name Wall2
+class_name Wall
 
-var sprite: ColorRect
+# No @tool needed anymore! 
 
 func _ready():
-	# Set wall properties
-	is_solid = true
-	is_pushable = false
-	object_type = "wall"
+	# 1. Define properties for Gameplay interactions
+	# (The GridManager knows this is a wall, but the Player might check these)
+	#is_solid = true
+	#is_pushable = false
+	#object_type = "wall"
 
-	# Create sprite if it doesn't exist
-	if not sprite:
-		create_sprite()
+	# 2. Visual Setup
+	# ideally, you set the texture in the Editor, not code.
+	# But if you want to keep your placeholder box for now:
 
-	# Call parent ready to register with grid
+	# 3. Initialize GameObject logic (Dimension visibility)
 	super._ready()
-
-func create_sprite():
-	# Remove any existing child sprites/labels first
-	for child in get_children():
-		if child is ColorRect or child is Label:
-			child.queue_free()
-
-	sprite = ColorRect.new()
-	sprite.size = Vector2(64, 64)
-	sprite.position = Vector2(-32, -32)
-	sprite.color = Color(0.5, 0.3, 0.2, 1)  # Brown
-	add_child(sprite)
