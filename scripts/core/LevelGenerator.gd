@@ -1,7 +1,5 @@
 extends Node2D
 
-
-var level = 4
 var level = 6
 
 @onready var grid_manager: GridManager = %GridManager # Make sure GridManager is accessible
@@ -11,20 +9,20 @@ var level = 6
 
 # --- CONFIGURATION ---
 # Key: Grid ID (int) -> Value: Settings (Dictionary)
-var tile_definitions: Dictionary = {} 
+var tile_definitions: Dictionary = {}
 var mask_definitions: Dictionary = {}
 
 func _init_definitions():
 	# define how every ID behaves here. 
 	# If you add a new object, just add a line here!
 	tile_definitions = {
-		1: { "scene": wall_scene, "container": "Walls", "type": GridManager.TileType.WALL, "auto_tile": true },
-		2: { "scene": water_scene, "container": "Water", "type": GridManager.TileType.WATER, "auto_tile": true },
-		3: { "scene": crumbled_wall_scene, "container": "CrumbledWalls", "type": GridManager.TileType.CRUMBLED_WALL, "auto_tile": false },
-		4: { "scene": rock_scene, "container": "Rocks", "type": GridManager.TileType.ROCK, "auto_tile": false },
-		5: { "scene": red_wall_scene, "container": "RedWalls", "type": GridManager.TileType.RED_WALL, "auto_tile": false },
-		6: { "scene": blue_wall_scene, "container": "BlueWalls", "type": GridManager.TileType.BLUE_WALL, "auto_tile": false },
-		7: { "scene": quicksand_scene, "container": "Quicksand", "type": GridManager.TileType.QUICKSAND, "auto_tile": false },
+		1: {"scene": wall_scene, "container": "Walls", "type": GridManager.TileType.WALL, "auto_tile": true},
+		2: {"scene": water_scene, "container": "Water", "type": GridManager.TileType.WATER, "auto_tile": true},
+		3: {"scene": crumbled_wall_scene, "container": "CrumbledWalls", "type": GridManager.TileType.CRUMBLED_WALL, "auto_tile": false},
+		4: {"scene": rock_scene, "container": "Rocks", "type": GridManager.TileType.ROCK, "auto_tile": false},
+		5: {"scene": red_wall_scene, "container": "RedWalls", "type": GridManager.TileType.RED_WALL, "auto_tile": false},
+		6: {"scene": blue_wall_scene, "container": "BlueWalls", "type": GridManager.TileType.BLUE_WALL, "auto_tile": false},
+		7: {"scene": quicksand_scene, "container": "Quicksand", "type": GridManager.TileType.QUICKSAND, "auto_tile": false},
 	}
 	
 	# Simple map for masks
@@ -224,7 +222,7 @@ func next_level():
 	else:
 		clear_level()
 		generate_level(level)
-func clear_level():		
+func clear_level():
 	# 1. Clear Visual Nodes (The Sprites)
 	for child in walls_container.get_children():
 		child.queue_free()
