@@ -14,6 +14,7 @@ var grid_position: Vector2i = Vector2i.ZERO
 
 # Object properties
 var is_solid: bool = false  # Blocks movement
+@export var dimension_ids: Array = [0]  # List of dimensions this object exists in
 var is_pushable: bool = false  # Can be pushed
 var object_type: String = "base"  # Type identifier for future extension
 
@@ -66,12 +67,19 @@ func snap_to_grid_editor():
 func register_with_grid():
 	# Register this object with the grid manager
 	if is_solid:
-		grid_manager.set_solid(grid_position, true)
+		for dim in dimension_ids:
+			grid_manager.set_solid(grid_position, true, dim)
 
 func unregister_from_grid():
 	# Remove this object from grid
 	if is_solid:
-		grid_manager.set_solid(grid_position, false)
+		for dim in dimension_ids:
+			grid_manager.set_solid(grid_position, false, dim)
+
+func update_dimension_visibility(active_dimension: int):
+	visible = active_dimension in dimension_ids
+	if has_node("CollisionShape2D"):
+		get_node("CollisionShape2D").disabled = not (active_dimension in dimension_ids)
 
 # Override this for custom behavior when player interacts
 func on_player_interact():

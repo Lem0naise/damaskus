@@ -31,6 +31,11 @@ var current_mask: MaskType = MaskType.NONE
 
 # Player state (NULL state by default)
 var is_intangible: bool = false  # Can walk through walls when true
+
+# Dimension system
+var current_dimension: int = 0
+const NUM_DIMENSIONS: int = 2  # Change this if you have more dimensions
+
 var properties: Array[String] = []  # Active properties from current mask
 
 func _ready():
@@ -41,6 +46,15 @@ func _ready():
 
 	# Start in NULL state (no mask)
 	update_mask_properties()
+
+	# Ensure all objects are set to the correct dimension visibility/collision at game start
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if ingame:
+		for group in ["Walls", "Water"]:
+			if ingame.has_node(group):
+				for obj in ingame.get_node(group).get_children():
+					if obj.has_method("update_dimension_visibility"):
+						obj.update_dimension_visibility(current_dimension)
 
 	# Set initial sprite
 	set_sprite_texture(texture_still)
@@ -57,6 +71,10 @@ func _process(delta):
 	# Handle input
 	handle_input()
 
+	# Handle dimension switching
+	if Input.is_action_just_pressed("ui_accept"):  # Default: spacebar
+		switch_dimension()
+
 	# Process movement
 	if is_moving:
 		animate_movement(delta)
@@ -65,6 +83,18 @@ func _process(delta):
 		var buffered_move = next_move
 		next_move = Vector2i.ZERO
 		try_move(buffered_move)
+
+# Switch dimension and update all objects
+func switch_dimension():
+	current_dimension = (current_dimension + 1) % NUM_DIMENSIONS
+	# Notify all objects to update their visibility/collision
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if ingame:
+		for group in ["Walls", "Water"]:
+			if ingame.has_node(group):
+				for obj in ingame.get_node(group).get_children():
+					if obj.has_method("update_dimension_visibility"):
+						obj.update_dimension_visibility(current_dimension)
 
 func handle_input():
 	var input_dir = Vector2i.ZERO
@@ -142,8 +172,8 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	if is_intangible:
 		return true
 
-	# Check for solid tiles (walls, water, etc.)
-	if grid_manager.is_solid(target_pos):
+	# Check for solid tiles (walls, water, etc.) in the current dimension
+	if grid_manager.is_solid(target_pos, current_dimension):
 		return false
 
 	return true
