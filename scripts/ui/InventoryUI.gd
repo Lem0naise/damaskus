@@ -73,6 +73,7 @@ func get_mask_name(mask_type) -> String:
 		1: return "DIMENSION"
 		2: return "WATER"
 		3: return "WINNER"
+		4: return "BATTERING_RAM"
 		_: return "UNKNOWN"
 
 func get_mask_display_name(mask_type) -> String:
@@ -80,6 +81,7 @@ func get_mask_display_name(mask_type) -> String:
 		1: return "Dimension"
 		2: return "Water"
 		3: return "Equip to Win!"
+		4: return "Battering Ram"
 		_: return "Unknown"
 
 func get_mask_color(mask_type) -> Color:
@@ -87,4 +89,5 @@ func get_mask_color(mask_type) -> Color:
 		1: return Color(0.8, 0.2, 0.8, 1)  # Purple for DIMENSION
 		2: return Color(0.2, 0.6, 0.9, 1)  # Blue for WATER
 		3: return Color(0.827, 0.667, 0.326, 1.0)  # Gold for WINNER
+		4: return Color(0.8, 0.3, 0.2, 1)  # Red/Orange for RAM
 		_: return Color(1, 1, 1, 1)

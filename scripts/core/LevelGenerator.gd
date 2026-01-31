@@ -16,7 +16,7 @@ var level_1_layout = [
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 	[1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 0, 0, 0, 0, 0, 1, 0, 0, 2, 2, 2, 0, 0, 1],
-	[1, 0, 0, 1, 1, 0, 1, 0, 0, 2, 0, 2, 0, 0, 1],
+	[1, 0, 0, 1, 1, 0, 1, 0, 0, 2, 0, 2, 0, 3, 1],
 	[1, 0, 0, 1, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 1],
 	[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -29,7 +29,7 @@ var level_1_masks = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -58,7 +58,26 @@ func generate_level():
 				water_container.add_child(water)
 				# Register to GridManager
 				grid_manager.set_tile(grid_pos, GridManager.TileType.WATER)
+
+			elif cell_value == 3: # CRUMBLED WALL
+				var wall = wall_scene.instantiate()
+				wall.position = world_pos
+				wall.modulate = Color(0.6, 0.4, 0.3) # Brownish tint
 				
+				# Create a dedicated container if it doesn't exist, or just use walls for now but track them?
+				# Actually, the player needs to find them by group/container to queue_free them.
+				# Let's add a "CrumbledWalls" container dynamically if not present, or better yet, assume structure.
+				# For now, let's create a node called "CrumbledWalls" in _ready or just add here.
+				if not has_node("CrumbledWalls"):
+					var node = Node2D.new()
+					node.name = "CrumbledWalls"
+					add_child(node)
+				
+				get_node("CrumbledWalls").add_child(wall)
+				
+				# Register to GridManager
+				grid_manager.set_tile(grid_pos, GridManager.TileType.CRUMBLED_WALL)
+
 	for y in range(level_1_masks.size()):
 		for x in range(level_1_masks[y].size()):
 			var cell_value = level_1_masks[y][x]
@@ -77,6 +96,9 @@ func generate_level():
 				
 				if cell_value == 3: # WINNING MASK
 					mask.mask_type = Mask.MaskType.WINNER
+				
+				if cell_value == 4: # BATTERING RAM MASK
+					mask.mask_type = Mask.MaskType.BATTERING_RAM
 					
 				masks_container.add_child(mask)
 				

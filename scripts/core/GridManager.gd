@@ -8,7 +8,7 @@ const GRID_HEIGHT = 9 # 1080 / 128
 var grid_offset = Vector2.ZERO
 
 # Define Tile Types
-enum TileType { EMPTY, WALL, WATER, OBSTACLE, MASK }
+enum TileType { EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK }
 
 # Storage: dimension_id -> { Vector2i: TileType }
 var grid_data: Dictionary = {} 
@@ -53,4 +53,4 @@ func get_tile_type(grid_pos: Vector2i, dimension_id: int = 0) -> TileType:
 # Replaces your old is_solid check
 func is_solid(grid_pos: Vector2i, dimension_id: int = 0) -> bool:
 	var type = get_tile_type(grid_pos, dimension_id)
-	return type == TileType.WALL # Water is not "solid" in the traditional sense, handled separately
+	return type == TileType.WALL or type == TileType.CRUMBLED_WALL # Water is not "solid" in the traditional sense, handled separately
