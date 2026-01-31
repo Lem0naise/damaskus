@@ -197,6 +197,7 @@ func reset_state():
 	set_sprite_texture(texture_still)
 
 func die():
+	# TODO flash red
 	remove_mask()
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame and ingame.has_method("reload_level"):
