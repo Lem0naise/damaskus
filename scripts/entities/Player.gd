@@ -460,6 +460,11 @@ func on_movement_finished():
 	
 	update_tooltip_state()
 
+	# Check if the current tile is deadly and run die if so
+	if grid_manager.is_deadly(grid_position):
+		print("WOAHH")
+		die()
+		return
 
 	# If player queued a move while sliding, execute it now for responsiveness
 
@@ -537,6 +542,21 @@ func can_move_to(target_pos: Vector2i) -> bool:
 			return true # Free to move
 
 	return true
+
+func die():
+	# Call the IngameManager's reload_level function to reset the current level
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if ingame and ingame.has_method("reload_level"):
+		print("e")
+		ingame.reload_level()
+	elif ingame and ingame.has_node("IngameManager"):
+		var manager = ingame.get_node("IngameManager")
+		print("f")
+		if manager and manager.has_method("reload_level"):
+			manager.reload_level()
+			print("e")
+	else:
+		print("Error: Could not find IngameManager to reload level.")
 
 
 # Helper function to set sprite texture and scale it to consistent size
