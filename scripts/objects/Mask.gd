@@ -2,7 +2,7 @@ extends GameObject
 class_name Mask
 
 # Match Player's MaskType enum
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM}
 
 # The Generator will set this variable before adding the child
 @export var mask_type: MaskType = MaskType.NONE
@@ -52,11 +52,10 @@ func setup_visuals():
 
 func get_mask_texture() -> Texture2D:
 	match mask_type:
-		MaskType.DIMENSION: return null # Purple
+		MaskType.DIMENSION: return golem_mask_still # Purple
 		MaskType.WATER:     return water_mask_still
 		MaskType.WINNER:    return win_mask_still
 		MaskType.BATTERING_RAM: return battering_mask_still
-		MaskType.GOLEM: return golem_mask_still
 		_:                  return null
 
 func get_mask_name() -> String:
@@ -65,15 +64,13 @@ func get_mask_name() -> String:
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "GOAL"
 		MaskType.BATTERING_RAM: return "RAM"
-		MaskType.GOLEM: return "GOLEM"
 		_: return "?"
 
 func get_mask_description() -> String:
 	match mask_type:
 		MaskType.DIMENSION: return "Toggle phase (Space)"
 		MaskType.WATER: return "Walk on water"
-		MaskType.BATTERING_RAM: return "Smash through crumbled walls"
-		MaskType.GOLEM: return "Push rocks!"
+		MaskType.BATTERING_RAM: return "Smash through crumbled walls and push logs!"
 		MaskType.WINNER: return "Equip to win!"
 		_: return ""
 

@@ -208,7 +208,6 @@ func get_mask_name_internal(mask_type) -> String:
 		2: return "WATER"
 		3: return "WINNER"
 		4: return "BATTERING_RAM"
-		5: return "GOLEM"
 		_: return "UNKNOWN"
 
 func get_mask_display_name(mask_type) -> String:
@@ -217,7 +216,6 @@ func get_mask_display_name(mask_type) -> String:
 		2: return "Water"
 		3: return "Equip to Win!"
 		4: return "Battering Ram"
-		5: return "Golem"
 		_: return "Unknown"
 
 func get_mask_color(mask_type) -> Color:

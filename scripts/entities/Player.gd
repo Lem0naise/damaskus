@@ -386,8 +386,8 @@ func try_move(direction: Vector2i):
 			for rock in ingame.get_node("LevelGenerator/Rocks").get_children():
 				if rock.has_method("get_grid_position") and rock.get_grid_position() == target_grid_pos:
 					# Found the rock at target position
-					if rock.is_on_water and not has_property("PUSH_ROCKS"):
-						# Rock is a bridge (on water) and we don't have GOLEM
+					if rock.is_on_water :
+						# Rock is a bridge (on water) 
 						# Allow walking on it - skip the push logic
 						break
 					elif has_property("PUSH_ROCKS"):
@@ -640,6 +640,9 @@ func update_mask_properties():
 			is_intangible = false
 			properties = ["DIMENSION_SHIFT"]
 			# Assign Dimension textures here if you have them later
+			current_mask_still = golem_mask_still
+			current_mask_walking = golem_mask_walking
+			mask_layer.visible = true # Make sure to show it!
 
 		MaskType.WATER:
 			# WATER - allows floating on water
@@ -668,18 +671,11 @@ func update_mask_properties():
 		MaskType.BATTERING_RAM:
 			# BATTERING_RAM - allows breaking crumbled walls
 			is_intangible = false
-			properties = ["BREAK_WALL"]
+			properties = ["BREAK_WALL", "PUSH_ROCKS"]
 			current_mask_still = battering_mask_still
 			current_mask_walking = battering_mask_walking
 			mask_layer.visible = true # Make sure to show it!
 
-		MaskType.GOLEM:
-			# GOLEM - allows pushing rocks
-			is_intangible = false
-			properties = ["PUSH_ROCKS"]
-			current_mask_still = golem_mask_still
-			current_mask_walking = golem_mask_walking
-			mask_layer.visible = true # Make sure to show it!
 
 	# Force a visual update immediately so it doesn't wait for movement
 	update_visuals()
@@ -768,7 +764,7 @@ func get_mask_desc(type: MaskType) -> String:
 		MaskType.DIMENSION: return "Press SPACE to walk through red or blue walls"
 		MaskType.WATER: return "Go on, walk on water!"
 		MaskType.WINNER: return "YOU'VE WON!"
-		MaskType.BATTERING_RAM: return "Smash through crumbling walls!"
+		MaskType.BATTERING_RAM: return "Smash through crumbling walls and push logs out the way!"
 		MaskType.GOLEM: return "Push that rock out the way!"
 		_: return "?"
 		
