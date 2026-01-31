@@ -7,7 +7,7 @@ class_name Water
 @export var tex_center: Texture2D # Surrounded by water on all sides
 @export var tex_edge: Texture2D   # Flat edge on TOP (we will rotate it)
 @export var tex_corner: Texture2D # Outer corner on TOP-LEFT (we will rotate it)
-
+@export var tex_tip: Texture2D # U-shaped end piece
 
 @onready var sprite_node = $Sprite 
 
@@ -27,6 +27,24 @@ func update_appearance(n: Dictionary):
 	var is_west =  n["W"]
 
 	# --- LOGIC TREE ---
+	
+	# --- 2. TIPS / END CAPS (3 adjacent sides are empty) ---
+	# Tip pointing North (Water is South, everything else empty)
+	if is_south and not is_north and not is_east and not is_west:
+		set_visual(tex_tip, 0) # Rotate so the open side faces South
+		return
+	# Tip pointing East (Water is West)
+	if is_west and not is_north and not is_south and not is_east:
+		set_visual(tex_tip, 90)
+		return
+	# Tip pointing South (Water is North)
+	if is_north and not is_south and not is_east and not is_west:
+		set_visual(tex_tip, 180)
+		return
+	# Tip pointing West (Water is East)
+	if is_east and not is_north and not is_south and not is_west:
+		set_visual(tex_tip, 270)
+		return
 	
 	# 1. CENTER (Surrounded by water)
 	if is_north and is_south and is_east and is_west:

@@ -157,7 +157,7 @@ var level_masks = [
 ]
 ]
 
-var level = 5
+var level = 0
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 const WIN_SCENE_PATH: String = "res://win.tscn"
 
