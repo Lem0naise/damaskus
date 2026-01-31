@@ -5,7 +5,6 @@ class_name Player
 @onready var grid_manager: GridManager = get_node("/root/Ingame/GridManager")
 @onready var sprite: Sprite2D = $Sprite
 
-
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 
 # Textures
@@ -15,10 +14,12 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 # Sprite size (slightly smaller than grid cell)
 const SPRITE_SIZE = 180.0  # pixels
 
-# Movement
+# Movement Configuration
 var grid_position: Vector2i = Vector2i.ZERO
 var is_moving: bool = false
-var move_speed: float = 15.0  # Speed of grid transition animation
+# Lower number = Faster, Snappier (e.g. 0.15)
+# Higher number = Slower, Heavier (e.g. 0.3)
+var move_duration: float = 0.18 
 
 # Input buffering
 var next_move: Vector2i = Vector2i.ZERO  # Only buffer one move
@@ -88,10 +89,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("equip_mask"):  # R key
 		cycle_equipped_mask()
 
-	# Process movement
-	if is_moving:
-		animate_movement(delta)
-	elif next_move != Vector2i.ZERO and move_cooldown <= 0:
+	# Process movement buffer (Only if NOT currently moving)
+	# The actual movement is now handled by the Tween, not manual delta updates
+	if not is_moving and next_move != Vector2i.ZERO and move_cooldown <= 0:
 		# Execute the one buffered move
 		var buffered_move = next_move
 		next_move = Vector2i.ZERO
@@ -226,7 +226,32 @@ func try_move(direction: Vector2i):
 		elif direction == Vector2i.RIGHT:
 			sprite.flip_h = false
 
-		move_cooldown = HELD_KEY_DELAY  # Set cooldown for next move
+		move_cooldown = HELD_KEY_DELAY
+		
+		# --- NEW SMOOTH TWEEN MOVEMENT ---
+		var target_world_pos = grid_manager.grid_to_world(grid_position)
+		
+		# Create a tween for smooth movement
+		var tween = create_tween()
+		# TRANS_SINE + EASE_OUT gives a natural slide
+		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "global_position", target_world_pos, move_duration)
+		tween.tween_callback(on_movement_finished)
+
+func on_movement_finished():
+	# Called when tween finishes
+	is_moving = false
+	set_sprite_texture(texture_still)
+	
+	# Check for pickups automatically when stopping
+	try_pickup()
+	
+	# If player queued a move while sliding, execute it now for responsiveness
+	if next_move != Vector2i.ZERO:
+		var buffered_move = next_move
+		next_move = Vector2i.ZERO
+		try_move(buffered_move)
+
 func can_move_to(target_pos: Vector2i) -> bool:
 	# 1. Bounds check
 	if not grid_manager.is_valid_position(target_pos):
@@ -253,25 +278,6 @@ func can_move_to(target_pos: Vector2i) -> bool:
 			return true # Free to move
 			
 	return true
-	
-	
-func animate_movement(delta):
-	var target_world_pos = grid_manager.grid_to_world(grid_position)
-
-	# Smoothly move towards target
-	global_position = global_position.move_toward(target_world_pos, move_speed * delta * grid_manager.TILE_SIZE)
-
-	# Check if reached target
-	if global_position.distance_to(target_world_pos) < 0.1:
-		global_position = target_world_pos
-		is_moving = false
-		set_sprite_texture(texture_still)
-		on_movement_complete()
-
-func on_movement_complete():
-	# Called when player reaches a new grid cell
-	# TODO: Check for pickups, triggers, etc.
-	pass
 
 # Helper function to set sprite texture and scale it to consistent size
 func set_sprite_texture(texture: Texture2D):
@@ -319,10 +325,9 @@ func update_mask_properties():
 			properties = ["FLOAT"]
 		
 		MaskType.WINNER: 
-		
+			# Win condition
 			get_tree().change_scene_to_file(MENU_SCENE_PATH)
 				
-
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
 func has_property(property_name: String) -> bool:
