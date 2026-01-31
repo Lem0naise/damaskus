@@ -346,6 +346,7 @@ func update_mask_properties():
 		
 		MaskType.WINNER: 
 			# Win condition
+			
 			get_tree().change_scene_to_file(MENU_SCENE_PATH)
 
 		MaskType.BATTERING_RAM:
