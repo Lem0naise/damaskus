@@ -134,7 +134,7 @@ var level_masks = [
 ]
 ]
 
-var level = 4
+var level = 0
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 
 func _ready():
