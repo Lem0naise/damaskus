@@ -178,10 +178,35 @@ func try_move(direction: Vector2i):
 		tween.tween_property(self, "global_position", target_world_pos, move_duration)
 		tween.tween_callback(on_movement_finished)
 
+func die():
+	remove_mask()
+	# Call the IngameManager's reload_level function to reset the current level
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if ingame and ingame.has_method("reload_level"):
+		print("e")
+		ingame.reload_level()
+	elif ingame and ingame.has_node("IngameManager"):
+		var manager = ingame.get_node("IngameManager")
+		print("f")
+		if manager and manager.has_method("reload_level"):
+			manager.reload_level()
+			print("e")
+	else:
+		print("Error: Could not find IngameManager to reload level.")
+
+
 func on_movement_finished():
 	if not is_active: return
 	is_moving = false
 	update_visuals()
+	
+	
+	# Check if the current tile is deadly and run die if so
+	if grid_manager.is_deadly(grid_position):
+		print("WOAHH NPC dead")
+		die()
+		return
+		
 	# No UI updates here!
 
 func can_move_to(target_pos: Vector2i) -> bool:
@@ -248,6 +273,7 @@ func wear_mask(type):
 	update_mask_properties()
 
 func remove_mask():
+	if not is_active: return
 	current_mask = MaskType.NONE
 	update_mask_properties()
 

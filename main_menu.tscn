@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="3_qe12f"]
 [ext_resource type="AudioStream" uid="uid://b01fau2lyyjsj" path="res://assets/mainmenunew.wav" id="5_8qtwp"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="5_glbon"]
+[ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="9_dy7ct"]
 
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
@@ -159,3 +160,5 @@ vertical_alignment = 1
 
 [node name="GridManager" type="Node" parent="." unique_id=897976182]
 script = ExtResource("5_glbon")
+
+[node name="InventoryUI" parent="." unique_id=1643233580 instance=ExtResource("9_dy7ct")]

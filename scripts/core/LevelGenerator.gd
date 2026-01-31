@@ -1,7 +1,8 @@
 extends Node2D
 
 
-var level = 0
+var level = 4
+var level = 6
 
 @onready var grid_manager: GridManager = %GridManager # Make sure GridManager is accessible
 @onready var walls_container = $Walls
@@ -113,6 +114,16 @@ var level_layouts = [
 	[1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 6, 0, 0, 0, 1],
 	[1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 6, 0, 0, 0, 1],
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+], [ # LEVEL 7
+	[0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 5, 7, 7],
+	[0, 0, 0, 1, 0, 0, 1, 0, 7, 0, 1, 0, 5, 7, 7],
+	[0, 0, 0, 1, 5, 5, 1, 0, 1, 0, 1, 0, 2, 6, 6],
+	[0, 0, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 1, 0, 0, 2, 0, 1, 1, 0, 0, 1, 1, 1],
+	[7, 0, 7, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 3, 0, 0, 2, 0, 1, 1, 1, 0, 6, 6, 6],
+	[0, 0, 0, 3, 0, 0, 2, 0, 0, 7, 1, 0, 6, 0, 7],
+	[0, 0, 0, 3, 0, 0, 2, 0, 0, 0, 0, 0, 6, 7, 7],
 ],
 ]
 
@@ -183,6 +194,18 @@ var level_masks = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ],
+[ # LEVEL 7
+	[0, 0, 0, 0, 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+	[0, -1, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+],
+
 ]
 
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
@@ -366,6 +389,14 @@ func generate_level(level_idx):
 
 				get_node("Quicksand").add_child(quicksand)
 				grid_manager.set_tile(grid_pos, GridManager.TileType.QUICKSAND)
+				
+				
+				# Check neighbors to determine texture
+				var neighbours = get_neighbours(level_layouts[level], grid_pos, 7)
+				# We defer this slightly or call immediate if script is ready
+				if quicksand.has_method("update_appearance"):
+					quicksand.update_appearance(neighbours)
+					
 
 	for y in range(level_masks[level].size()):
 		for x in range(level_masks[level][y].size()):

@@ -552,6 +552,7 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	return true
 
 func die():
+	remove_mask()
 	# Call the IngameManager's reload_level function to reset the current level
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame and ingame.has_method("reload_level"):
@@ -563,6 +564,7 @@ func die():
 		if manager and manager.has_method("reload_level"):
 			manager.reload_level()
 			print("e")
+			
 	else:
 		print("Error: Could not find IngameManager to reload level.")
 
