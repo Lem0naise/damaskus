@@ -109,14 +109,14 @@ var level_masks = [
 ]
 ]
 
-var level = 3
+var level = 0
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 
 func _ready():
 	generate_level(level) # level 1 to start
 func next_level():
 	level += 1
-	if level >2:
+	if level >3:
 		get_tree().change_scene_to_file(MENU_SCENE_PATH)
 	else:
 		clear_level()

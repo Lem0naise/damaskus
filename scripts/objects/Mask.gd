@@ -50,8 +50,8 @@ func get_mask_texture() -> Texture2D:
 		MaskType.DIMENSION: return null # Purple
 		MaskType.WATER:     return water_mask_still
 		MaskType.WINNER:    return win_mask_still
-		MaskType.BATTERING_RAM: return null
-		MaskType.GOLEM: return null
+		MaskType.BATTERING_RAM: return win_mask_still
+		MaskType.GOLEM: return win_mask_still
 		_:                  return null
 
 func get_mask_name() -> String:
