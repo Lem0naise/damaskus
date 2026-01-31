@@ -1,6 +1,8 @@
 extends Node
 class_name GridManager
 
+signal grid_state_changed
+
 # Configuration
 const TILE_SIZE = 128
 const GRID_WIDTH = 15 # 1920 / 128
@@ -57,7 +59,6 @@ func is_solid(grid_pos: Vector2i) -> bool:
 		   type == TileType.LASER_EMITTER
 
 func is_deadly(grid_pos: Vector2i) -> bool:
-	print("checking deadliness")
 	var type = get_tile_type(grid_pos)
 	# Add any deadly tile types here
 	return type == TileType.QUICKSAND

@@ -37,7 +37,6 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var battering_mask_walking: Texture2D
 
 
-
 var current_mask_still: Texture2D = null
 var current_mask_walking: Texture2D = null
 
@@ -89,10 +88,11 @@ var is_intangible: bool = false # Can walk through walls when true
 
 var properties: Array[String] = [] # Active properties from current mask
 
+var is_dying: bool = false
+
 
 func _ready():
 	# Snap to grid at start
-	
 	if grid_manager:
 		global_position = grid_manager.grid_to_world(grid_position)
 		grid_position = grid_manager.world_to_grid(global_position)
@@ -133,8 +133,6 @@ func _process(delta):
 	# Handle phase mode switching (if player OR NPC has DIMENSION mask)
 
 	if Input.is_action_just_pressed("ui_accept"): # Default: spacebar
-
-
 		# Check if either player or NPC has DIMENSION mask
 		var npc = get_node_or_null("/root/Ingame/NPC")
 		var player_has_dimension = current_mask == MaskType.DIMENSION
@@ -149,7 +147,6 @@ func _process(delta):
 	# Handle pickup
 
 	if Input.is_action_just_pressed("pickup"): # E key
-		
 		try_pickup()
 		
 		
@@ -189,7 +186,8 @@ func toggle_phase_mode():
 	grid_manager.is_red_mode = not grid_manager.is_red_mode
 	var mode_name = "RED" if grid_manager.is_red_mode else "BLUE"
 	print("Player toggled universal dimension to ", mode_name, " mode")
-
+	grid_manager.grid_state_changed.emit()
+	
 
 # Try to pick up a mask at the current position
 # Try to pick up a mask at the current position
@@ -202,7 +200,7 @@ func try_pickup():
 
 	# Check for masks at current grid position
 	for mask_obj in level_gen.get_node("Masks").get_children():
-		if mask_obj.get("is_picked_up"): 
+		if mask_obj.get("is_picked_up"):
 			continue
 			
 		if mask_obj.has_method("pickup"):
@@ -210,22 +208,22 @@ func try_pickup():
 			
 			if mask_grid_pos == grid_position:
 				# --- SWAP LOGIC START ---
-				
 				# 1. If we are already holding a mask, drop it first
 				if current_mask != MaskType.NONE:
 					# Spawn the old mask at the current location
 					level_gen.spawn_mask_at(grid_position, current_mask)
 					print("Dropped old mask: ", MaskType.keys()[current_mask])
-				
+							
 				# 2. Pick up the new mask
 				var new_mask_type = mask_obj.mask_type
 				wear_mask(new_mask_type)
 				
 				# 3. Remove the new mask from the floor (pickup)
-				mask_obj.pickup() 
+				mask_obj.pickup()
 				
 				update_tooltip_state()
-					
+				
+				
 				return
 				
 				
@@ -270,6 +268,8 @@ func drop_mask():
 	if current_mask == MaskType.NONE:
 		print("No mask to drop!")
 		return
+		
+		# TODO make it not be allowed to drop on things like other masks, or solid blocks like water etc
 
 	# 2. Get references
 	var ingame = get_tree().get_root().get_node("Ingame")
@@ -292,7 +292,7 @@ func drop_mask():
 		if inventory.has(current_mask):
 			inventory.erase(current_mask)
 		# Or just clear all since we only hold one
-		inventory.clear() 
+		inventory.clear()
 		
 		# 6. Update UI
 		update_inventory_ui()
@@ -301,10 +301,13 @@ func drop_mask():
 		# This ensures the pickup tooltip appears immediately
 		update_tooltip_state()
 			
+				
+		grid_manager.grid_state_changed.emit()
+		
 	else:
 		print("Error: LevelGenerator missing spawn_mask_at method")
 		
-		
+	
 func handle_input():
 	var input_dir = Vector2i.ZERO
 
@@ -404,7 +407,7 @@ func try_move(direction: Vector2i):
 			for rock in ingame.get_node("LevelGenerator/Rocks").get_children():
 				if rock.has_method("get_grid_position") and rock.get_grid_position() == target_grid_pos:
 					# Found the rock at target position
-					if rock.is_on_water :
+					if rock.is_on_water:
 						# Rock is a bridge (on water) 
 						# Allow walking on it - skip the push logic
 						break
@@ -432,7 +435,7 @@ func try_move(direction: Vector2i):
 					wall.queue_free()
 
 					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY)
-
+									
 					print("Smashed a crumbled wall!")
 
 					break
@@ -483,6 +486,8 @@ func try_move(direction: Vector2i):
 	
 func on_movement_finished():
 	# Called when tween finishes
+	grid_manager.grid_state_changed.emit()
+	
 	is_moving = false
 
 	update_visuals()
@@ -516,7 +521,6 @@ func can_move_to(target_pos: Vector2i) -> bool:
 		# The NPC is currently blocking us.
 		# However, since the NPC copies our moves, if we move, THEY will move.
 		# We need to check if the NPC has a valid place to go.
-		
 		# Calculate where the NPC would try to go
 		var move_direction = target_pos - grid_position
 		var npc_future_pos = npc.grid_position + move_direction
@@ -524,7 +528,7 @@ func can_move_to(target_pos: Vector2i) -> bool:
 		# Ask the NPC: "Can you move to your next spot?"
 		if npc.can_move_to(npc_future_pos):
 			# YES: The NPC will vacate this tile, so we CAN move here.
-			return true 
+			return true
 		else:
 			# NO: The NPC is blocked (by a wall, etc), so we are effectively blocked.
 			return false
@@ -543,7 +547,6 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	match tile_type:
 		GridManager.TileType.RED_WALL:
 			# Can pass if player OR NPC has DIMENSION mask and in RED mode (universal)
-			
 			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (npc and npc.is_active and npc.has_property("DIMENSION_SHIFT"))
 			if anyone_has_dimension and grid_manager.is_red_mode:
 				return true
@@ -551,7 +554,6 @@ func can_move_to(target_pos: Vector2i) -> bool:
 
 		GridManager.TileType.BLUE_WALL:
 			# Can pass if player OR NPC has DIMENSION mask and in BLUE mode (universal)
-	
 			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (npc and npc.is_active and npc.has_property("DIMENSION_SHIFT"))
 			if anyone_has_dimension and not grid_manager.is_red_mode:
 				return true
@@ -599,10 +601,14 @@ func reset_state():
 	# 1. Stop Movement
 	if move_tween: move_tween.kill()
 	is_moving = false
+	is_dying = false
 	
 	set_sprite_texture(texture_still)
 	
 func die():
+	if is_dying: return
+	is_dying = true
+	
 	# TODO flash red
 	remove_mask()
 	# Call the IngameManager's reload_level function to reset the current level
@@ -647,7 +653,7 @@ func wear_mask(mask_type: MaskType):
 	update_mask_properties()
 	update_inventory_ui()
 
-
+	
 func remove_mask():
 	current_mask = MaskType.NONE
 
@@ -662,12 +668,10 @@ func move_level():
 	self.grid_position = Vector2i(1, 1)
 	
 	
-	
 	remove_mask()
 	
 	inventory.clear()
 	update_inventory_ui()
-	
 	
 	
 	update_tooltip_state()
@@ -734,6 +738,8 @@ func update_mask_properties():
 
 	# Force a visual update immediately so it doesn't wait for movement
 	update_visuals()
+	
+	grid_manager.grid_state_changed.emit()
 	
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
@@ -822,5 +828,3 @@ func get_mask_desc(type: MaskType) -> String:
 		MaskType.BATTERING_RAM: return "Smash through crumbling walls and push logs out the way!"
 		MaskType.GOLEM: return "Push that rock out the way!"
 		_: return "?"
-		
-	

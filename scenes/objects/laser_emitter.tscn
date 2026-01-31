@@ -1,12 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://laser_emitter_scene"]
+[gd_scene format=3 uid="uid://hrw28w574gdx"]
 
-[ext_resource type="Script" path="res://scripts/objects/LaserEmitter.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/laser_emitter.png" id="2"]
+[ext_resource type="Script" uid="uid://djc3an5xslair" path="res://scripts/objects/LaserEmitter.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://b6x61t7xwuy2j" path="res://assets/laser_emitter.png" id="2"]
+[ext_resource type="PackedScene" uid="uid://bf1aqg2kimfyx" path="res://scenes/objects/laserBeam.tscn" id="2_a25fg"]
+[ext_resource type="Texture2D" uid="uid://bbl17ad66jtr7" path="res://assets/laserEmitter.png" id="4_5c0h5"]
 
-[node name="LaserEmitter" type="Node2D"]
+[node name="LaserEmitter" type="Node2D" unique_id=409707917]
 script = ExtResource("1")
+beam_texture = ExtResource("2_a25fg")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=110065465]
+visible = false
 texture = ExtResource("2")
 
-[node name="LaserBeams" type="Node2D" parent="."]
+[node name="LaserBeams" type="Node2D" parent="." unique_id=1932101177]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=900375686]
+offset_left = -64.0
+offset_top = -65.0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("4_5c0h5")
+expand_mode = 1
