@@ -1,5 +1,8 @@
 extends Node2D
 
+
+var level = 0
+
 @onready var grid_manager: GridManager = %GridManager # Make sure GridManager is accessible
 @onready var walls_container = $Walls
 @onready var water_container = $Water
@@ -70,7 +73,7 @@ var level_layouts = [
 	[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 1],
 	[1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 2, 2, 2, 1],
 	[1, 2, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1],
-	[1, 0, 4, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+	[1, 0, 4, 0, 0, 0, 0, 1, 0, 0, 1, 0, 7, 0, 1],
 	[1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ],
@@ -156,7 +159,6 @@ var level_masks = [
 ],
 ]
 
-var level = 0
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 const WIN_SCENE_PATH: String = "res://win.tscn"
 
