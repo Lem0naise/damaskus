@@ -7,16 +7,17 @@ export const CELL_SIZE = 48; // pixels in web editor (128px in-game)
 
 // Tile definitions (matches GridManager.TileType enum)
 // Values: 0=EMPTY, 1=WALL, 2=WATER, 3=CRUMBLED_WALL, 4=ROCK,
-//         5=RED_WALL, 6=BLUE_WALL, 7=QUICKSAND
+//         5=RED_WALL, 6=BLUE_WALL, 7=QUICKSAND, 8=LASER_EMITTER
 export const TILES: TileDefinition[] = [
   { value: 0, name: 'Empty', color: '#f0f0f0', description: 'Walkable space' },
-  { value: 1, name: 'Wall', color: '#784f3c', description: 'Solid obstacle' },
-  { value: 2, name: 'Water', color: '#3498db', description: 'Water tiles' },
-  { value: 3, name: 'Crumbled Wall', color: '#e67e22', description: 'Destructible wall' },
-  { value: 4, name: 'Rock', color: '#7f8c8d', description: 'Pushable object' },
-  { value: 5, name: 'Red Wall', color: '#cc3333', description: 'Phase column - DOWN (passable) in red mode, UP (blocks) in blue mode' },
-  { value: 6, name: 'Blue Wall', color: '#3333cc', description: 'Phase column - DOWN (passable) in blue mode, UP (blocks) in red mode' },
-  { value: 7, name: 'Quicksand', color: '#e59866', description: 'Sinks objects' },
+  { value: 1, name: 'Wall', color: '#784f3c', description: 'Solid obstacle - blocks movement and lasers' },
+  { value: 2, name: 'Water', color: '#3498db', description: 'Water terrain (deadly without H2O mask)' },
+  { value: 3, name: 'Crumbled Wall', color: '#e67e22', description: 'Destructible with RAM mask - blocks lasers' },
+  { value: 4, name: 'Rock', color: '#7f8c8d', description: 'Pushable object - blocks lasers' },
+  { value: 5, name: 'Red Wall', color: '#cc3333', description: 'Phase column - DOWN in red mode, UP in blue mode - blocks lasers when raised' },
+  { value: 6, name: 'Blue Wall', color: '#3333cc', description: 'Phase column - DOWN in blue mode, UP in red mode - blocks lasers when raised' },
+  { value: 7, name: 'Quicksand', color: '#e59866', description: 'Deadly terrain - does not block lasers' },
+  { value: 8, name: 'Laser Emitter', color: '#ff0000', description: 'Emits deadly laser to paired emitter. Blocks movement. Pairs with closest aligned emitter.' },
 ];
 
 // Mask definitions (matches in-game UI)

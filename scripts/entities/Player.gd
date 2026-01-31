@@ -522,6 +522,9 @@ func can_move_to(target_pos: Vector2i) -> bool:
 		GridManager.TileType.WALL:
 			return false # Always blocked by walls
 
+		GridManager.TileType.LASER_EMITTER:
+			return false # Laser emitters are solid like walls
+
 		GridManager.TileType.WATER:
 			# Only pass if we have FLOAT property
 			if has_property("FLOAT"):

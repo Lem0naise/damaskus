@@ -237,15 +237,16 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	
 	var tile_type = grid_manager.get_tile_type(target_pos)
 	match tile_type:
-		GridManager.TileType.WALL: return false 
+		GridManager.TileType.WALL: return false
+		GridManager.TileType.LASER_EMITTER: return false # Laser emitters are solid like walls
 		GridManager.TileType.WATER:
 			if has_property("FLOAT"): return true
 			return false
 		GridManager.TileType.CRUMBLED_WALL:
 			if has_property("BREAK_WALL"): return true
-			return false 
+			return false
 		GridManager.TileType.EMPTY: return true
-		
+
 		# Phase Walls (universal - can pass if player OR NPC has DIMENSION mask)
 		GridManager.TileType.RED_WALL:
 			var player = get_node_or_null("/root/Ingame/Player")
