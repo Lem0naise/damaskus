@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var level = 4
+var level = 6
 
 @onready var grid_manager: GridManager = %GridManager # Make sure GridManager is accessible
 @onready var walls_container = $Walls
