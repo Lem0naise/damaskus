@@ -47,7 +47,7 @@ func setup_ui():
 	# Position: Top Right with some padding
 	inventory_container.anchor_right = 1.0
 	inventory_container.anchor_top = 0.0
-	inventory_container.anchor_left = 1.0 
+	inventory_container.anchor_left = 1.0
 	inventory_container.anchor_bottom = 0.0
 	inventory_container.position = Vector2(1920 - 250, 20) # Approx
 	inventory_container.size = Vector2(230, 0) # Min fixed width
@@ -162,7 +162,7 @@ func update_inventory(inventory: Array, equipped_mask):
 		# Name
 		var name_label = Label.new()
 		# Use index + 1 for display number
-		var display_idx = inventory.find(mask_type) + 1 
+		var display_idx = inventory.find(mask_type) + 1
 		name_label.text = "[%d] %s" % [display_idx, get_mask_display_name(mask_type)]
 		name_label.add_theme_font_override("font", font)
 		name_label.add_theme_font_size_override("font_size", 18)
@@ -204,6 +204,7 @@ func get_mask_name_internal(mask_type) -> String:
 		2: return "WATER"
 		3: return "WINNER"
 		4: return "BATTERING_RAM"
+		5: return "GOLEM"
 		_: return "UNKNOWN"
 
 func get_mask_display_name(mask_type) -> String:
@@ -212,12 +213,14 @@ func get_mask_display_name(mask_type) -> String:
 		2: return "Water"
 		3: return "Equip to Win!"
 		4: return "Battering Ram"
+		5: return "Golem"
 		_: return "Unknown"
 
 func get_mask_color(mask_type) -> Color:
 	match mask_type:
-		1: return Color(0.8, 0.2, 0.8, 1)  # Purple for DIMENSION
-		2: return Color(0.2, 0.6, 0.9, 1)  # Blue for WATER
-		3: return Color(0.827, 0.667, 0.326, 1.0)  # Gold for WINNER
-		4: return Color(0.8, 0.3, 0.2, 1)  # Red/Orange for RAM
+		1: return Color(0.8, 0.2, 0.8, 1) # Purple for DIMENSION
+		2: return Color(0.2, 0.6, 0.9, 1) # Blue for WATER
+		3: return Color(0.827, 0.667, 0.326, 1.0) # Gold for WINNER
+		4: return Color(0.8, 0.3, 0.2, 1) # Red/Orange for RAM
+		5: return Color(0.335, 0.539, 0.429, 1.0) # Greenish? for GOLEM
 		_: return Color(1, 1, 1, 1)
