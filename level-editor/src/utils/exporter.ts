@@ -28,6 +28,26 @@ export const exportToJSON = (levels: Level[]): string => {
 };
 
 /**
+ * Sanitize levels to convert invalid mask values
+ * (e.g., legacy mask value 5 which no longer exists)
+ */
+export const sanitizeLevels = (levels: Level[]): Level[] => {
+  return levels.map(level => ({
+    ...level,
+    maskLayout: level.maskLayout.map(row =>
+      row.map((maskValue: any) => {
+        // Convert invalid mask value 5 to None (0)
+        if (maskValue === 5) {
+          console.warn('Converted legacy mask value 5 to None (0) - value 5 not supported');
+          return 0;
+        }
+        return maskValue;
+      })
+    )
+  }));
+};
+
+/**
  * Parse a single GDScript array block.
  * Strategy: Clean comments -> Isolate Array -> Remove trailing commas -> Parse
  */
@@ -91,7 +111,8 @@ export const parseGDScriptLevels = (code: string): Level[] => {
       maskLayout: levelMasks[index] as any,
     }));
 
-    return levels;
+    // Sanitize to handle legacy mask values
+    return sanitizeLevels(levels);
   } catch (error) {
     throw new Error(`Failed to parse GDScript: ${error}`);
   }

@@ -22,6 +22,8 @@ function App() {
     addLevel,
     removeLevel,
     duplicateLevel,
+    reorderLevels,
+    renameLevel,
     setCurrentLevelIndex,
     loadLevels,
   } = useGridState();
@@ -49,6 +51,8 @@ function App() {
           onAdd={addLevel}
           onRemove={removeLevel}
           onDuplicate={duplicateLevel}
+          onReorder={reorderLevels}
+          onRename={renameLevel}
         />
       </div>
 
@@ -84,14 +88,25 @@ function App() {
 
       {/* Instructions */}
       <div className="max-w-7xl mx-auto mt-8 bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-bold mb-2">📖 Instructions</h3>
+        <h3 className="text-lg font-bold mb-2">Instructions</h3>
         <ul className="list-disc list-inside space-y-1 text-gray-700">
           <li><strong>Left-click</strong> to place selected tile/mask</li>
           <li><strong>Right-click</strong> to erase tile/mask</li>
           <li><strong>Click and drag</strong> to paint multiple cells</li>
           <li><strong>Toggle layers</strong> to edit level tiles or masks separately</li>
-          <li><strong>Copy code</strong> from Export panel and paste into LevelGenerator.gd</li>
+          <li><strong>Drag grip handle (≡)</strong> to reorder levels</li>
+          <li><strong>Click purple edit icon</strong> to rename levels</li>
+          <li><strong>Copy GDScript</strong> from Export panel and paste into LevelGenerator.gd</li>
+          <li><strong>Required</strong>: Each level needs one Player Spawn (-1) and at least one GOAL mask (3)</li>
         </ul>
+
+        <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+          <h4 className="font-semibold text-blue-900 mb-1">Phase Walls (Red/Blue)</h4>
+          <p className="text-sm text-blue-800">
+            Phase columns block until player gets GOLEM mask. With GOLEM: Red mode = red DOWN/blue UP.
+            Press Space to toggle modes.
+          </p>
+        </div>
       </div>
     </div>
   );
