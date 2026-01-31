@@ -1,0 +1,126 @@
+setcps(128/60/4)
+
+
+// --- INSTRUMENTS ---
+
+
+// 1. High Energy Elements
+
+let drums = s("bd*4, [~ hh sd hh]*2").bank("tr909")
+
+let bass = note("[c2 . g2 f2] ~").s("sawtooth").lpf(400).resonance(15).cut(1)
+
+let superBass = note("c1").s("sawtooth").lpf(200).resonance(10) // Lower filter for deep sub feel
+
+  .shape(0.5)             // Distortion/Saturation
+
+  .gain(1)              // Volume Boost
+
+  .cut(1)                 // Keep it tight (monophonic)
+
+
+let superDrums = s("bd*4, [~ hh sd hh]*2").bank("tr909")
+
+
+let fmLead = note("c4 eb4 g4 bb4").s("gm_pad_poly").struct("x(3,8)").delay(0.4).room(1)
+
+
+let catchyHook = note("c5 [~ c5] g5 c6 . <bb5 f5> g5 eb5 d5")
+
+  .s("supersaw").sustain(0.15).lpf(4000).vib(5).delay(0.5).decay(0.2)
+
+
+let dingDaDing = note("c5 c5 [g4 g4] [~ c5] [~ c5] [~ c5] g4 g4")
+
+  .s("gm_agogo").sustain(0.15).lpf(4000).vib(5).decay(0.2)
+
+
+// 2. NEW: Slower / Breakdown Elements
+
+// "Half-time" beat: Kick on 1, Snare on 3. Feels twice as slow.
+
+let slowDrums = s("bd ~ sd ~").bank("tr909")
+
+
+// Long, deep bass notes
+
+let slowBass = note("c2 [~ f2] ~ ~").s("sawtooth").lpf(200).sustain(4)
+
+
+// Dreamy chords to fill the space
+
+let pad = note("<c3m7 g3m7>")
+
+  .s("superpiano").lpf(800).room(3).sustain(4)
+
+
+// A snare roll to build energy back up
+
+let riser = s("sd*8").bank("tr909").gain(sine.range(0.2, 1).slow(4))
+
+let megaRiser = s("sd*16").bank("tr909").gain(sine.range(0.2, 1).slow(4))
+
+
+
+
+// --- SECTIONS ---
+
+
+let intro = stack(drums, bass)
+
+let build = stack(drums, bass, fmLead)
+
+let peak  = stack(drums, bass, fmLead, catchyHook, dingDaDing)
+
+
+let megaPeak  = stack(drums, bass, fmLead, catchyHook, dingDaDing, superBass)
+
+// The "Slower" section: Half-time drums + Pads + Deep Bass
+
+let breakdown = stack(slowDrums, slowBass, pad)
+
+
+// The transition back to energy
+
+let buildup = stack(riser, fmLead)
+
+let megaBuildup = stack(megaRiser, fmLead)
+
+let huh = fmLead
+
+
+let outro = stack(drums, bass)
+
+
+
+// --- ARRANGEMENT ---
+
+
+const loop = (n, p) => Array(n).fill(p)
+
+
+$: cat(
+
+  ...loop(1, intro),
+
+  ...loop(2, build),
+
+  ...loop(8, peak),      // 1. First drop (8)
+
+  
+
+  ...loop(4, breakdown), // 2. The "Slower" bit (Breathing room)
+
+  ...loop(2, buildup),   // 3. Ramp up...
+
+  ...loop(2, megaBuildup),
+
+  ...loop(1, huh),
+
+  
+
+  ...loop(7, megaPeak),      // 4. Back to the main energy!
+
+  ...loop(4, outro)      // 5. Fade out
+
+)

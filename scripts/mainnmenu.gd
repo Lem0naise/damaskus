@@ -49,6 +49,10 @@ func _on_start_pressed() -> void:
 	# 2. Fade UI out quickly
 	tween.tween_property(%MenuBox, "modulate:a", 0.0, 0.3)
 	
+	tween.tween_property($Player2, "modulate:a", 0.0, 0.3)#
+	tween.tween_property($Background, "modulate:a", 0.0, 0.3)
+	tween.tween_property($Black/Loading, "modulate:a", 1, 0.8)
+	
 	# 3. Wait for tween to finish, then change scene
 	await tween.finished
 	get_tree().change_scene_to_file(GAME_SCENE_PATH)
