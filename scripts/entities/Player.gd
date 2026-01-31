@@ -768,13 +768,13 @@ func get_mask_name(type: MaskType) -> String:
 		MaskType.DIMENSION: return "DIMENSION"
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "WINNER"
-		MaskType.BATTERING_RAM: return "BATTERING RIM"
+		MaskType.BATTERING_RAM: return "BATTERING RAM"
 		MaskType.GOLEM: return "GOLEM"
 		_: return "?"
 		
 func get_mask_desc(type: MaskType) -> String:
 	match type:
-		MaskType.DIMENSION: return "Press SPACE to walk through red or blue walls"
+		MaskType.DIMENSION: return "Press SPACE to toggle pillars!"
 		MaskType.WATER: return "Go on, walk on water!"
 		MaskType.WINNER: return "YOU'VE WON!"
 		MaskType.BATTERING_RAM: return "Smash through crumbling walls and push logs out the way!"
