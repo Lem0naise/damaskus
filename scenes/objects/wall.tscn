@@ -1,13 +1,24 @@
 [gd_scene format=3 uid="uid://cqkw5y8nx7xle"]
 
 [ext_resource type="Script" uid="uid://kgm5a4drv1hn" path="res://scripts/objects/Wall.gd" id="1_wall"]
+[ext_resource type="Texture2D" uid="uid://b85yyuxgmltht" path="res://assets/wall.png" id="2_2yst1"]
 
 [node name="Wall" type="Node2D" unique_id=1559853941]
 script = ExtResource("1_wall")
 
 [node name="Sprite" type="ColorRect" parent="." unique_id=908071085]
+visible = false
 offset_left = -64.0
 offset_top = -64.0
 offset_right = 64.0
 offset_bottom = 64.0
 color = Color(0.47058824, 0.3137255, 0.23529412, 1)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1174871960]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 65.0
+offset_bottom = 464.0
+texture = ExtResource("2_2yst1")
+expand_mode = 1
+stretch_mode = 4

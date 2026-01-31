@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://ctsvm15dv038b" path="res://scripts/mainnmenu.gd" id="1_06t4h"]
 [ext_resource type="Script" uid="uid://bjvbyqnuj0xmx" path="res://scripts/entities/PlayerMainMenu.gd" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://c28f11wxipbai" path="res://assets/background.png" id="2_nlkkf"]
+[ext_resource type="FontFile" uid="uid://c0im8hsey1aa4" path="res://assets/PixelifySans-Bold.ttf" id="3_8qtwp"]
 [ext_resource type="AudioStream" uid="uid://dnpxrx3bvq1mr" path="res://assets/output.wav" id="3_fu7sn"]
 [ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="3_glbon"]
+[ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="3_qe12f"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="5_glbon"]
 
 [node name="MainMenu" type="Control" unique_id=1050467227]
@@ -46,32 +48,42 @@ offset_bottom = 883.0
 unique_name_in_owner = true
 
 [node name="TitleLabel" type="Label" parent="UI_Layer/MenuBox" unique_id=1058150304]
-offset_left = 144.0
-offset_top = -16.0
-offset_right = 1379.0
-offset_bottom = 94.0
+offset_left = 155.0
+offset_top = 79.0
+offset_right = 1390.0
+offset_bottom = 189.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_8qtwp")
 theme_override_font_sizes/font_size = 60
 text = "THAT'S WHAT THE POINT OF"
 horizontal_alignment = 1
 
 [node name="TitleLabel2" type="Label" parent="UI_Layer/MenuBox" unique_id=2122587757]
-offset_left = -32.0
-offset_top = 26.0
-offset_right = 1509.0
-offset_bottom = 191.0
-theme_override_font_sizes/font_size = 120
+offset_left = -43.0
+offset_top = 114.0
+offset_right = 1498.0
+offset_bottom = 279.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("3_8qtwp")
+theme_override_font_sizes/font_size = 180
 text = " DAMASKUS"
 horizontal_alignment = 1
 
 [node name="Btn_Start" type="Button" parent="UI_Layer/MenuBox" unique_id=564618523]
 unique_name_in_owner = true
-offset_left = 501.0
-offset_top = 193.0
-offset_right = 997.0
-offset_bottom = 380.0
+offset_left = 506.0
+offset_top = 381.0
+offset_right = 1002.0
+offset_bottom = 568.0
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 70
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("3_qe12f")
+theme_override_font_sizes/font_size = 100
 text = "START"
+flat = true
 
 [node name="Btn_Options" type="Button" parent="UI_Layer/MenuBox" unique_id=2081321731]
 unique_name_in_owner = true
@@ -80,8 +92,12 @@ offset_top = 662.0
 offset_right = 251.0
 offset_bottom = 814.0
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_qe12f")
 theme_override_font_sizes/font_size = 40
-text = "OPTIONS (non existent)"
+text = "OPTIONS"
+flat = true
 
 [node name="Btn_Quit" type="Button" parent="UI_Layer/MenuBox" unique_id=627072692]
 unique_name_in_owner = true
@@ -90,8 +106,12 @@ offset_top = 669.0
 offset_right = 1665.0
 offset_bottom = 833.0
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_qe12f")
 theme_override_font_sizes/font_size = 40
 text = "QUIT"
+flat = true
 
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1153583541]
 stream = ExtResource("3_fu7sn")

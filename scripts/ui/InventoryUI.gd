@@ -56,10 +56,13 @@ func update_inventory(inventory: Array, equipped_mask):
 	hint.text += "\n[R] Cycle Masks"
 	if equipped_mask != 0:  # If something is equipped
 		var mask_name = get_mask_name(equipped_mask)
+		print(equipped_mask)
 		if mask_name == "DIMENSION":
 			hint.text += "\n[Space] Shift Dim"
 		elif mask_name == "WATER":
 			hint.text += "\n(Walk on water)"
+		if mask_name == "WINNER":
+			hint.text += "\n You should already have won!"
 	hint.add_theme_font_size_override("font_size", 10)
 	hint.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1))
 	inventory_container.add_child(hint)
@@ -69,16 +72,19 @@ func get_mask_name(mask_type) -> String:
 		0: return "NONE"
 		1: return "DIMENSION"
 		2: return "WATER"
+		3: return "WINNER"
 		_: return "UNKNOWN"
 
 func get_mask_display_name(mask_type) -> String:
 	match mask_type:
 		1: return "Dimension"
 		2: return "Water"
+		3: return "Equip to Win!"
 		_: return "Unknown"
 
 func get_mask_color(mask_type) -> Color:
 	match mask_type:
 		1: return Color(0.8, 0.2, 0.8, 1)  # Purple for DIMENSION
 		2: return Color(0.2, 0.6, 0.9, 1)  # Blue for WATER
+		3: return Color(0.827, 0.667, 0.326, 1.0)  # Gold for WINNER
 		_: return Color(1, 1, 1, 1)

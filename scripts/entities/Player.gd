@@ -5,6 +5,9 @@ class_name Player
 @onready var grid_manager: GridManager = get_node("/root/Ingame/GridManager")
 @onready var sprite: Sprite2D = $Sprite
 
+
+const MENU_SCENE_PATH: String = "res://main_menu.tscn"
+
 # Textures
 var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
 var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.png")
@@ -26,7 +29,7 @@ var held_key_timer: float = 0.0
 var last_held_direction: Vector2i = Vector2i.ZERO
 
 # Mask system
-enum MaskType { NONE, DIMENSION, WATER }
+enum MaskType { NONE, DIMENSION, WATER, WINNER}
 var current_mask: MaskType = MaskType.NONE
 var inventory: Array[MaskType] = []  # Masks the player has collected
 
@@ -314,6 +317,11 @@ func update_mask_properties():
 			# WATER - allows floating on water
 			is_intangible = false
 			properties = ["FLOAT"]
+		
+		MaskType.WINNER: 
+		
+			get_tree().change_scene_to_file(MENU_SCENE_PATH)
+				
 
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
