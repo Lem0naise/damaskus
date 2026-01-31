@@ -12,6 +12,7 @@ export const TILES: TileDefinition[] = [
   { value: 4, name: 'Rock', color: '#7f8c8d', description: 'Pushable object' },
   { value: 5, name: 'Red Wall', color: '#cc3333', description: 'Phase wall (red mode)' },
   { value: 6, name: 'Blue Wall', color: '#3333cc', description: 'Phase wall (blue mode)' },
+  { value: 7, name: 'Quicksand', color: '#e59866', description: 'Sinks objects' },
 ];
 
 export const MASKS: MaskDefinition[] = [
