@@ -682,8 +682,8 @@ func update_tooltip_state():
 
 	# 2. If no pickup, check if we are wearing a mask -> Show Permanent Tooltip
 	if current_mask != MaskType.NONE:
-		var m_name = get_mask_name_from_enum(current_mask)
-		var m_desc = "Active Effect: " + str(properties) # Or fetch a nicer description
+		var m_name = get_mask_name(current_mask)
+		var m_desc = "Active Effect: " + get_mask_desc(current_mask) # Or fetch a nicer description
 		ui.show_perm_tooltip(m_name, m_desc + "\n Press Q to drop")
 		return
 
@@ -701,8 +701,22 @@ func get_mask_at_pos(g_pos: Vector2i) -> Node:
 			return mask_obj
 	return null
 
-# Helper to get string name for your current mask enum
-func get_mask_name_from_enum(type: MaskType) -> String:
-	return MaskType.keys()[type]
-	
+func get_mask_name(type: MaskType) -> String:
+	match type:
+		MaskType.DIMENSION: return "DIMENSION"
+		MaskType.WATER: return "H2O"
+		MaskType.WINNER: return "WINNER"
+		MaskType.BATTERING_RAM: return "BATTERING RIM"
+		MaskType.GOLEM: return "GOLEM"
+		_: return "?"
+		
+func get_mask_desc(type: MaskType) -> String:
+	match type:
+		MaskType.DIMENSION: return "Press SPACE to walk through red or blue walls"
+		MaskType.WATER: return "Walk on water"
+		MaskType.WINNER: return "YOU'VE WON!"
+		MaskType.BATTERING_RAM: return "Smash through crumbling walls!"
+		MaskType.GOLEM: return "You can push rocks"
+		_: return "?"
+		
 	
