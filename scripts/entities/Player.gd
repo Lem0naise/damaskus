@@ -213,11 +213,11 @@ func try_pickup():
 				# 3. Remove the new mask from the floor (pickup)
 				mask_obj.pickup() 
 				
-				# 4. Cleanup UI
-				var ui = get_node_or_null("/root/Ingame/InventoryUI")
-				if ui: ui.hide_pickup_tooltip()
-				
+				update_tooltip_state()
+					
 				return
+				
+				
 				# --- SWAP LOGIC END ---
 
 # Equip mask at specific inventory index
@@ -288,7 +288,8 @@ func drop_mask():
 		
 		# 7. Check if we are now standing on a mask (the one we just dropped)
 		# This ensures the pickup tooltip appears immediately
-		check_for_mask_tooltip()
+		update_tooltip_state()
+			
 	else:
 		print("Error: LevelGenerator missing spawn_mask_at method")
 		
@@ -467,7 +468,8 @@ func on_movement_finished():
 	is_moving = false
 
 	update_visuals()
-	check_for_mask_tooltip()
+	
+	update_tooltip_state()
 
 
 	# If player queued a move while sliding, execute it now for responsiveness
@@ -677,55 +679,46 @@ func update_visuals():
 func has_property(property_name: String) -> bool:
 	return properties.has(property_name)
 
+func update_tooltip_state():
+	var ui = get_node_or_null("/root/Ingame/InventoryUI")
+	if not ui: return
 
-func check_for_mask_tooltip():
-	var ingame = get_tree().get_root().get_node("Ingame")
-
-	if not ingame or not ingame.has_node("LevelGenerator/Masks"):
+	# 1. Check for Pickup FIRST (Priority)
+	var pickup_target = get_mask_at_pos(grid_position)
+	
+	if pickup_target:
+		# We are standing on a mask -> Show Pickup Tooltip
+		var m_name = "Unknown"
+		var m_desc = ""
+		if pickup_target.has_method("get_mask_name"): m_name = pickup_target.get_mask_name()
+		if pickup_target.has_method("get_mask_description"): m_desc = pickup_target.get_mask_description()
+		
+		ui.show_pickup_tooltip(m_name, m_desc)
 		return
 
-		
-	var found_mask = false
+	# 2. If no pickup, check if we are wearing a mask -> Show Permanent Tooltip
+	if current_mask != MaskType.NONE:
+		var m_name = get_mask_name_from_enum(current_mask)
+		var m_desc = "Active Effect: " + str(properties) # Or fetch a nicer description
+		ui.show_perm_tooltip(m_name, m_desc + "\n Press Q to drop")
+		return
 
+	# 3. If neither, hide everything
+	ui.hide_pickup_tooltip()
+
+# Helper to find mask object at specific grid pos
+func get_mask_at_pos(g_pos: Vector2i) -> Node:
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame or not ingame.has_node("LevelGenerator/Masks"): return null
 	
-	# Check for masks at current grid position
-
 	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
-		var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
+		var m_pos = grid_manager.world_to_grid(mask_obj.global_position)
+		if m_pos == g_pos:
+			return mask_obj
+	return null
 
-		if mask_grid_pos == grid_position:
-			# Found a mask!
-			found_mask = true
-
-			var ui = get_node_or_null("/root/Ingame/InventoryUI")
-
-			if ui and ui.has_method("show_pickup_tooltip"):
-				# Determine name and description
-				var mask_type = mask_obj.mask_type
-
-				var mask_name = "Unknown"
-
-				var mask_desc = ""
-
-				
-				# We can get these from the InventoryUI helper or Mask object if we expose it
-
-				# Let's rely on Mask object since we added it there
-
-				if mask_obj.has_method("get_mask_name"):
-					mask_name = mask_obj.get_mask_name()
-
-				if mask_obj.has_method("get_mask_description"):
-					mask_desc = mask_obj.get_mask_description()
-
-					
-				ui.show_pickup_tooltip(mask_name, mask_desc)
-
-			break
-
+# Helper to get string name for your current mask enum
+func get_mask_name_from_enum(type: MaskType) -> String:
+	return MaskType.keys()[type]
 	
-	if not found_mask:
-		var ui = get_node_or_null("/root/Ingame/InventoryUI")
-
-		if ui and ui.has_method("hide_pickup_tooltip"):
-			ui.hide_pickup_tooltip()
+	

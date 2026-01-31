@@ -193,6 +193,10 @@ func show_pickup_tooltip(mask_name: String, description: String):
 	tooltip_label.text = "Press [E] to pickup %s\n%s" % [mask_name, description]
 	tooltip_panel.visible = true
 
+func show_perm_tooltip(mask_name: String, description: String):
+	tooltip_label.text = "Wearing %s\n%s" % [mask_name, description]
+	tooltip_panel.visible = true
+
 func hide_pickup_tooltip():
 	tooltip_panel.visible = false
 
