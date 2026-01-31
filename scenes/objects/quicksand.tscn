@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bmdfmx6v8mb6w"]
+
+[ext_resource type="Script" uid="uid://cxh813377ny0c" path="res://scripts/objects/Quicksand.gd" id="1_am17u"]
+[ext_resource type="Texture2D" uid="uid://brb8kl35m5sx4" path="res://assets/water.png" id="2_46yy8"]
+[ext_resource type="Texture2D" uid="uid://cds6yaa5htmtj" path="res://assets/watercorner.png" id="3_fuvqh"]
+
+[node name="Quicksand" type="Node2D" unique_id=1559853941]
+script = ExtResource("1_am17u")
+tex_center = ExtResource("2_46yy8")
+tex_edge = ExtResource("2_46yy8")
+tex_corner = ExtResource("3_fuvqh")
+
+[node name="Sprite" type="TextureRect" parent="." unique_id=1347911437]
+modulate = Color(1, 1, 0, 1)
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("2_46yy8")
+expand_mode = 1

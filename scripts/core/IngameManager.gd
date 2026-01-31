@@ -15,3 +15,6 @@ func _ready():
 
 func next_level():
 	$LevelGenerator.next_level()
+
+func reload_level():
+	$LevelGenerator.reload_level()
