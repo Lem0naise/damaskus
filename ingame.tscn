@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://bqpvnetvb3g4y" path="res://scripts/core/LevelGenerator.gd" id="8_8g0if"]
 [ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="8_inventory"]
 [ext_resource type="PackedScene" uid="uid://3k2cx0yul142" path="res://scenes/objects/crumbled_wall.tscn" id="8_phpej"]
-[ext_resource type="PackedScene" path="res://scenes/objects/mask.tscn" id="9_mask"]
+[ext_resource type="PackedScene" uid="uid://brxn5px8j3xkr" path="res://scenes/objects/mask.tscn" id="9_mask"]
 [ext_resource type="AudioStream" uid="uid://cooganjoa3xac" path="res://assets/mainSong.wav" id="10_snqyf"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]

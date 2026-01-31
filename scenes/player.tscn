@@ -2,9 +2,17 @@
 
 [ext_resource type="Script" uid="uid://o8ig778kpd1o" path="res://scripts/entities/Player.gd" id="1_player"]
 [ext_resource type="Texture2D" uid="uid://cbau38wwtig6x" path="res://assets/SpriteStillTransparent.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://cxvo2x3m7iuv2" path="res://assets/maskSpiritWalking.png" id="2_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://c7enmjabr1fce" path="res://assets/crown.png" id="4_fjrip"]
+[ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="4_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://dxyrfk2upegex" path="res://assets/crownWin.png" id="5_smehm"]
 
 [node name="Player" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_player")
+water_mask_still = ExtResource("4_tuyoq")
+water_mask_walking = ExtResource("2_qhqgy")
+win_mask_still = ExtResource("4_fjrip")
+win_mask_walking = ExtResource("5_smehm")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
 scale = Vector2(0.3, 0.3)
@@ -15,3 +23,6 @@ offset_left = -90.0
 offset_top = -90.0
 offset_right = 90.0
 offset_bottom = 90.0
+pivot_offset = Vector2(90, 90)
+texture = ExtResource("4_tuyoq")
+expand_mode = 1

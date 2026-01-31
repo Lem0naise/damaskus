@@ -16,9 +16,20 @@ const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 # Textures
 
 var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
-
 var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.png")
 
+
+@onready var mask_layer: TextureRect = $MaskLayer
+
+@export var water_mask_still: Texture2D
+@export var water_mask_walking: Texture2D
+
+@export var win_mask_still: Texture2D
+@export var win_mask_walking: Texture2D
+
+
+var current_mask_still: Texture2D = null
+var current_mask_walking: Texture2D = null
 
 # Sprite size (slightly smaller than grid cell)
 
@@ -380,9 +391,7 @@ func try_move(direction: Vector2i):
 		grid_position = target_grid_pos
 
 		is_moving = true
-
-		set_sprite_texture(texture_walking)
-
+		
 
 		# Flip sprite horizontally based on left/right movement
 
@@ -391,6 +400,8 @@ func try_move(direction: Vector2i):
 
 		elif direction == Vector2i.RIGHT:
 			sprite.flip_h = false
+			
+		update_visuals()
 
 
 		move_cooldown = HELD_KEY_DELAY
@@ -418,9 +429,7 @@ func on_movement_finished():
 	# Called when tween finishes
 	is_moving = false
 
-	set_sprite_texture(texture_still)
-
-
+	update_visuals()
 	check_for_mask_tooltip()
 
 
@@ -491,30 +500,25 @@ func can_move_to(target_pos: Vector2i) -> bool:
 func set_sprite_texture(texture: Texture2D):
 	if not sprite:
 		sprite = $Sprite
-
 	if not sprite:
 		print("ERROR: Sprite node not found!")
-
 		return
 
-
 	sprite.texture = texture
-
+	
 	if texture:
 		var texture_size = texture.get_size()
-
 		var scale_factor = SPRITE_SIZE / max(texture_size.x, texture_size.y)
-
 		sprite.scale = Vector2(scale_factor, scale_factor)
 
+	# ALSO UPDATE THE MASK
+	
 
 # Mask management
 
 func wear_mask(mask_type: MaskType):
 	current_mask = mask_type
-
 	update_mask_properties()
-
 	update_inventory_ui()
 
 
@@ -526,47 +530,68 @@ func remove_mask():
 	update_inventory_ui()
 
 
+func move_level():
+	self.position = Vector2i(192, 192)
+	
+	self.grid_position = Vector2i(1, 1)
+	
+	
+	remove_mask()
+	
+	inventory.clear()
+	update_inventory_ui()
+	
+	
+	get_parent().next_level()
+	
 func update_mask_properties():
 	properties.clear()
 
 	is_intangible = false
 
+	current_mask_still = null
+	current_mask_walking = null
+	mask_layer.visible = false
 
 	match current_mask:
 		MaskType.NONE:
 			# NULL state - solid by default, can't walk through walls or water
 			is_intangible = false
-
 			properties = []
-
 
 		MaskType.DIMENSION:
 			# DIMENSION - allows switching between dimensions with spacebar
 			is_intangible = false
-
 			properties = ["DIMENSION_SHIFT"]
-
+			# Assign Dimension textures here if you have them later
 
 		MaskType.WATER:
 			# WATER - allows floating on water
 			is_intangible = false
-
 			properties = ["FLOAT"]
-
-		
+			# --- ASSIGN WATER SPIRIT TEXTURES ---
+			current_mask_still = water_mask_still
+			current_mask_walking = water_mask_walking
+			mask_layer.visible = true # Make sure to show it!
+				
 		MaskType.WINNER:
-			# Win condition
-			## MOVE TO NEXT LEVEL
-			get_parent().next_level()
-
+			# Win condition logic...
+			current_mask_still = win_mask_still
+			current_mask_walking = win_mask_walking
+			mask_layer.visible = true # Make sure to show it!
 			
-			get_tree().change_scene_to_file(MENU_SCENE_PATH)
-
+			var tween = create_tween()
+			
+			# Add an empty delay of 1 second
+			tween.tween_interval(1.0)
+			
+			# Run the function once the interval finishes
+			tween.tween_callback(move_level)
+	
 
 		MaskType.BATTERING_RAM:
 			# BATTERING_RAM - allows breaking crumbled walls
 			is_intangible = false
-
 			properties = ["BREAK_WALL"]
 
 		MaskType.GOLEM:
@@ -574,9 +599,38 @@ func update_mask_properties():
 			is_intangible = false
 			properties = ["PUSH_ROCKS"]
 
+	# Force a visual update immediately so it doesn't wait for movement
+	update_visuals()
+	
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
 
+func update_visuals():
+	# 1. Determine if we are moving or still
+	var is_moving_visual = is_moving
+	
+	# 2. Update Base Sprite (Existing logic)
+	if is_moving_visual:
+		set_sprite_texture(texture_walking)
+	else:
+		set_sprite_texture(texture_still)
+		
+	# 3. Update Mask Layer
+	if mask_layer.visible and current_mask_still != null:
+		if is_moving_visual:
+			mask_layer.texture = current_mask_walking
+		else:
+			mask_layer.texture = current_mask_still
+			
+		# Match the scale/flipping of the base sprite
+		# TextureRect doesn't have flip_h, so we use scale.x
+		# Make sure Pivot Offset is centered in Inspector!
+		if sprite.flip_h:
+			mask_layer.scale.x = -1
+		else:
+			mask_layer.scale.x = 1
+			
+				
 func has_property(property_name: String) -> bool:
 	return properties.has(property_name)
 
