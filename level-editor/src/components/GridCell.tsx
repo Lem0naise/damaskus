@@ -65,7 +65,7 @@ export const GridCell = memo(({
       onContextMenu={handleContextMenu}
     >
       {/* Mask overlay */}
-      {maskValue > 0 && (
+      {maskValue !== 0 && (
         <div
           className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
           style={{
