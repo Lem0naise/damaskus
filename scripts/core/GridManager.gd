@@ -3,19 +3,18 @@ class_name GridManager
 
 # Configuration
 const TILE_SIZE = 128
-const GRID_WIDTH = 15 # 1920 / 128 
+const GRID_WIDTH = 15 # 1920 / 128
 const GRID_HEIGHT = 9 # 1080 / 128
 var grid_offset = Vector2.ZERO
 
 # Define Tile Types
-enum TileType { EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK }
+enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL, BLUE_WALL}
 
-# Storage: dimension_id -> { Vector2i: TileType }
-var grid_data: Dictionary = {} 
+# Storage: Vector2i -> TileType (single dimension)
+var grid_data: Dictionary = {}
 
 func _ready():
-	# Initialize dictionary for default dimension
-	grid_data[0] = {}
+	pass
 
 # --- Conversion Helpers ---
 func world_to_grid(world_pos: Vector2) -> Vector2i:
@@ -36,21 +35,19 @@ func is_valid_position(grid_pos: Vector2i) -> bool:
 		   grid_pos.y >= 0 and grid_pos.y < GRID_HEIGHT
 
 # --- Content Management ---
-func set_tile(grid_pos: Vector2i, type: TileType, dimension_id: int = 0):
-	if not grid_data.has(dimension_id):
-		grid_data[dimension_id] = {}
-	
+func set_tile(grid_pos: Vector2i, type: TileType):
 	if type == TileType.EMPTY:
-		grid_data[dimension_id].erase(grid_pos)
+		grid_data.erase(grid_pos)
 	else:
-		grid_data[dimension_id][grid_pos] = type
+		grid_data[grid_pos] = type
 
-func get_tile_type(grid_pos: Vector2i, dimension_id: int = 0) -> TileType:
-	if grid_data.has(dimension_id) and grid_data[dimension_id].has(grid_pos):
-		return grid_data[dimension_id][grid_pos]
+func get_tile_type(grid_pos: Vector2i) -> TileType:
+	if grid_data.has(grid_pos):
+		return grid_data[grid_pos]
 	return TileType.EMPTY
 
 # Replaces your old is_solid check
-func is_solid(grid_pos: Vector2i, dimension_id: int = 0) -> bool:
-	var type = get_tile_type(grid_pos, dimension_id)
-	return type == TileType.WALL or type == TileType.CRUMBLED_WALL # Water is not "solid" in the traditional sense, handled separately
+func is_solid(grid_pos: Vector2i) -> bool:
+	var type = get_tile_type(grid_pos)
+	return type == TileType.WALL or type == TileType.CRUMBLED_WALL or \
+		   type == TileType.RED_WALL or type == TileType.BLUE_WALL

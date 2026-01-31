@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://red_wall_scene_001"]
+
+[ext_resource type="Script" path="res://scripts/objects/RedWall.gd" id="1_red_wall"]
+
+[node name="RedWall" type="Node2D"]
+script = ExtResource("1_red_wall")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+color = Color(0.8, 0.2, 0.2, 1)

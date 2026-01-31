@@ -75,13 +75,8 @@ var inventory: Array[MaskType] = [] # Masks the player has collected
 
 var is_intangible: bool = false # Can walk through walls when true
 
-
-# Dimension system
-
-var current_dimension: int = 0
-
-const NUM_DIMENSIONS: int = 2 # Change this if you have more dimensions
-
+# Phase mode for red/blue walls
+var is_red_mode: bool = true  # true = red mode, false = blue mode
 
 var properties: Array[String] = [] # Active properties from current mask
 
@@ -97,18 +92,6 @@ func _ready():
 	# Start in NULL state (no mask)
 
 	update_mask_properties()
-
-
-	# Ensure all objects are set to the correct dimension visibility/collision at game start
-
-	var ingame = get_tree().get_root().get_node("Ingame")
-
-	if ingame:
-		for group in ["Walls", "Water", "Rocks"]:
-			if ingame.has_node(group):
-				for obj in ingame.get_node(group).get_children():
-					if obj.has_method("update_dimension_visibility"):
-						obj.update_dimension_visibility(current_dimension)
 
 
 	# Set initial sprite
@@ -138,11 +121,11 @@ func _process(delta):
 	handle_input()
 
 
-	# Handle dimension switching (only if wearing DIMENSION mask)
+	# Handle phase mode switching (only if wearing DIMENSION mask)
 
 	if Input.is_action_just_pressed("ui_accept"): # Default: spacebar
 		if current_mask == MaskType.DIMENSION:
-			switch_dimension()
+			toggle_phase_mode()
 
 
 	# Handle pickup
@@ -164,23 +147,12 @@ func _process(delta):
 		try_move(buffered_move)
 
 
-# Switch dimension and update all objects
+# Toggle phase mode between red and blue
 
-func switch_dimension():
-	current_dimension = (current_dimension + 1) % NUM_DIMENSIONS
-
-	print("Switched to dimension ", current_dimension)
-
-	# Notify all objects to update their visibility/collision
-
-	var ingame = get_tree().get_root().get_node("Ingame")
-
-	if ingame:
-		for group in ["Walls", "Water", "Rocks"]:
-			if ingame.has_node(group):
-				for obj in ingame.get_node(group).get_children():
-					if obj.has_method("update_dimension_visibility"):
-						obj.update_dimension_visibility(current_dimension)
+func toggle_phase_mode():
+	is_red_mode = not is_red_mode
+	var mode_name = "RED" if is_red_mode else "BLUE"
+	print("Toggled to ", mode_name, " mode")
 
 
 # Try to pick up a mask at the current position
@@ -343,7 +315,7 @@ func try_move(direction: Vector2i):
 	var target_grid_pos = grid_position + direction
 
 	# Check if moving into a ROCK
-	var tile_type = grid_manager.get_tile_type(target_grid_pos, current_dimension)
+	var tile_type = grid_manager.get_tile_type(target_grid_pos)
 	if tile_type == GridManager.TileType.ROCK:
 		# Find the rock to check if it's on water
 		var ingame = get_tree().get_root().get_node("Ingame")
@@ -368,7 +340,7 @@ func try_move(direction: Vector2i):
 				# Note: If no rock found at position (shouldn't happen), movement continues
 
 	# Check if moving into a CRUMBLED_WALL with proper equipment
-	tile_type = grid_manager.get_tile_type(target_grid_pos, current_dimension)
+	tile_type = grid_manager.get_tile_type(target_grid_pos)
 	if tile_type == GridManager.TileType.CRUMBLED_WALL and has_property("BREAK_WALL"):
 		# Destroy the wall!
 		var ingame = get_tree().get_root().get_node("Ingame")
@@ -378,7 +350,7 @@ func try_move(direction: Vector2i):
 				if grid_manager.world_to_grid(wall.global_position) == target_grid_pos:
 					wall.queue_free()
 
-					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY, current_dimension)
+					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY)
 
 					print("Smashed a crumbled wall!")
 
@@ -457,10 +429,22 @@ func can_move_to(target_pos: Vector2i) -> bool:
 
 	# 3. Check what type of tile is there
 
-	var tile_type = grid_manager.get_tile_type(target_pos, current_dimension)
+	var tile_type = grid_manager.get_tile_type(target_pos)
 
-	
+
 	match tile_type:
+		GridManager.TileType.RED_WALL:
+			# Can pass if wearing DIMENSION mask and in RED mode
+			if has_property("DIMENSION_SHIFT") and is_red_mode:
+				return true
+			return false
+
+		GridManager.TileType.BLUE_WALL:
+			# Can pass if wearing DIMENSION mask and in BLUE mode
+			if has_property("DIMENSION_SHIFT") and not is_red_mode:
+				return true
+			return false
+
 		GridManager.TileType.WALL:
 			return false # Always blocked by walls
 

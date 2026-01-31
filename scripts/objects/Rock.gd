@@ -27,7 +27,7 @@ func on_pushed(direction: Vector2i) -> bool:
 		return false
 
 	# Check what's at the target position
-	var target_tile = grid_manager.get_tile_type(target_pos, dimension_ids[0] if dimension_ids.size() > 0 else 0)
+	var target_tile = grid_manager.get_tile_type(target_pos)
 
 	# If rock is on water, it can ONLY be pushed to other water tiles (not back to land)
 	if is_on_water:
@@ -40,11 +40,11 @@ func on_pushed(direction: Vector2i) -> bool:
 
 	# If we're currently on water, restore the water tile
 	if is_on_water:
-		grid_manager.set_tile(current_grid_position, GridManager.TileType.WATER, dimension_ids[0] if dimension_ids.size() > 0 else 0)
+		grid_manager.set_tile(current_grid_position, GridManager.TileType.WATER)
 		is_on_water = false
 	else:
 		# We were on empty ground, restore it
-		grid_manager.set_tile(current_grid_position, GridManager.TileType.EMPTY, dimension_ids[0] if dimension_ids.size() > 0 else 0)
+		grid_manager.set_tile(current_grid_position, GridManager.TileType.EMPTY)
 
 	# Update position
 	current_grid_position = target_pos
@@ -54,7 +54,7 @@ func on_pushed(direction: Vector2i) -> bool:
 		is_on_water = true
 
 	# Set the new position to ROCK type
-	grid_manager.set_tile(current_grid_position, GridManager.TileType.ROCK, dimension_ids[0] if dimension_ids.size() > 0 else 0)
+	grid_manager.set_tile(current_grid_position, GridManager.TileType.ROCK)
 
 	# Animate the movement
 	var target_world_pos = grid_manager.grid_to_world(current_grid_position)

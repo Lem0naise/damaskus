@@ -61,7 +61,7 @@ func get_mask_texture() -> Texture2D:
 
 func get_mask_name() -> String:
 	match mask_type:
-		MaskType.DIMENSION: return "DIM"
+		MaskType.DIMENSION: return "PHASE"
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "GOAL"
 		MaskType.BATTERING_RAM: return "RAM"
@@ -70,7 +70,7 @@ func get_mask_name() -> String:
 
 func get_mask_description() -> String:
 	match mask_type:
-		MaskType.DIMENSION: return "Shift dimensions (Space)"
+		MaskType.DIMENSION: return "Toggle phase (Space)"
 		MaskType.WATER: return "Walk on water"
 		MaskType.BATTERING_RAM: return "Smash through crumbled walls"
 		MaskType.GOLEM: return "Push rocks!"
