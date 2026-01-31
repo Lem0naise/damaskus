@@ -89,7 +89,7 @@ var level_layouts = [
 var level_masks = [
 		[ # LEVEL 1
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -100,7 +100,7 @@ var level_masks = [
 	],
 	[ # LEVEL 2
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], # 4 = RAM, 3 = WINNER
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -111,7 +111,7 @@ var level_masks = [
 ],
 [ # LEVEL 3
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0], # 4 = RAM (Easy access)
+	[0, -1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0], # 4 = RAM (Easy access)
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0], # 1 = WATER (Trapped), 3 = WINNER (Across moat)
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -125,16 +125,16 @@ var level_masks = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], # 5 = GOLEM mask, 3 = WINNER mask
+	[0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], # 5 = GOLEM mask, 3 = WINNER mask
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 ,
 [ # LEVEL 5 - Phase Maze Masks
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -226,6 +226,12 @@ func get_neighbours(layout: Array, grid_pos: Vector2i, whatami: int) -> Dictiona
 	
 	
 func generate_level(level_idx):
+	
+	
+	var npc = get_node_or_null("/root/Ingame/NPC")
+	if npc:
+		npc.deactivate()
+				
 	for y in range(level_layouts[level_idx].size()):
 		for x in range(level_layouts[level_idx][y].size()):
 			var cell_value = level_layouts[level_idx][y][x]
@@ -322,6 +328,22 @@ func generate_level(level_idx):
 			var grid_pos = Vector2i(x, y)
 			var world_pos = grid_manager.grid_to_world(grid_pos)
 			
+			if cell_value == -1: # player
+				var player = get_node_or_null("/root/Ingame/Player")
+				if player:
+					player.show()
+					# Directly set position and internal grid reference
+					player.global_position = world_pos
+					player.grid_position = grid_pos
+					# Reset any movement state
+					player.is_moving = false
+					player.next_move = Vector2i.ZERO
+					
+			if cell_value == -2: # critter
+				if npc:
+					npc.activate(grid_pos, world_pos)
+					npc.is_moving = false
+					
 			if cell_value > 0:
 				var mask = mask_scene.instantiate()
 				mask.position = world_pos
