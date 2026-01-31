@@ -10,6 +10,7 @@ extends Node2D
 @export var water_scene: PackedScene
 @export var mask_scene: PackedScene
 @export var crumbled_wall_scene: PackedScene = preload("res://scenes/objects/crumbled_wall.tscn")
+@export var rock_scene: PackedScene = preload("res://scenes/objects/rock.tscn")
 
 # 0 = Empty, 1 = Wall, 2 = Water
 # 15 Width x 9 Height
@@ -45,6 +46,17 @@ var level_layouts = [
 	[1, 0, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 0, 1],
 	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+],
+[ # LEVEL 4 - Rock Bridge Puzzle
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+	[1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 4, 2, 0, 0, 1, 1, 1, 1, 0, 0, 1], # 4 = Rock, 2 = Water river
+	[1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 4, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1], # Player starts left side
+	[1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 4, 2, 0, 0, 1, 1, 1, 1, 0, 0, 1], # 3 rocks to push into water
+	[1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 ]
@@ -82,11 +94,22 @@ var level_masks = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+],
+[ # LEVEL 4 - Rock Bridge Puzzle Masks
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], # 5 = GOLEM mask, 3 = WINNER mask
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 ]
 
 func _ready():
-	generate_level(1) # level 2
+	generate_level(3) # Level 4 - Rock Bridge Puzzle
 
 func generate_level(level):
 	for y in range(level_layouts[level].size()):
@@ -112,7 +135,7 @@ func generate_level(level):
 			elif cell_value == 3: # CRUMBLED WALL
 				var crumbled_wall = crumbled_wall_scene.instantiate()
 				crumbled_wall.position = world_pos
-				
+
 				# Create a dedicated container if it doesn't exist, or just use walls for now but track them?
 				# Actually, the player needs to find them by group/container to queue_free them.
 				# Let's add a "CrumbledWalls" container dynamically if not present, or better yet, assume structure.
@@ -121,11 +144,23 @@ func generate_level(level):
 					var node = Node2D.new()
 					node.name = "CrumbledWalls"
 					add_child(node)
-				
+
 				get_node("CrumbledWalls").add_child(crumbled_wall)
-				
+
 				# Register to GridManager
 				grid_manager.set_tile(grid_pos, GridManager.TileType.CRUMBLED_WALL)
+
+			elif cell_value == 4: # ROCK
+				var rock = rock_scene.instantiate()
+				rock.position = world_pos
+
+				if not has_node("Rocks"):
+					var node = Node2D.new()
+					node.name = "Rocks"
+					add_child(node)
+
+				get_node("Rocks").add_child(rock)
+				grid_manager.set_tile(grid_pos, GridManager.TileType.ROCK)
 
 	for y in range(level_masks[level].size()):
 		for x in range(level_masks[level][y].size()):
@@ -136,19 +171,22 @@ func generate_level(level):
 			if cell_value > 0:
 				var mask = mask_scene.instantiate()
 				mask.position = world_pos
-					
+
 				if cell_value == 1: # WATER FLOAT MASK
 					mask.mask_type = Mask.MaskType.WATER
 				if cell_value == 2:
 					mask.mask_type = Mask.MaskType.DIMENSION
-				
-				
+
+
 				if cell_value == 3: # WINNING MASK
 					mask.mask_type = Mask.MaskType.WINNER
-				
+
 				if cell_value == 4: # BATTERING RAM MASK
 					mask.mask_type = Mask.MaskType.BATTERING_RAM
-					
+
+				if cell_value == 5: # GOLEM MASK
+					mask.mask_type = Mask.MaskType.GOLEM
+
 				masks_container.add_child(mask)
 				
 				

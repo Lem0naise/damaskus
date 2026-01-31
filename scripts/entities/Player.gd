@@ -30,7 +30,7 @@ var held_key_timer: float = 0.0
 var last_held_direction: Vector2i = Vector2i.ZERO
 
 # Mask system
-enum MaskType { NONE, DIMENSION, WATER, WINNER, BATTERING_RAM }
+enum MaskType { NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM }
 var current_mask: MaskType = MaskType.NONE
 var inventory: Array[MaskType] = []  # Masks the player has collected
 
@@ -55,7 +55,7 @@ func _ready():
 	# Ensure all objects are set to the correct dimension visibility/collision at game start
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame:
-		for group in ["Walls", "Water"]:
+		for group in ["Walls", "Water", "Rocks"]:
 			if ingame.has_node(group):
 				for obj in ingame.get_node(group).get_children():
 					if obj.has_method("update_dimension_visibility"):
@@ -105,7 +105,7 @@ func switch_dimension():
 	# Notify all objects to update their visibility/collision
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame:
-		for group in ["Walls", "Water"]:
+		for group in ["Walls", "Water", "Rocks"]:
 			if ingame.has_node(group):
 				for obj in ingame.get_node(group).get_children():
 					if obj.has_method("update_dimension_visibility"):
@@ -142,11 +142,10 @@ func equip_mask_at_index(index: int):
 	var mask_type = inventory[index]
 	
 	if current_mask == mask_type:
-		# Toggle off if already equipped? Or just stay equipped? 
-		# Let's say toggle off for now, or just do nothing.
-		# User asked to select, usually 1-9 matches slot.
-		# If they press '1' and '1' is equipped, usually nothing happens or it re-equips.
-		pass
+		# Toggle off if already equipped
+		remove_mask()
+		print("Unequipped mask")
+		return
 	
 	wear_mask(mask_type)
 	print("Equipped ", MaskType.keys()[mask_type])
@@ -215,9 +214,34 @@ func handle_input():
 
 func try_move(direction: Vector2i):
 	var target_grid_pos = grid_position + direction
-	
-	# Check if moving into a CRUMBLED_WALL with proper equipment
+
+	# Check if moving into a ROCK
 	var tile_type = grid_manager.get_tile_type(target_grid_pos, current_dimension)
+	if tile_type == GridManager.TileType.ROCK:
+		# Find the rock to check if it's on water
+		var ingame = get_tree().get_root().get_node("Ingame")
+		if ingame and ingame.has_node("LevelGenerator/Rocks"):
+			for rock in ingame.get_node("LevelGenerator/Rocks").get_children():
+				if rock.has_method("get_grid_position") and rock.get_grid_position() == target_grid_pos:
+					# Found the rock at target position
+					if rock.is_on_water and not has_property("PUSH_ROCKS"):
+						# Rock is a bridge (on water) and we don't have GOLEM
+						# Allow walking on it - skip the push logic
+						break
+					elif has_property("PUSH_ROCKS"):
+						# We have GOLEM mask - try to push the rock
+						if not rock.on_pushed(direction):
+							# Push failed, block movement
+							return
+						# Push succeeded, continue to move into old rock position
+						break
+					else:
+						# Rock is not on water and we don't have GOLEM - block movement
+						return
+				# Note: If no rock found at position (shouldn't happen), movement continues
+
+	# Check if moving into a CRUMBLED_WALL with proper equipment
+	tile_type = grid_manager.get_tile_type(target_grid_pos, current_dimension)
 	if tile_type == GridManager.TileType.CRUMBLED_WALL and has_property("BREAK_WALL"):
 		# Destroy the wall!
 		var ingame = get_tree().get_root().get_node("Ingame")
@@ -281,7 +305,7 @@ func can_move_to(target_pos: Vector2i) -> bool:
 	match tile_type:
 		GridManager.TileType.WALL:
 			return false # Always blocked by walls
-			
+
 		GridManager.TileType.WATER:
 			# Only pass if we have FLOAT property
 			if has_property("FLOAT"):
@@ -293,10 +317,21 @@ func can_move_to(target_pos: Vector2i) -> bool:
 			if has_property("BREAK_WALL"):
 				return true
 			return false # Blocked by crumbled wall otherwise
-			
+
+		GridManager.TileType.ROCK:
+			# Rocks on water are walkable (bridge effect)
+			var ingame = get_tree().get_root().get_node("Ingame")
+			if ingame and ingame.has_node("LevelGenerator/Rocks"):
+				for rock in ingame.get_node("LevelGenerator/Rocks").get_children():
+					if rock.has_method("get_grid_position") and rock.get_grid_position() == target_pos:
+						if rock.is_on_water:
+							return true  # Can walk on rock-on-water
+						return false  # Can't walk through rocks not on water
+			return false
+
 		GridManager.TileType.EMPTY:
 			return true # Free to move
-			
+
 	return true
 
 # Helper function to set sprite texture and scale it to consistent size
@@ -352,7 +387,12 @@ func update_mask_properties():
 			# BATTERING_RAM - allows breaking crumbled walls
 			is_intangible = false
 			properties = ["BREAK_WALL"]
-				
+
+		MaskType.GOLEM:
+			# GOLEM - allows pushing rocks
+			is_intangible = false
+			properties = ["PUSH_ROCKS"]
+
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
 func has_property(property_name: String) -> bool:
