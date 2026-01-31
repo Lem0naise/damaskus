@@ -15,6 +15,8 @@ export const TILES: TileDefinition[] = [
 ];
 
 export const MASKS: MaskDefinition[] = [
+  { value: -2, name: 'NPC Spawn', color: '#5dade2', icon: '👻', description: 'NPC/Critter spawn point' },
+  { value: -1, name: 'Player Spawn', color: '#48c9b0', icon: '🧍', description: 'Player spawn point' },
   { value: 0, name: 'None', color: 'transparent', icon: '', description: 'No mask' },
   { value: 1, name: 'WATER', color: '#1abc9c', icon: '💧', description: 'Walk on water' },
   { value: 2, name: 'DIMENSION', color: '#9b59b6', icon: '🔮', description: 'Toggle phase' },
