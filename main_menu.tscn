@@ -4,15 +4,35 @@
 [ext_resource type="Script" uid="uid://bjvbyqnuj0xmx" path="res://scripts/entities/PlayerMainMenu.gd" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://c28f11wxipbai" path="res://assets/background.png" id="2_nlkkf"]
 [ext_resource type="FontFile" uid="uid://c0im8hsey1aa4" path="res://assets/PixelifySans-Bold.ttf" id="3_8qtwp"]
-[ext_resource type="AudioStream" uid="uid://dnpxrx3bvq1mr" path="res://assets/output.wav" id="3_fu7sn"]
 [ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="3_glbon"]
 [ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="3_qe12f"]
+[ext_resource type="AudioStream" uid="uid://bbyafkd6u87ti" path="res://assets/mainmenu.wav" id="5_8qtwp"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="5_glbon"]
 
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_06t4h")
+
+[node name="Black" type="ColorRect" parent="." unique_id=951688467]
+layout_mode = 0
+offset_right = 1944.0
+offset_bottom = 1092.0
+color = Color(0, 0, 0, 1)
+
+[node name="Loading" type="Label" parent="Black" unique_id=403724561]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 234.0
+offset_top = 355.0
+offset_right = 1775.0
+offset_bottom = 572.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("3_8qtwp")
+theme_override_font_sizes/font_size = 180
+text = "LOADING..."
+horizontal_alignment = 1
 
 [node name="Background" type="TextureRect" parent="." unique_id=955506735]
 layout_mode = 0
@@ -114,7 +134,7 @@ text = "QUIT"
 flat = true
 
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1153583541]
-stream = ExtResource("3_fu7sn")
+stream = ExtResource("5_8qtwp")
 autoplay = true
 
 [node name="Player2" type="CharacterBody2D" parent="." unique_id=906236154]
