@@ -39,6 +39,8 @@ var current_mask_walking: Texture2D = null
 var is_intangible: bool = false
 var properties: Array[String] = []
 
+var is_dying: bool = false
+
 func _ready():
 	if not is_active:
 		hide()
@@ -149,6 +151,8 @@ func try_move(direction: Vector2i):
 func on_movement_finished():
 	if not is_active: return
 	is_moving = false
+	grid_manager.grid_state_changed.emit()
+	
 	update_visuals()
 	
 	if grid_manager.is_deadly(grid_position):
@@ -196,8 +200,12 @@ func reset_state():
 	current_mask = MaskType.NONE
 	update_mask_properties()
 	set_sprite_texture(texture_still)
+	is_dying = false
 
 func die():
+	if is_dying: return
+	is_dying = true
+	
 	# TODO flash red
 	remove_mask()
 	var ingame = get_tree().get_root().get_node("Ingame")

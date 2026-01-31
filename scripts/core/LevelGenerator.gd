@@ -299,10 +299,10 @@ var level_masks = [
 ],
 		[ # LEVEL 10
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0],
+	[0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0],
 	[0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
@@ -423,6 +423,7 @@ func get_neighbours(layout: Array, grid_pos: Vector2i, whatami: int) -> Dictiona
 	
 	
 func generate_level(level_idx):
+	
 	var npc = get_node_or_null("/root/Ingame/NPC")
 	if npc:
 		npc.deactivate()
@@ -591,7 +592,9 @@ func generate_level(level_idx):
 					mask.mask_type = Mask.MaskType.BATTERING_RAM
 
 				masks_container.add_child(mask)
-
+	grid_manager.grid_state_changed.emit()
+	
+	
 
 # --- NEW HELPER FOR SWAPPING MASKS ---
 func spawn_mask_at(grid_pos: Vector2i, mask_type_id: int):
