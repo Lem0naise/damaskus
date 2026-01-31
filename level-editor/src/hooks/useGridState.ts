@@ -77,6 +77,11 @@ export const useGridState = () => {
     setLevels([...levels, newLevel]);
   };
 
+  const loadLevels = (newLevels: Level[]) => {
+    setLevels(newLevels);
+    setCurrentLevelIndex(0);
+  };
+
   return {
     levels,
     currentLevel,
@@ -93,5 +98,6 @@ export const useGridState = () => {
     removeLevel,
     duplicateLevel,
     setCurrentLevelIndex,
+    loadLevels,
   };
 };

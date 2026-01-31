@@ -23,6 +23,7 @@ function App() {
     removeLevel,
     duplicateLevel,
     setCurrentLevelIndex,
+    loadLevels,
   } = useGridState();
 
   return (
@@ -78,7 +79,7 @@ function App() {
         </div>
 
         {/* Export Panel */}
-        <ExportPanel levels={levels} />
+        <ExportPanel levels={levels} onLoadLevels={loadLevels} />
       </div>
 
       {/* Instructions */}
