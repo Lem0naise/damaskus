@@ -30,7 +30,7 @@ var held_key_timer: float = 0.0
 var last_held_direction: Vector2i = Vector2i.ZERO
 
 # Mask system
-enum MaskType { NONE, DIMENSION, WATER, WINNER}
+enum MaskType { NONE, DIMENSION, WATER, WINNER, BATTERING_RAM }
 var current_mask: MaskType = MaskType.NONE
 var inventory: Array[MaskType] = []  # Masks the player has collected
 
@@ -213,6 +213,19 @@ func handle_input():
 
 func try_move(direction: Vector2i):
 	var target_grid_pos = grid_position + direction
+	
+	# Check if moving into a CRUMBLED_WALL with proper equipment
+	var tile_type = grid_manager.get_tile_type(target_grid_pos, current_dimension)
+	if tile_type == GridManager.TileType.CRUMBLED_WALL and has_property("BREAK_WALL"):
+		# Destroy the wall!
+		var ingame = get_tree().get_root().get_node("Ingame")
+		if ingame and ingame.has_node("LevelGenerator/CrumbledWalls"):
+			for wall in ingame.get_node("LevelGenerator/CrumbledWalls").get_children():
+				if grid_manager.world_to_grid(wall.global_position) == target_grid_pos:
+					wall.queue_free()
+					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY, current_dimension)
+					print("Smashed a crumbled wall!")
+					break
 
 	# Check if move is valid
 	if can_move_to(target_grid_pos):
@@ -242,10 +255,7 @@ func on_movement_finished():
 	# Called when tween finishes
 	is_moving = false
 	set_sprite_texture(texture_still)
-	
-	# Check for pickups automatically when stopping
-	try_pickup()
-	
+
 	# If player queued a move while sliding, execute it now for responsiveness
 	if next_move != Vector2i.ZERO:
 		var buffered_move = next_move
@@ -273,6 +283,12 @@ func can_move_to(target_pos: Vector2i) -> bool:
 			if has_property("FLOAT"):
 				return true
 			return false # Blocked by water otherwise
+
+		GridManager.TileType.CRUMBLED_WALL:
+			# Only pass if we have BREAK_WALL property
+			if has_property("BREAK_WALL"):
+				return true
+			return false # Blocked by crumbled wall otherwise
 			
 		GridManager.TileType.EMPTY:
 			return true # Free to move
@@ -327,6 +343,11 @@ func update_mask_properties():
 		MaskType.WINNER: 
 			# Win condition
 			get_tree().change_scene_to_file(MENU_SCENE_PATH)
+
+		MaskType.BATTERING_RAM:
+			# BATTERING_RAM - allows breaking crumbled walls
+			is_intangible = false
+			properties = ["BREAK_WALL"]
 				
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
