@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://oafli3v0rpi8"]
+[gd_scene format=3 uid="uid://be6wlemx8vb0v"]
 
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
 [ext_resource type="Script" uid="uid://dbfxa2deqsx6x" path="res://scripts/core/IngameManager.gd" id="1_ingamemanager"]
@@ -9,12 +9,8 @@
 [ext_resource type="Script" uid="uid://bqpvnetvb3g4y" path="res://scripts/core/LevelGenerator.gd" id="8_8g0if"]
 [ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="8_inventory"]
 [ext_resource type="PackedScene" uid="uid://3k2cx0yul142" path="res://scenes/objects/crumbled_wall.tscn" id="8_phpej"]
-[ext_resource type="PackedScene" uid="uid://brxn5px8j3xkr" path="res://scenes/objects/mask.tscn" id="9_mask"]
-[ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="10_boc44"]
+[ext_resource type="PackedScene" path="res://scenes/objects/mask.tscn" id="9_mask"]
 [ext_resource type="AudioStream" uid="uid://cooganjoa3xac" path="res://assets/mainSong.wav" id="10_snqyf"]
-[ext_resource type="Texture2D" uid="uid://cbau38wwtig6x" path="res://assets/SpriteStillTransparent.png" id="10_vj2cp"]
-[ext_resource type="Texture2D" uid="uid://cu7s8geb3gt6j" path="res://assets/SpriteMovingTransparent.png" id="11_j731u"]
-[ext_resource type="Texture2D" uid="uid://cxvo2x3m7iuv2" path="res://assets/maskSpiritWalking.png" id="13_j731u"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")
@@ -57,10 +53,6 @@ unique_name_in_owner = true
 [node name="Player" parent="." unique_id=1640560224 instance=ExtResource("2_player")]
 position = Vector2(184.00003, 185)
 scale = Vector2(0.6, 0.6)
-tex_base_still = ExtResource("10_vj2cp")
-tex_base_walk = ExtResource("11_j731u")
-tex_spirit_still = ExtResource("10_boc44")
-tex_spirit_walk = ExtResource("13_j731u")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=589967515]
 position = Vector2(954, 573)

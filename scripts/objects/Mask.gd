@@ -2,7 +2,7 @@ extends GameObject
 class_name Mask
 
 # Match Player's MaskType enum
-enum MaskType { NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM }
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM}
 
 # The Generator will set this variable before adding the child
 @export var mask_type: MaskType = MaskType.NONE
@@ -14,8 +14,6 @@ func _ready():
 	super._ready()
 
 func setup_visuals():
-
-
 	var label = Label.new()
 	label.position = Vector2(-28, -10)
 	label.size = Vector2(56, 20)
@@ -35,29 +33,29 @@ func setup_visuals():
 func get_mask_color() -> Color:
 	match mask_type:
 		MaskType.DIMENSION: return Color(0.8, 0.2, 0.8, 1) # Purple
-		MaskType.WATER:     return Color(0.2, 0.6, 0.9, 1) # Blue
-		MaskType.WINNER:    return Color(0.827, 0.667, 0.326, 1.0)  # Blue for WATER
+		MaskType.WATER: return Color(0.2, 0.6, 0.9, 1) # Blue
+		MaskType.WINNER: return Color(0.827, 0.667, 0.326, 1.0) # Blue for WATER
 		MaskType.BATTERING_RAM: return Color(0.8, 0.3, 0.2, 1) # Red/Orange
-		MaskType.GOLEM:     return Color(0.5, 0.4, 0.3, 1) # Brown/Gray
-		_:                  return Color(1, 1, 1, 0.5)
+		MaskType.GOLEM: return Color(0.5, 0.4, 0.3, 1) # Brown/Gray
+		_: return Color(1, 1, 1, 0.5)
 
 func get_mask_name() -> String:
 	match mask_type:
 		MaskType.DIMENSION: return "DIM"
-		MaskType.WATER:     return "H2O"
-		MaskType.WINNER:   	return "GOAL"
+		MaskType.WATER: return "H2O"
+		MaskType.WINNER: return "GOAL"
 		MaskType.BATTERING_RAM: return "RAM"
-		MaskType.GOLEM:     return "ROCK"
-		_:                  return "?"
+		MaskType.GOLEM: return "ROCK"
+		_: return "?"
 
 func get_mask_description() -> String:
 	match mask_type:
 		MaskType.DIMENSION: return "Shift dimensions (Space)"
-		MaskType.WATER:     return "Walk on water"
+		MaskType.WATER: return "Walk on water"
 		MaskType.BATTERING_RAM: return "Smash through crumbled walls"
-		MaskType.GOLEM:     return "Push rocks to create bridges"
-		MaskType.WINNER:    return "Equip to win!"
-		_:                  return ""
+		MaskType.GOLEM: return "Push rocks!"
+		MaskType.WINNER: return "Equip to win!"
+		_: return ""
 
 func pickup():
 	# Player calls this when collecting
