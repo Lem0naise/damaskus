@@ -48,6 +48,14 @@ func get_mask_name() -> String:
 		MaskType.BATTERING_RAM: return "RAM"
 		_:                  return "?"
 
+func get_mask_description() -> String:
+	match mask_type:
+		MaskType.DIMENSION: return "Shift dimensions (Space)"
+		MaskType.WATER:     return "Walk on water"
+		MaskType.BATTERING_RAM: return "Smash through crumbled walls"
+		MaskType.WINNER:    return "Equip to win!"
+		_:                  return ""
+
 func pickup():
 	# Player calls this when collecting
 	var tween = create_tween()

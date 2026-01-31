@@ -63,6 +63,9 @@ func _ready():
 
 	# Set initial sprite
 	set_sprite_texture(texture_still)
+	
+	# Sync UI
+	update_inventory_ui()
 
 func _process(delta):
 	# Update cooldown timer
@@ -85,9 +88,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("pickup"):  # E key
 		try_pickup()
 
-	# Handle equip mask
-	if Input.is_action_just_pressed("equip_mask"):  # R key
-		cycle_equipped_mask()
+
 
 	# Process movement buffer (Only if NOT currently moving)
 	# The actual movement is now handled by the Tween, not manual delta updates
@@ -128,32 +129,33 @@ func try_pickup():
 					print("Picked up ", MaskType.keys()[mask_type], " mask!")
 					mask_obj.pickup()
 					update_inventory_ui()
+					# Hide tooltip after pickup
+					var ui = get_node_or_null("/root/Ingame/InventoryUI")
+					if ui: ui.hide_pickup_tooltip()
 				return
 
-# Cycle through masks in inventory
-func cycle_equipped_mask():
-	if inventory.size() == 0:
-		print("No masks in inventory!")
-		return
+# Equip mask at specific inventory index
+func equip_mask_at_index(index: int):
+	if index < 0 or index >= inventory.size():
+		return # Mute invalid index
+		
+	var mask_type = inventory[index]
+	
+	if current_mask == mask_type:
+		# Toggle off if already equipped? Or just stay equipped? 
+		# Let's say toggle off for now, or just do nothing.
+		# User asked to select, usually 1-9 matches slot.
+		# If they press '1' and '1' is equipped, usually nothing happens or it re-equips.
+		pass
+	
+	wear_mask(mask_type)
+	print("Equipped ", MaskType.keys()[mask_type])
 
-	# Find current mask index in inventory
-	var current_index = inventory.find(current_mask)
-
-	if current_index == -1:
-		# No mask equipped or current mask not in inventory, equip first
-		wear_mask(inventory[0])
-		print("Equipped ", MaskType.keys()[inventory[0]])
-	else:
-		# Move to next mask (or unequip if at the end)
-		var next_index = current_index + 1
-		if next_index >= inventory.size():
-			# End of list, unequip
-			remove_mask()
-			print("Unequipped mask")
-		else:
-			# Equip next mask
-			wear_mask(inventory[next_index])
-			print("Equipped ", MaskType.keys()[inventory[next_index]])
+func _unhandled_input(event):
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode >= KEY_1 and event.keycode <= KEY_9:
+			var index = event.keycode - KEY_1
+			equip_mask_at_index(index)
 
 # Update inventory UI
 func update_inventory_ui():
@@ -256,6 +258,8 @@ func on_movement_finished():
 	is_moving = false
 	set_sprite_texture(texture_still)
 
+	check_for_mask_tooltip()
+
 	# If player queued a move while sliding, execute it now for responsiveness
 	if next_move != Vector2i.ZERO:
 		var buffered_move = next_move
@@ -353,3 +357,38 @@ func update_mask_properties():
 
 func has_property(property_name: String) -> bool:
 	return properties.has(property_name)
+
+func check_for_mask_tooltip():
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame or not ingame.has_node("LevelGenerator/Masks"):
+		return
+		
+	var found_mask = false
+	
+	# Check for masks at current grid position
+	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
+		var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
+		if mask_grid_pos == grid_position:
+			# Found a mask!
+			found_mask = true
+			var ui = get_node_or_null("/root/Ingame/InventoryUI")
+			if ui and ui.has_method("show_pickup_tooltip"):
+				# Determine name and description
+				var mask_type = mask_obj.mask_type
+				var mask_name = "Unknown"
+				var mask_desc = ""
+				
+				# We can get these from the InventoryUI helper or Mask object if we expose it
+				# Let's rely on Mask object since we added it there
+				if mask_obj.has_method("get_mask_name"):
+					mask_name = mask_obj.get_mask_name()
+				if mask_obj.has_method("get_mask_description"):
+					mask_desc = mask_obj.get_mask_description()
+					
+				ui.show_pickup_tooltip(mask_name, mask_desc)
+			break
+	
+	if not found_mask:
+		var ui = get_node_or_null("/root/Ingame/InventoryUI")
+		if ui and ui.has_method("hide_pickup_tooltip"):
+			ui.hide_pickup_tooltip()
