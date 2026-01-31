@@ -124,6 +124,7 @@ func try_move(direction: Vector2i):
 						# Rock is a bridge (on water) and we don't have GOLEM
 						# Allow walking on it - skip the push logic
 						break
+						# TODO - bug is that the NPC cannot walk over bridges for some reason
 					elif has_property("PUSH_ROCKS"):
 						# We have GOLEM mask - try to push the rock
 						if not rock.on_pushed(direction):
