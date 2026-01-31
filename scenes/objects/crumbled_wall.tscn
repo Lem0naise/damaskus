@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://3k2cx0yul142"]
+
+[ext_resource type="Texture2D" uid="uid://b85yyuxgmltht" path="res://assets/wall.png" id="2_texture"]
+
+[node name="CrumbledWall" type="Node2D" unique_id=1295761046]
+modulate = Color(0.6, 0.4, 0.3, 1)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=649072215]
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 65.0
+offset_bottom = 464.0
+texture = ExtResource("2_texture")
+expand_mode = 1
+stretch_mode = 4
