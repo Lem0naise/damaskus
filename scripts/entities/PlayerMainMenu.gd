@@ -10,7 +10,7 @@ var texture_still: Texture2D = preload("res://assets/gorgeous.png")
 var texture_walking: Texture2D = preload("res://assets/walking.png")
 
 # Sprite size (slightly smaller than grid cell)
-const SPRITE_SIZE = 180.0  # pixels
+const SPRITE_SIZE = 360.0  # pixels
 
 # Movement
 var grid_position: Vector2i = Vector2i.ZERO
