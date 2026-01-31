@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ctsvm15dv038b" path="res://scripts/mainnmenu.gd" id="1_06t4h"]
 [ext_resource type="Script" uid="uid://bjvbyqnuj0xmx" path="res://scripts/entities/PlayerMainMenu.gd" id="2_glbon"]
+[ext_resource type="Texture2D" uid="uid://c28f11wxipbai" path="res://assets/background.png" id="2_nlkkf"]
 [ext_resource type="AudioStream" uid="uid://dnpxrx3bvq1mr" path="res://assets/output.wav" id="3_fu7sn"]
 [ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="3_glbon"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="5_glbon"]
@@ -13,8 +14,13 @@ script = ExtResource("1_06t4h")
 
 [node name="Background" type="TextureRect" parent="." unique_id=955506735]
 layout_mode = 0
-offset_right = 1918.0
-offset_bottom = 1062.0
+offset_left = -45.0
+offset_top = -145.0
+offset_right = 2150.0
+offset_bottom = 1250.0
+texture = ExtResource("2_nlkkf")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="FadeLayer" type="ColorRect" parent="." unique_id=393215701]
 unique_name_in_owner = true
