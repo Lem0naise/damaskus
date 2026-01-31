@@ -33,8 +33,5 @@ func update_visual_state():
 	# 4. Apply Texture
 	if is_down:
 		sprite.texture = texture_down
-		# Optional: Make it semi-transparent or darker to look "inactive"
-		modulate = Color(1, 1, 1, 0.5) 
 	else:
 		sprite.texture = texture_up
-		modulate = Color(1, 1, 1, 1.0)

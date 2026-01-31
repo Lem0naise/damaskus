@@ -8,6 +8,9 @@ enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM}
 @export var mask_type: MaskType = MaskType.NONE
 
 
+var is_picked_up: bool = false
+
+
 @export var water_mask_still: Texture2D
 @export var water_mask_walking: Texture2D
 
@@ -75,6 +78,7 @@ func get_mask_description() -> String:
 		_: return ""
 
 func pickup():
+	is_picked_up = true
 	# Player calls this when collecting
 	var tween = create_tween()
 	tween.tween_property(self, "scale", Vector2.ZERO, 0.2)
