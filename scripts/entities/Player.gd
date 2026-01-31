@@ -127,7 +127,7 @@ func try_pickup():
 					update_inventory_ui()
 				return
 
-# Cycle through equipped masks
+# Cycle through masks in inventory
 func cycle_equipped_mask():
 	if inventory.size() == 0:
 		print("No masks in inventory!")
@@ -136,14 +136,21 @@ func cycle_equipped_mask():
 	# Find current mask index in inventory
 	var current_index = inventory.find(current_mask)
 
-	# Cycle to next mask in inventory
 	if current_index == -1:
-		# No mask equipped, equip first in inventory
+		# No mask equipped or current mask not in inventory, equip first
 		wear_mask(inventory[0])
+		print("Equipped ", MaskType.keys()[inventory[0]])
 	else:
-		# Cycle to next mask
-		var next_index = (current_index + 1) % inventory.size()
-		wear_mask(inventory[next_index])
+		# Move to next mask (or unequip if at the end)
+		var next_index = current_index + 1
+		if next_index >= inventory.size():
+			# End of list, unequip
+			remove_mask()
+			print("Unequipped mask")
+		else:
+			# Equip next mask
+			wear_mask(inventory[next_index])
+			print("Equipped ", MaskType.keys()[inventory[next_index]])
 
 # Update inventory UI
 func update_inventory_ui():
@@ -293,6 +300,7 @@ func wear_mask(mask_type: MaskType):
 func remove_mask():
 	current_mask = MaskType.NONE
 	update_mask_properties()
+	update_inventory_ui()
 
 func update_mask_properties():
 	properties.clear()
