@@ -75,8 +75,8 @@ enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM}
 var current_mask: MaskType = MaskType.NONE
 var current_mask_still: Texture2D = null
 var current_mask_walking: Texture2D = null
-var is_intangible: bool = false 
-var is_red_mode: bool = true  
+var is_intangible: bool = false
+# Note: Phase mode is now stored globally in GridManager.is_red_mode
 var properties: Array[String] = [] 
 
 # --- TARGETING ---
@@ -95,15 +95,12 @@ func _on_player_moved(direction: Vector2i):
 
 func _on_player_interacted(action_name: String):
 	if not is_active: return
-	# Mirror actions
+	# Mirror actions (dimension toggle is now handled globally by player)
 	match action_name:
 		"pickup":
 			try_pickup()
 		"drop":
 			drop_mask()
-		"space":
-			if current_mask == MaskType.DIMENSION:
-				toggle_phase_mode()
 
 # --- MOVEMENT LOGIC (Copied from Player, removed UI/Input) ---
 
@@ -193,12 +190,16 @@ func can_move_to(target_pos: Vector2i) -> bool:
 			return false 
 		GridManager.TileType.EMPTY: return true
 		
-		# Phase Walls
+		# Phase Walls (universal - can pass if player OR NPC has DIMENSION mask)
 		GridManager.TileType.RED_WALL:
-			if has_property("DIMENSION_SHIFT") and is_red_mode: return true
+			var player = get_node_or_null("/root/Ingame/Player")
+			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (player and player.has_property("DIMENSION_SHIFT"))
+			if anyone_has_dimension and grid_manager.is_red_mode: return true
 			return false
 		GridManager.TileType.BLUE_WALL:
-			if has_property("DIMENSION_SHIFT") and not is_red_mode: return true
+			var player = get_node_or_null("/root/Ingame/Player")
+			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (player and player.has_property("DIMENSION_SHIFT"))
+			if anyone_has_dimension and not grid_manager.is_red_mode: return true
 			return false
 			
 	return true
@@ -241,8 +242,10 @@ func remove_mask():
 	update_mask_properties()
 
 func toggle_phase_mode():
-	is_red_mode = not is_red_mode
-	print("NPC Toggled Phase Mode")
+	# Dimension state is now global - this function is kept for compatibility
+	# but the actual toggling should be done via the player
+	grid_manager.is_red_mode = not grid_manager.is_red_mode
+	print("NPC toggled universal dimension mode (deprecated - use player toggle)")
 
 func update_mask_properties():
 	if not is_active: return

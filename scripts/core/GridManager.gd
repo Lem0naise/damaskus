@@ -13,6 +13,9 @@ enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL
 # Storage: Vector2i -> TileType (single dimension)
 var grid_data: Dictionary = {}
 
+# Universal dimension state (shared by all entities)
+var is_red_mode: bool = true  # true = red dimension, false = blue dimension
+
 func _ready():
 	pass
 
