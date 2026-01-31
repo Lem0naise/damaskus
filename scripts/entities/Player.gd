@@ -559,11 +559,15 @@ func move_level():
 	self.grid_position = Vector2i(1, 1)
 	
 	
+	
 	remove_mask()
 	
 	inventory.clear()
 	update_inventory_ui()
 	
+	
+	
+	update_tooltip_state()
 	
 	get_parent().next_level()
 	
@@ -683,7 +687,7 @@ func update_tooltip_state():
 	# 2. If no pickup, check if we are wearing a mask -> Show Permanent Tooltip
 	if current_mask != MaskType.NONE:
 		var m_name = get_mask_name(current_mask)
-		var m_desc = "Active Effect: " + get_mask_desc(current_mask) # Or fetch a nicer description
+		var m_desc = get_mask_desc(current_mask) # Or fetch a nicer description
 		ui.show_perm_tooltip(m_name, m_desc + "\n Press Q to drop")
 		return
 
@@ -713,10 +717,10 @@ func get_mask_name(type: MaskType) -> String:
 func get_mask_desc(type: MaskType) -> String:
 	match type:
 		MaskType.DIMENSION: return "Press SPACE to walk through red or blue walls"
-		MaskType.WATER: return "Walk on water"
+		MaskType.WATER: return "Go on, walk on water!"
 		MaskType.WINNER: return "YOU'VE WON!"
 		MaskType.BATTERING_RAM: return "Smash through crumbling walls!"
-		MaskType.GOLEM: return "You can push rocks"
+		MaskType.GOLEM: return "Push that rock out the way!"
 		_: return "?"
 		
 	
