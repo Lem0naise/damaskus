@@ -1,13 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://red_wall_scene_001"]
+[gd_scene format=3 uid="uid://dcs5jm3dhnyk5"]
 
-[ext_resource type="Script" path="res://scripts/objects/RedWall.gd" id="1_red_wall"]
+[ext_resource type="Script" uid="uid://byhuoo7cmwabn" path="res://scripts/objects/PhaseWall.gd" id="1_red_wall"]
+[ext_resource type="Texture2D" uid="uid://cikwmio4bkcax" path="res://assets/pillar.png" id="2_ekqdn"]
+[ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="3_27waw"]
 
-[node name="RedWall" type="Node2D"]
+[node name="RedWall" type="Node2D" unique_id=6578759]
 script = ExtResource("1_red_wall")
+texture_up = ExtResource("2_ekqdn")
+texture_down = ExtResource("3_27waw")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2006613214]
 offset_left = -64.0
 offset_top = -64.0
 offset_right = 64.0
 offset_bottom = 64.0
-color = Color(0.8, 0.2, 0.2, 1)
+texture = ExtResource("2_ekqdn")
+expand_mode = 1
