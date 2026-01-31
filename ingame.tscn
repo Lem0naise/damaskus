@@ -1,17 +1,17 @@
-[gd_scene format=3 uid="uid://be6wlemx8vb0v"]
+[gd_scene format=3 uid="uid://oafli3v0rpi8"]
 
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
 [ext_resource type="Script" uid="uid://dbfxa2deqsx6x" path="res://scripts/core/IngameManager.gd" id="1_ingamemanager"]
 [ext_resource type="Texture2D" uid="uid://c3oc0t5fxlsoj" path="res://assets/backgroundplain.jpg" id="2_ooucj"]
 [ext_resource type="PackedScene" uid="uid://bvw8qm7xj0qqn" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://cqkw5y8nx7xle" path="res://scenes/objects/wall.tscn" id="5_wall"]
-[ext_resource type="PackedScene" uid="uid://dlonf04fiy5nb" path="res://scenes/objects/water.tscn" id="6_water"]
+[ext_resource type="PackedScene" uid="uid://bduh8dljkvxxc" path="res://scenes/objects/water.tscn" id="6_water"]
 [ext_resource type="Script" uid="uid://bqpvnetvb3g4y" path="res://scripts/core/LevelGenerator.gd" id="8_8g0if"]
 [ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="8_inventory"]
 [ext_resource type="PackedScene" uid="uid://3k2cx0yul142" path="res://scenes/objects/crumbled_wall.tscn" id="8_phpej"]
 [ext_resource type="PackedScene" uid="uid://brxn5px8j3xkr" path="res://scenes/objects/mask.tscn" id="9_mask"]
 [ext_resource type="AudioStream" uid="uid://cooganjoa3xac" path="res://assets/mainSong.wav" id="10_snqyf"]
-[ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="12_boc44"]
+[ext_resource type="PackedScene" uid="uid://bccfxi5lnt5n3" path="res://scenes/npc.tscn" id="12_boc44"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")

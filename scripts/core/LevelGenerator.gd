@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var level = 0
+var level = 4
 
 @onready var grid_manager: GridManager = %GridManager # Make sure GridManager is accessible
 @onready var walls_container = $Walls
@@ -361,6 +361,14 @@ func generate_level(level_idx):
 
 				get_node("Quicksand").add_child(quicksand)
 				grid_manager.set_tile(grid_pos, GridManager.TileType.QUICKSAND)
+				
+				
+				# Check neighbors to determine texture
+				var neighbours = get_neighbours(level_layouts[level], grid_pos, 7)
+				# We defer this slightly or call immediate if script is ready
+				if quicksand.has_method("update_appearance"):
+					quicksand.update_appearance(neighbours)
+					
 
 	for y in range(level_masks[level].size()):
 		for x in range(level_masks[level][y].size()):

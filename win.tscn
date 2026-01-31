@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bjvbyqnuj0xmx" path="res://scripts/entities/PlayerMainMenu.gd" id="6_vbxid"]
 [ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="7_cenvs"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="8_4oewu"]
+[ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="9_d8ejm"]
 
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
@@ -94,9 +95,9 @@ horizontal_alignment = 1
 [node name="Btn_Start" type="Button" parent="UI_Layer/MenuBox" unique_id=564618523]
 unique_name_in_owner = true
 offset_left = 503.0
-offset_top = 394.0
+offset_top = 490.0
 offset_right = 1035.0
-offset_bottom = 581.0
+offset_bottom = 677.0
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 20
@@ -134,6 +135,19 @@ theme_override_font_sizes/font_size = 40
 text = "OPTIONS"
 flat = true
 
+[node name="TitleLabel3" type="Label" parent="UI_Layer/MenuBox" unique_id=1041114125]
+offset_left = 165.0
+offset_top = 298.0
+offset_right = 1400.0
+offset_bottom = 408.0
+pivot_offset = Vector2(533, 97)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_d8ejm")
+theme_override_font_sizes/font_size = 60
+text = "WHAT WAS THE POINT???"
+horizontal_alignment = 1
+
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1153583541]
 stream = ExtResource("5_wmsxl")
 autoplay = true
@@ -160,3 +174,5 @@ vertical_alignment = 1
 
 [node name="GridManager" type="Node" parent="." unique_id=897976182]
 script = ExtResource("8_4oewu")
+
+[node name="InventoryUI" parent="." unique_id=1643233580 instance=ExtResource("9_d8ejm")]
