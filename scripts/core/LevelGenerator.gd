@@ -143,7 +143,7 @@ var level_masks = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], # 3 = WINNER
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ],
-[
+[ # Level 6 - From editor
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0],
@@ -157,7 +157,7 @@ var level_masks = [
 ]
 ]
 
-var level = 3
+var level = 5
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 const WIN_SCENE_PATH: String = "res://win.tscn"
 
@@ -165,7 +165,7 @@ func _ready():
 	generate_level(level) # level 1 to start
 func next_level():
 	level += 1
-	if level > 4:
+	if level > 5:
 		get_tree().change_scene_to_file(WIN_SCENE_PATH)
 	else:
 		clear_level()
