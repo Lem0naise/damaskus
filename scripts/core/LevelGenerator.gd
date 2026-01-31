@@ -318,3 +318,24 @@ func generate_level(level_idx):
 					mask.mask_type = Mask.MaskType.GOLEM
 
 				masks_container.add_child(mask)
+
+
+# --- NEW HELPER FOR SWAPPING MASKS ---
+func spawn_mask_at(grid_pos: Vector2i, mask_type_id: int):
+	if not mask_scene:
+		print("Error: mask_scene is missing in LevelGenerator inspector!")
+		return
+
+	# 1. Create the mask
+	var mask = mask_scene.instantiate()
+	
+	# 2. Position it
+	mask.position = grid_manager.grid_to_world(grid_pos)
+	
+	# 3. Assign Type (Make sure your Mask.gd has this variable)
+	mask.mask_type = mask_type_id
+	
+	# 4. Add to the scene tree
+	masks_container.add_child(mask)
+	
+	print("Dropped mask ", mask_type_id, " at ", grid_pos)

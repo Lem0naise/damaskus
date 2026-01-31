@@ -156,47 +156,41 @@ func toggle_phase_mode():
 
 
 # Try to pick up a mask at the current position
-
+# Try to pick up a mask at the current position
 func try_pickup():
 	var ingame = get_tree().get_root().get_node("Ingame")
-
-	if not ingame or not ingame.has_node("LevelGenerator/Masks"):
-		return
-
+	if not ingame: return
+	
+	var level_gen = ingame.get_node_or_null("LevelGenerator")
+	if not level_gen or not level_gen.has_node("Masks"): return
 
 	# Check for masks at current grid position
-
-	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
+	for mask_obj in level_gen.get_node("Masks").get_children():
 		if mask_obj.has_method("pickup"):
 			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
-
+			
 			if mask_grid_pos == grid_position:
-				# Pick up the mask
-				var mask_type = mask_obj.mask_type
-
-				if not inventory.has(mask_type):
-					var was_empty = inventory.is_empty()
-
-					inventory.append(mask_type)
-
-					print("Picked up ", MaskType.keys()[mask_type], " mask!")
-
-					mask_obj.pickup()
-					
-					if was_empty:
-						wear_mask(mask_type)
-						print("Auto-equipped first mask!")
-
-					update_inventory_ui()
-
-					# Hide tooltip after pickup
-
-					var ui = get_node_or_null("/root/Ingame/InventoryUI")
-
-					if ui: ui.hide_pickup_tooltip()
-
+				# --- SWAP LOGIC START ---
+				
+				# 1. If we are already holding a mask, drop it first
+				if current_mask != MaskType.NONE:
+					# Spawn the old mask at the current location
+					level_gen.spawn_mask_at(grid_position, current_mask)
+					print("Dropped old mask: ", MaskType.keys()[current_mask])
+				
+				# 2. Pick up the new mask
+				var new_mask_type = mask_obj.mask_type
+				wear_mask(new_mask_type)
+				
+				# 3. Remove the new mask from the floor (pickup)
+				mask_obj.pickup() 
+				
+				# 4. Cleanup UI
+				var ui = get_node_or_null("/root/Ingame/InventoryUI")
+				if ui: ui.hide_pickup_tooltip()
+				
 				return
-
+				# --- SWAP LOGIC END ---
 
 # Equip mask at specific inventory index
 
@@ -232,12 +226,55 @@ func update_inventory_ui():
 		ui.update_inventory(inventory, current_mask)
 
 
+func drop_mask():
+	# 1. Check if we have a mask to drop
+	if current_mask == MaskType.NONE:
+		print("No mask to drop!")
+		return
+
+	# 2. Get references
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame: return
+	
+	var level_gen = ingame.get_node_or_null("LevelGenerator")
+	if not level_gen: return
+
+	# 3. Spawn the mask item at current position
+	# We use the existing spawn helper from LevelGenerator
+	if level_gen.has_method("spawn_mask_at"):
+		level_gen.spawn_mask_at(grid_position, current_mask)
+		print("Dropped mask: ", MaskType.keys()[current_mask])
+		
+		# 4. Remove it from player
+		remove_mask()
+		
+		# 5. Clear Inventory Data
+		# Since we use inventory array in your code, we should clear it
+		if inventory.has(current_mask):
+			inventory.erase(current_mask)
+		# Or just clear all since we only hold one
+		inventory.clear() 
+		
+		# 6. Update UI
+		update_inventory_ui()
+		
+		# 7. Check if we are now standing on a mask (the one we just dropped)
+		# This ensures the pickup tooltip appears immediately
+		check_for_mask_tooltip()
+	else:
+		print("Error: LevelGenerator missing spawn_mask_at method")
+		
+		
 func handle_input():
 	var input_dir = Vector2i.ZERO
 
 	var is_just_pressed = false
 
 
+	if Input.is_action_just_pressed("drop_mask") or Input.is_key_pressed(KEY_Q):
+			drop_mask()
+			return # Don't move on the same frame you drop
+			
 	# Check for just_pressed input (highest priority - always register)
 
 	if Input.is_action_just_pressed("ui_right") or Input.is_action_just_pressed("ui_d"):
@@ -577,11 +614,17 @@ func update_mask_properties():
 			# BATTERING_RAM - allows breaking crumbled walls
 			is_intangible = false
 			properties = ["BREAK_WALL"]
+			current_mask_still = water_mask_still
+			current_mask_walking = water_mask_walking
+			mask_layer.visible = true # Make sure to show it!
 
 		MaskType.GOLEM:
 			# GOLEM - allows pushing rocks
 			is_intangible = false
 			properties = ["PUSH_ROCKS"]
+			current_mask_still = water_mask_still
+			current_mask_walking = water_mask_walking
+			mask_layer.visible = true # Make sure to show it!
 
 	# Force a visual update immediately so it doesn't wait for movement
 	update_visuals()
