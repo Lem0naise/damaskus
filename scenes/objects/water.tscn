@@ -3,12 +3,14 @@
 [ext_resource type="Script" uid="uid://bmyktq68ro5li" path="res://scripts/objects/Water.gd" id="1_water"]
 [ext_resource type="Texture2D" uid="uid://brb8kl35m5sx4" path="res://assets/water.png" id="2_3lf6t"]
 [ext_resource type="Texture2D" uid="uid://cds6yaa5htmtj" path="res://assets/watercorner.png" id="3_uidfi"]
+[ext_resource type="Texture2D" uid="uid://cwcnia3ulwlkq" path="res://assets/waterEnd.png" id="3_v3ey0"]
 
 [node name="Water" type="Node2D" unique_id=1559853941]
 script = ExtResource("1_water")
 tex_center = ExtResource("2_3lf6t")
 tex_edge = ExtResource("2_3lf6t")
 tex_corner = ExtResource("3_uidfi")
+tex_tip = ExtResource("3_v3ey0")
 
 [node name="Sprite" type="TextureRect" parent="." unique_id=1347911437]
 offset_left = -64.0
