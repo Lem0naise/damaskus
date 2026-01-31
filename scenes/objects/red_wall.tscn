@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dcs5jm3dhnyk5"]
 
-[ext_resource type="Script" path="res://scripts/objects/PhaseWall.gd" id="1_red_wall"]
+[ext_resource type="Script" uid="uid://byhuoo7cmwabn" path="res://scripts/objects/PhaseWall.gd" id="1_red_wall"]
 [ext_resource type="Texture2D" uid="uid://cikwmio4bkcax" path="res://assets/pillar.png" id="2_ekqdn"]
 [ext_resource type="Texture2D" uid="uid://cf47fblp77vkl" path="res://assets/downpillar.png" id="3_27waw"]
 
