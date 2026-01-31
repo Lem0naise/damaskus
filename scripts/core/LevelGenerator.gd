@@ -11,6 +11,8 @@ extends Node2D
 @export var mask_scene: PackedScene
 @export var crumbled_wall_scene: PackedScene
 @export var rock_scene: PackedScene = preload("res://scenes/objects/rock.tscn")
+@export var red_wall_scene: PackedScene = preload("res://scenes/objects/red_wall.tscn")
+@export var blue_wall_scene: PackedScene = preload("res://scenes/objects/blue_wall.tscn")
 
 # 0 = Empty, 1 = Wall, 2 = Water
 # 15 Width x 9 Height
@@ -58,6 +60,17 @@ var level_layouts = [
 	[1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 0, 0, 0, 4, 2, 0, 0, 1, 1, 1, 1, 0, 0, 1], # 3 rocks to push into water
 	[1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+],
+[ # LEVEL 5 - Phase Maze
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+	[1, 0, 5, 0, 6, 0, 5, 0, 6, 0, 0, 0, 0, 0, 1],
+	[1, 0, 5, 0, 6, 0, 5, 0, 6, 1, 1, 1, 1, 0, 1],
+	[1, 0, 5, 0, 6, 0, 5, 0, 6, 0, 0, 0, 0, 0, 1],
+	[1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+	[1, 0, 0, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 0, 1],
+	[1, 0, 1, 1, 1, 6, 1, 1, 1, 5, 1, 1, 1, 0, 1],
+	[1, 0, 0, 0, 0, 6, 0, 0, 0, 5, 0, 0, 0, 0, 1],
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 ]
@@ -107,6 +120,18 @@ var level_masks = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
+,
+[ # LEVEL 5 - Phase Maze Masks
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0], # 3 = WINNER
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+]
 ]
 
 var level = 0
@@ -116,7 +141,7 @@ func _ready():
 	generate_level(level) # level 1 to start
 func next_level():
 	level += 1
-	if level >3:
+	if level > 4:
 		get_tree().change_scene_to_file(MENU_SCENE_PATH)
 	else:
 		clear_level()
@@ -136,19 +161,29 @@ func clear_level():
 		for child in get_node("CrumbledWalls").get_children():
 			child.queue_free()
 
+	if has_node("Rocks"):
+		for child in get_node("Rocks").get_children():
+			child.queue_free()
+
+	if has_node("RedWalls"):
+		for child in get_node("RedWalls").get_children():
+			child.queue_free()
+
+	if has_node("BlueWalls"):
+		for child in get_node("BlueWalls").get_children():
+			child.queue_free()
+
 	# 2. Clear Logical Grid Data (The Collisions)
 	# We must reset the grid_manager, otherwise invisible walls will remain.
 	# We loop through the known grid size (15x9)
-	for y in range(9): 
+	for y in range(9):
 		for x in range(15):
 			var grid_pos = Vector2i(x, y)
-			# Clear logic for both dimensions (0 and 1) just to be safe
-			grid_manager.set_tile(grid_pos, GridManager.TileType.EMPTY, 0)
-			grid_manager.set_tile(grid_pos, GridManager.TileType.EMPTY, 1)
+			grid_manager.set_tile(grid_pos, GridManager.TileType.EMPTY)
 	
 # --- HELPER FUNCTION ---
 func get_neighbours(layout: Array, grid_pos: Vector2i, whatami: int) -> Dictionary:
-	var neighbours = { "N": false, "S": false, "E": false, "W": false }
+	var neighbours = {"N": false, "S": false, "E": false, "W": false}
 	
 	var x = grid_pos.x
 	var y = grid_pos.y
@@ -166,10 +201,10 @@ func get_neighbours(layout: Array, grid_pos: Vector2i, whatami: int) -> Dictiona
 	return neighbours
 	
 	
-func generate_level(level):
-	for y in range(level_layouts[level].size()):
-		for x in range(level_layouts[level][y].size()):
-			var cell_value = level_layouts[level][y][x]
+func generate_level(level_idx):
+	for y in range(level_layouts[level_idx].size()):
+		for x in range(level_layouts[level_idx][y].size()):
+			var cell_value = level_layouts[level_idx][y][x]
 			var grid_pos = Vector2i(x, y)
 			var world_pos = grid_manager.grid_to_world(grid_pos)
 			
@@ -187,7 +222,6 @@ func generate_level(level):
 				# We defer this slightly or call immediate if script is ready
 				if wall.has_method("update_appearance"):
 					wall.update_appearance(neighbours)
-
 
 
 			elif cell_value == 2: # WATER
@@ -234,6 +268,30 @@ func generate_level(level):
 				get_node("Rocks").add_child(rock)
 				grid_manager.set_tile(grid_pos, GridManager.TileType.ROCK)
 
+			elif cell_value == 5: # RED WALL
+				var red_wall = red_wall_scene.instantiate()
+				red_wall.position = world_pos
+
+				if not has_node("RedWalls"):
+					var node = Node2D.new()
+					node.name = "RedWalls"
+					add_child(node)
+
+				get_node("RedWalls").add_child(red_wall)
+				grid_manager.set_tile(grid_pos, GridManager.TileType.RED_WALL)
+
+			elif cell_value == 6: # BLUE WALL
+				var blue_wall = blue_wall_scene.instantiate()
+				blue_wall.position = world_pos
+
+				if not has_node("BlueWalls"):
+					var node = Node2D.new()
+					node.name = "BlueWalls"
+					add_child(node)
+
+				get_node("BlueWalls").add_child(blue_wall)
+				grid_manager.set_tile(grid_pos, GridManager.TileType.BLUE_WALL)
+
 	for y in range(level_masks[level].size()):
 		for x in range(level_masks[level][y].size()):
 			var cell_value = level_masks[level][y][x]
@@ -262,7 +320,6 @@ func generate_level(level):
 				masks_container.add_child(mask)
 
 
-
 # --- NEW HELPER FOR SWAPPING MASKS ---
 func spawn_mask_at(grid_pos: Vector2i, mask_type_id: int):
 	if not mask_scene:
@@ -282,7 +339,3 @@ func spawn_mask_at(grid_pos: Vector2i, mask_type_id: int):
 	masks_container.add_child(mask)
 	
 	print("Dropped mask ", mask_type_id, " at ", grid_pos)
-				
-
-
-					
