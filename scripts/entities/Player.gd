@@ -85,8 +85,7 @@ var inventory: Array[MaskType] = [] # Masks the player has collected
 
 var is_intangible: bool = false # Can walk through walls when true
 
-# Phase mode for red/blue walls
-var is_red_mode: bool = true  # true = red mode, false = blue mode
+# Note: Phase mode is now stored globally in GridManager.is_red_mode
 
 var properties: Array[String] = [] # Active properties from current mask
 
@@ -131,13 +130,18 @@ func _process(delta):
 	handle_input()
 
 
-	# Handle phase mode switching (only if wearing DIMENSION mask)
+	# Handle phase mode switching (if player OR NPC has DIMENSION mask)
 
 	if Input.is_action_just_pressed("ui_accept"): # Default: spacebar
-		
+
 		player_interacted.emit("space") # NPC
-			
-		if current_mask == MaskType.DIMENSION:
+
+		# Check if either player or NPC has DIMENSION mask
+		var npc = get_node_or_null("/root/Ingame/NPC")
+		var player_has_dimension = current_mask == MaskType.DIMENSION
+		var npc_has_dimension = npc and npc.is_active and npc.current_mask == MaskType.DIMENSION
+
+		if player_has_dimension or npc_has_dimension:
 			toggle_phase_mode()
 
 
@@ -163,12 +167,12 @@ func _process(delta):
 		try_move(buffered_move)
 
 
-# Toggle phase mode between red and blue
+# Toggle phase mode between red and blue (universal state)
 
 func toggle_phase_mode():
-	is_red_mode = not is_red_mode
-	var mode_name = "RED" if is_red_mode else "BLUE"
-	print("Toggled to ", mode_name, " mode")
+	grid_manager.is_red_mode = not grid_manager.is_red_mode
+	var mode_name = "RED" if grid_manager.is_red_mode else "BLUE"
+	print("Player toggled universal dimension to ", mode_name, " mode")
 
 
 # Try to pick up a mask at the current position
@@ -464,6 +468,11 @@ func on_movement_finished():
 	
 	update_tooltip_state()
 
+	# Check if the current tile is deadly and run die if so
+	if grid_manager.is_deadly(grid_position):
+		print("WOAHH")
+		die()
+		return
 
 	# If player queued a move while sliding, execute it now for responsiveness
 
@@ -494,14 +503,18 @@ func can_move_to(target_pos: Vector2i) -> bool:
 
 	match tile_type:
 		GridManager.TileType.RED_WALL:
-			# Can pass if wearing DIMENSION mask and in RED mode
-			if has_property("DIMENSION_SHIFT") and is_red_mode:
+			# Can pass if player OR NPC has DIMENSION mask and in RED mode (universal)
+			var npc = get_node_or_null("/root/Ingame/NPC")
+			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (npc and npc.is_active and npc.has_property("DIMENSION_SHIFT"))
+			if anyone_has_dimension and grid_manager.is_red_mode:
 				return true
 			return false
 
 		GridManager.TileType.BLUE_WALL:
-			# Can pass if wearing DIMENSION mask and in BLUE mode
-			if has_property("DIMENSION_SHIFT") and not is_red_mode:
+			# Can pass if player OR NPC has DIMENSION mask and in BLUE mode (universal)
+			var npc = get_node_or_null("/root/Ingame/NPC")
+			var anyone_has_dimension = has_property("DIMENSION_SHIFT") or (npc and npc.is_active and npc.has_property("DIMENSION_SHIFT"))
+			if anyone_has_dimension and not grid_manager.is_red_mode:
 				return true
 			return false
 
@@ -537,6 +550,21 @@ func can_move_to(target_pos: Vector2i) -> bool:
 			return true # Free to move
 
 	return true
+
+func die():
+	# Call the IngameManager's reload_level function to reset the current level
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if ingame and ingame.has_method("reload_level"):
+		print("e")
+		ingame.reload_level()
+	elif ingame and ingame.has_node("IngameManager"):
+		var manager = ingame.get_node("IngameManager")
+		print("f")
+		if manager and manager.has_method("reload_level"):
+			manager.reload_level()
+			print("e")
+	else:
+		print("Error: Could not find IngameManager to reload level.")
 
 
 # Helper function to set sprite texture and scale it to consistent size

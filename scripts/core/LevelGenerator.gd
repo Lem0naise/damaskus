@@ -13,6 +13,7 @@ extends Node2D
 @export var rock_scene: PackedScene = preload("res://scenes/objects/rock.tscn")
 @export var red_wall_scene: PackedScene = preload("res://scenes/objects/red_wall.tscn")
 @export var blue_wall_scene: PackedScene = preload("res://scenes/objects/blue_wall.tscn")
+@export var quicksand_scene: PackedScene = preload("res://scenes/objects/quicksand.tscn")
 
 # 0 = Empty, 1 = Wall, 2 = Water
 # 15 Width x 9 Height
@@ -73,6 +74,17 @@ var level_layouts = [
 	[1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ],
+		[ # LEVEL 6
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+	[1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 5, 0, 1],
+	[1, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 5, 5, 1],
+	[1, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 6, 6, 6, 6, 1],
+	[1, 0, 0, 0, 0, 0, 2, 4, 0, 0, 6, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 6, 0, 0, 0, 1],
+	[1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 6, 0, 0, 0, 1],
+	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+],
 ]
 
 var level_masks = [
@@ -131,6 +143,17 @@ var level_masks = [
 	[0, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ],
+[ # LEVEL 6
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 4, 0],
+	[0, 0, -1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+],
 ]
 
 var level = 3
@@ -139,6 +162,9 @@ const WIN_SCENE_PATH: String = "res://win.tscn"
 
 func _ready():
 	generate_level(level) # level 1 to start
+func reload_level():
+	clear_level()
+	generate_level(level)
 func next_level():
 	level += 1
 	if level > 4:
@@ -171,6 +197,10 @@ func clear_level():
 
 	if has_node("BlueWalls"):
 		for child in get_node("BlueWalls").get_children():
+			child.queue_free()
+	
+	if has_node("Quicksand"):
+		for child in get_node("Quicksand").get_children():
 			child.queue_free()
 
 	# 2. Clear Logical Grid Data (The Collisions)
@@ -295,6 +325,18 @@ func generate_level(level_idx):
 
 				get_node("BlueWalls").add_child(blue_wall)
 				grid_manager.set_tile(grid_pos, GridManager.TileType.BLUE_WALL)
+
+			elif cell_value == 7: # QUICKSAND
+				var quicksand = quicksand_scene.instantiate()
+				quicksand.position = world_pos
+
+				if not has_node("Quicksand"):
+					var node = Node2D.new()
+					node.name = "Quicksand"
+					add_child(node)
+
+				get_node("Quicksand").add_child(quicksand)
+				grid_manager.set_tile(grid_pos, GridManager.TileType.QUICKSAND)
 
 	for y in range(level_masks[level].size()):
 		for x in range(level_masks[level][y].size()):
