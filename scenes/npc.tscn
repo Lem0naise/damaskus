@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bccfxi5lnt5n3"]
+
+[ext_resource type="Script" uid="uid://cktyrhc7bukxi" path="res://scripts/entities/NPC.gd" id="1_tl2vt"]
+[ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="2_hwkja"]
+[ext_resource type="Texture2D" uid="uid://cxvo2x3m7iuv2" path="res://assets/maskSpiritWalking.png" id="3_0tygy"]
+[ext_resource type="Texture2D" uid="uid://c7enmjabr1fce" path="res://assets/crown.png" id="4_sptji"]
+[ext_resource type="Texture2D" uid="uid://dxyrfk2upegex" path="res://assets/crownWin.png" id="5_v4e37"]
+[ext_resource type="Texture2D" uid="uid://cbau38wwtig6x" path="res://assets/SpriteStillTransparent.png" id="6_1h837"]
+
+[node name="NPC" type="CharacterBody2D" unique_id=40229128]
+script = ExtResource("1_tl2vt")
+water_mask_still = ExtResource("2_hwkja")
+water_mask_walking = ExtResource("3_0tygy")
+win_mask_still = ExtResource("4_sptji")
+win_mask_walking = ExtResource("5_v4e37")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("6_1h837")
+
+[node name="MaskLayer" type="TextureRect" parent="." unique_id=403206602]
+offset_left = -90.0
+offset_top = -90.0
+offset_right = 90.0
+offset_bottom = 90.0
+pivot_offset = Vector2(90, 90)
+texture = ExtResource("2_hwkja")
+expand_mode = 1

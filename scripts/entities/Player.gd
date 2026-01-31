@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Player
 
+signal player_moved(direction: Vector2i)
+signal player_interacted(action_name: String) # pickup, drop, space, etc
 
 # References
 
@@ -124,6 +126,9 @@ func _process(delta):
 	# Handle phase mode switching (only if wearing DIMENSION mask)
 
 	if Input.is_action_just_pressed("ui_accept"): # Default: spacebar
+		
+		player_interacted.emit("space") # NPC
+			
 		if current_mask == MaskType.DIMENSION:
 			toggle_phase_mode()
 
@@ -131,6 +136,9 @@ func _process(delta):
 	# Handle pickup
 
 	if Input.is_action_just_pressed("pickup"): # E key
+		
+		player_interacted.emit("pickup") # NPC
+		
 		try_pickup()
 
 
@@ -274,6 +282,9 @@ func handle_input():
 
 	if Input.is_action_just_pressed("drop_mask") or Input.is_key_pressed(KEY_Q):
 			drop_mask()
+			
+			player_interacted.emit("drop") # NPC
+			
 			return # Don't move on the same frame you drop
 			
 	# Check for just_pressed input (highest priority - always register)
@@ -351,7 +362,9 @@ func handle_input():
 
 func try_move(direction: Vector2i):
 	var target_grid_pos = grid_position + direction
-
+	
+	player_moved.emit(direction) # emit signal for NPC
+	
 	# Check if moving into a ROCK
 	var tile_type = grid_manager.get_tile_type(target_grid_pos)
 	if tile_type == GridManager.TileType.ROCK:

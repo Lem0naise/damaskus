@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://3k2cx0yul142" path="res://scenes/objects/crumbled_wall.tscn" id="8_phpej"]
 [ext_resource type="PackedScene" uid="uid://brxn5px8j3xkr" path="res://scenes/objects/mask.tscn" id="9_mask"]
 [ext_resource type="AudioStream" uid="uid://cooganjoa3xac" path="res://assets/mainSong.wav" id="10_snqyf"]
+[ext_resource type="PackedScene" uid="uid://bccfxi5lnt5n3" path="res://scenes/npc.tscn" id="12_boc44"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")
@@ -63,3 +64,8 @@ zoom = Vector2(1.1, 1.1)
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=592283684]
 stream = ExtResource("10_snqyf")
 autoplay = true
+
+[node name="NPC" parent="." unique_id=40229128 node_paths=PackedStringArray("target_player") instance=ExtResource("12_boc44")]
+position = Vector2(1663, 807)
+scale = Vector2(0.6, 0.6)
+target_player = NodePath("../Player")
