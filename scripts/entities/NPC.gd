@@ -13,6 +13,20 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 
 var is_active: bool = false
 
+# Assign these in Inspector just like Player
+
+@export var water_mask_still: Texture2D
+@export var water_mask_walking: Texture2D
+
+@export var win_mask_still: Texture2D
+@export var win_mask_walking: Texture2D
+
+@export var golem_mask_still: Texture2D
+@export var golem_mask_walking: Texture2D
+
+@export var battering_mask_still: Texture2D
+@export var battering_mask_walking: Texture2D
+
 func activate(start_grid_pos: Vector2i, start_world_pos: Vector2):
 	is_active = true
 	visible = true
@@ -42,7 +56,7 @@ func activate(start_grid_pos: Vector2i, start_world_pos: Vector2):
 	set_sprite_texture(texture_still)
 	
 	# 2. Visual Distinction (Ghostly Look)
-	modulate = Color(0.7, 0.7, 1.0, 0.9) 
+	$Sprite.modulate = Color(0.3, 0.3, 1.0, 0.3) 
 
 	# 3. Connect to Player Signals
 	if not target_player:
@@ -59,11 +73,7 @@ func deactivate():
 	global_position = Vector2(-1000, -1000)
 	
 
-# Assign these in Inspector just like Player
-@export var water_mask_still: Texture2D
-@export var water_mask_walking: Texture2D
-@export var win_mask_still: Texture2D
-@export var win_mask_walking: Texture2D
+
 
 # --- STATE ---
 var grid_position: Vector2i = Vector2i.ZERO
@@ -271,13 +281,13 @@ func update_mask_properties():
 			mask_layer.visible = true
 		MaskType.BATTERING_RAM: 
 			properties = ["BREAK_WALL"]
-			current_mask_still = water_mask_still
-			current_mask_walking = water_mask_walking
+			current_mask_still = battering_mask_still
+			current_mask_walking = battering_mask_walking
 			mask_layer.visible = true
 		MaskType.GOLEM: 
 			properties = ["PUSH_ROCKS"]
-			current_mask_still = water_mask_still
-			current_mask_walking = water_mask_walking
+			current_mask_still = golem_mask_still
+			current_mask_walking = golem_mask_walking
 			mask_layer.visible = true
 
 	update_visuals()

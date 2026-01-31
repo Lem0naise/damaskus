@@ -5,7 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://cxvo2x3m7iuv2" path="res://assets/maskSpiritWalking.png" id="3_0tygy"]
 [ext_resource type="Texture2D" uid="uid://c7enmjabr1fce" path="res://assets/crown.png" id="4_sptji"]
 [ext_resource type="Texture2D" uid="uid://dxyrfk2upegex" path="res://assets/crownWin.png" id="5_v4e37"]
+[ext_resource type="Texture2D" uid="uid://djrfkddong1j8" path="res://assets/golemStill.png" id="6_0tygy"]
 [ext_resource type="Texture2D" uid="uid://cbau38wwtig6x" path="res://assets/SpriteStillTransparent.png" id="6_1h837"]
+[ext_resource type="Texture2D" uid="uid://b663uj7osxa27" path="res://assets/golemWalking.png" id="7_sptji"]
 
 [node name="NPC" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_tl2vt")
@@ -13,6 +15,10 @@ water_mask_still = ExtResource("2_hwkja")
 water_mask_walking = ExtResource("3_0tygy")
 win_mask_still = ExtResource("4_sptji")
 win_mask_walking = ExtResource("5_v4e37")
+golem_mask_still = ExtResource("6_0tygy")
+golem_mask_walking = ExtResource("7_sptji")
+battering_mask_still = ExtResource("6_0tygy")
+battering_mask_walking = ExtResource("7_sptji")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
 scale = Vector2(0.3, 0.3)
