@@ -45,7 +45,7 @@ func get_mask_name() -> String:
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "GOAL"
 		MaskType.BATTERING_RAM: return "RAM"
-		MaskType.GOLEM: return "ROCK"
+		MaskType.GOLEM: return "GOLEM"
 		_: return "?"
 
 func get_mask_description() -> String:
