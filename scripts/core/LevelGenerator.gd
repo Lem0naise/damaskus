@@ -9,6 +9,7 @@ extends Node2D
 @export var wall_scene: PackedScene
 @export var water_scene: PackedScene
 @export var mask_scene: PackedScene
+@export var crumbled_wall_scene: PackedScene = preload("res://scenes/objects/crumbled_wall.tscn")
 
 # 0 = Empty, 1 = Wall, 2 = Water
 # 15 Width x 9 Height
@@ -109,9 +110,8 @@ func generate_level(level):
 				grid_manager.set_tile(grid_pos, GridManager.TileType.WATER)
 
 			elif cell_value == 3: # CRUMBLED WALL
-				var wall = wall_scene.instantiate()
-				wall.position = world_pos
-				wall.modulate = Color(0.6, 0.4, 0.3) # Brownish tint
+				var crumbled_wall = crumbled_wall_scene.instantiate()
+				crumbled_wall.position = world_pos
 				
 				# Create a dedicated container if it doesn't exist, or just use walls for now but track them?
 				# Actually, the player needs to find them by group/container to queue_free them.
@@ -122,7 +122,7 @@ func generate_level(level):
 					node.name = "CrumbledWalls"
 					add_child(node)
 				
-				get_node("CrumbledWalls").add_child(wall)
+				get_node("CrumbledWalls").add_child(crumbled_wall)
 				
 				# Register to GridManager
 				grid_manager.set_tile(grid_pos, GridManager.TileType.CRUMBLED_WALL)
