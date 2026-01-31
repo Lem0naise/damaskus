@@ -1,16 +1,34 @@
 [gd_scene format=3 uid="uid://brxn5px8j3xkr"]
 
 [ext_resource type="Script" uid="uid://jqctimduuyrs" path="res://scripts/objects/Mask.gd" id="1_mask"]
-[ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="2_swtcn"]
+[ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="2_1ra8y"]
+[ext_resource type="Texture2D" uid="uid://cxvo2x3m7iuv2" path="res://assets/maskSpiritWalking.png" id="3_po0vf"]
+[ext_resource type="Texture2D" uid="uid://c7enmjabr1fce" path="res://assets/crown.png" id="4_grsrn"]
+[ext_resource type="Texture2D" uid="uid://dxyrfk2upegex" path="res://assets/crownWin.png" id="5_gxyrp"]
 
 [node name="Mask" type="Node2D" unique_id=246809494]
 script = ExtResource("1_mask")
 mask_type = 1
+water_mask_still = ExtResource("2_1ra8y")
+water_mask_walking = ExtResource("3_po0vf")
+win_mask_still = ExtResource("4_grsrn")
+win_mask_walking = ExtResource("5_gxyrp")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=533052826]
-offset_left = -35.0
-offset_top = -40.0
-offset_right = 37.0
-offset_bottom = 32.0
-texture = ExtResource("2_swtcn")
+offset_left = -83.0
+offset_top = -45.0
+offset_right = 72.0
+offset_bottom = 110.0
+pivot_offset = Vector2(69, 42)
+texture = ExtResource("2_1ra8y")
+expand_mode = 1
+
+[node name="CrownRect" type="TextureRect" parent="." unique_id=1116296863]
+visible = false
+offset_left = -71.0
+offset_top = -15.0
+offset_right = 71.0
+offset_bottom = 132.0
+pivot_offset = Vector2(110, 38)
+texture = ExtResource("4_grsrn")
 expand_mode = 1
