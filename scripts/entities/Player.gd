@@ -217,41 +217,34 @@ func try_move(direction: Vector2i):
 			sprite.flip_h = false
 
 		move_cooldown = HELD_KEY_DELAY  # Set cooldown for next move
-
 func can_move_to(target_pos: Vector2i) -> bool:
-	# Check if position is within bounds
+	# 1. Bounds check
 	if not grid_manager.is_valid_position(target_pos):
 		return false
 
-	# In NULL state (intangible), can move through solid objects
+	# 2. Intangible check
 	if is_intangible:
 		return true
 
-	# Check for solid tiles (walls, water, etc.) in the current dimension
-	if grid_manager.is_solid(target_pos, current_dimension):
-		# Special case: if it's water and we have FLOAT property, we can pass
-		if is_water_tile(target_pos) and has_property("FLOAT"):
-			return true
-		return false
-
-	return true
-
-func is_water_tile(target_pos: Vector2i) -> bool:
-	# Check if there's a water object at this position
-	var ingame = get_tree().get_root().get_node("Ingame")
-	if not ingame or not ingame.has_node("Water"):
-		return false
-
-	for water_obj in ingame.get_node("Water").get_children():
-		if grid_manager:
-			var water_grid_pos = grid_manager.world_to_grid(water_obj.global_position)
-			if water_grid_pos == target_pos:
-				# Check if this water is in the current dimension
-				if water_obj.has_method("update_dimension_visibility"):
-					return water_obj.visible
+	# 3. Check what type of tile is there
+	var tile_type = grid_manager.get_tile_type(target_pos, current_dimension)
+	
+	match tile_type:
+		GridManager.TileType.WALL:
+			return false # Always blocked by walls
+			
+		GridManager.TileType.WATER:
+			# Only pass if we have FLOAT property
+			if has_property("FLOAT"):
 				return true
-	return false
-
+			return false # Blocked by water otherwise
+			
+		GridManager.TileType.EMPTY:
+			return true # Free to move
+			
+	return true
+	
+	
 func animate_movement(delta):
 	var target_world_pos = grid_manager.grid_to_world(grid_position)
 
