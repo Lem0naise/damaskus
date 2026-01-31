@@ -51,6 +51,7 @@ const SPRITE_SIZE = 180.0 # pixels
 var grid_position: Vector2i = Vector2i.ZERO
 
 var is_moving: bool = false
+var waiting_on_win: bool = false
 
 # Lower number = Faster, Snappier (e.g. 0.15)
 
@@ -599,6 +600,7 @@ func reset_state():
 	# 1. Stop Movement
 	if move_tween: move_tween.kill()
 	is_moving = false
+	waiting_on_win = false
 	
 	set_sprite_texture(texture_still)
 	
@@ -709,18 +711,22 @@ func update_mask_properties():
 			mask_layer.visible = true # Make sure to show it!
 				
 		MaskType.WINNER:
-			# Win condition logic...
-			current_mask_still = win_mask_still
-			current_mask_walking = win_mask_walking
-			mask_layer.visible = true # Make sure to show it!
-			
-			var tween = create_tween()
-			
-			# Add an empty delay of 1 second
-			tween.tween_interval(1.0)
-			
-			# Run the function once the interval finishes
-			tween.tween_callback(move_level)
+			if waiting_on_win:
+				return
+			else:
+				# Win condition logic...
+				current_mask_still = win_mask_still
+				current_mask_walking = win_mask_walking
+				mask_layer.visible = true # Make sure to show it!
+				
+				var tween = create_tween()
+				
+				# Add an empty delay of 1 second
+				tween.tween_interval(1.0)
+				waiting_on_win = true
+				
+				# Run the function once the interval finishes
+				tween.tween_callback(move_level)
 	
 
 		MaskType.BATTERING_RAM:
