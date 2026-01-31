@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://brxn5px8j3xkr"]
+
+[ext_resource type="Script" path="res://scripts/objects/Mask.gd" id="1_mask"]
+
+[node name="Mask" type="Node2D"]
+script = ExtResource("1_mask")

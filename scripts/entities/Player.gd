@@ -26,8 +26,9 @@ var held_key_timer: float = 0.0
 var last_held_direction: Vector2i = Vector2i.ZERO
 
 # Mask system
-enum MaskType { NONE, GOLEM, SPIRIT, MIRROR, MIMIC }
+enum MaskType { NONE, DIMENSION, WATER }
 var current_mask: MaskType = MaskType.NONE
+var inventory: Array[MaskType] = []  # Masks the player has collected
 
 # Player state (NULL state by default)
 var is_intangible: bool = false  # Can walk through walls when true
@@ -71,9 +72,18 @@ func _process(delta):
 	# Handle input
 	handle_input()
 
-	# Handle dimension switching
+	# Handle dimension switching (only if wearing DIMENSION mask)
 	if Input.is_action_just_pressed("ui_accept"):  # Default: spacebar
-		switch_dimension()
+		if current_mask == MaskType.DIMENSION:
+			switch_dimension()
+
+	# Handle pickup
+	if Input.is_action_just_pressed("pickup"):  # E key
+		try_pickup()
+
+	# Handle equip mask
+	if Input.is_action_just_pressed("equip_mask"):  # R key
+		cycle_equipped_mask()
 
 	# Process movement
 	if is_moving:
@@ -87,6 +97,7 @@ func _process(delta):
 # Switch dimension and update all objects
 func switch_dimension():
 	current_dimension = (current_dimension + 1) % NUM_DIMENSIONS
+	print("Switched to dimension ", current_dimension)
 	# Notify all objects to update their visibility/collision
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if ingame:
@@ -95,6 +106,50 @@ func switch_dimension():
 				for obj in ingame.get_node(group).get_children():
 					if obj.has_method("update_dimension_visibility"):
 						obj.update_dimension_visibility(current_dimension)
+
+# Try to pick up a mask at the current position
+func try_pickup():
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame or not ingame.has_node("Masks"):
+		return
+
+	# Check for masks at current grid position
+	for mask_obj in ingame.get_node("Masks").get_children():
+		if mask_obj.has_method("pickup"):
+			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
+			if mask_grid_pos == grid_position:
+				# Pick up the mask
+				var mask_type = mask_obj.mask_type
+				if not inventory.has(mask_type):
+					inventory.append(mask_type)
+					print("Picked up ", MaskType.keys()[mask_type], " mask!")
+					mask_obj.pickup()
+					update_inventory_ui()
+				return
+
+# Cycle through equipped masks
+func cycle_equipped_mask():
+	if inventory.size() == 0:
+		print("No masks in inventory!")
+		return
+
+	# Find current mask index in inventory
+	var current_index = inventory.find(current_mask)
+
+	# Cycle to next mask in inventory
+	if current_index == -1:
+		# No mask equipped, equip first in inventory
+		wear_mask(inventory[0])
+	else:
+		# Cycle to next mask
+		var next_index = (current_index + 1) % inventory.size()
+		wear_mask(inventory[next_index])
+
+# Update inventory UI
+func update_inventory_ui():
+	var ui = get_node_or_null("/root/Ingame/InventoryUI")
+	if ui and ui.has_method("update_inventory"):
+		ui.update_inventory(inventory, current_mask)
 
 func handle_input():
 	var input_dir = Vector2i.ZERO
@@ -174,9 +229,28 @@ func can_move_to(target_pos: Vector2i) -> bool:
 
 	# Check for solid tiles (walls, water, etc.) in the current dimension
 	if grid_manager.is_solid(target_pos, current_dimension):
+		# Special case: if it's water and we have FLOAT property, we can pass
+		if is_water_tile(target_pos) and has_property("FLOAT"):
+			return true
 		return false
 
 	return true
+
+func is_water_tile(target_pos: Vector2i) -> bool:
+	# Check if there's a water object at this position
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame or not ingame.has_node("Water"):
+		return false
+
+	for water_obj in ingame.get_node("Water").get_children():
+		if grid_manager:
+			var water_grid_pos = grid_manager.world_to_grid(water_obj.global_position)
+			if water_grid_pos == target_pos:
+				# Check if this water is in the current dimension
+				if water_obj.has_method("update_dimension_visibility"):
+					return water_obj.visible
+				return true
+	return false
 
 func animate_movement(delta):
 	var target_world_pos = grid_manager.grid_to_world(grid_position)
@@ -214,6 +288,7 @@ func set_sprite_texture(texture: Texture2D):
 func wear_mask(mask_type: MaskType):
 	current_mask = mask_type
 	update_mask_properties()
+	update_inventory_ui()
 
 func remove_mask():
 	current_mask = MaskType.NONE
@@ -225,28 +300,19 @@ func update_mask_properties():
 
 	match current_mask:
 		MaskType.NONE:
-			# NULL state - solid by default, can't walk through walls
+			# NULL state - solid by default, can't walk through walls or water
 			is_intangible = false
+			properties = []
 
-		MaskType.GOLEM:
-			# SOLID, HEAVY, SINK
+		MaskType.DIMENSION:
+			# DIMENSION - allows switching between dimensions with spacebar
 			is_intangible = false
-			properties = ["SOLID", "HEAVY", "SINK"]
+			properties = ["DIMENSION_SHIFT"]
 
-		MaskType.SPIRIT:
-			# FLOAT, WEAK
+		MaskType.WATER:
+			# WATER - allows floating on water
 			is_intangible = false
-			properties = ["FLOAT", "WEAK"]
-
-		MaskType.MIRROR:
-			# REFLECT
-			is_intangible = false
-			properties = ["SOLID", "REFLECT"]
-
-		MaskType.MIMIC:
-			# COPY
-			is_intangible = false
-			properties = ["SOLID", "COPY"]
+			properties = ["FLOAT"]
 
 	print("Mask changed: ", MaskType.keys()[current_mask], " Properties: ", properties)
 
