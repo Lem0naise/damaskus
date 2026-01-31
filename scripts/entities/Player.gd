@@ -448,16 +448,17 @@ func try_move(direction: Vector2i):
 
 		
 		# Create a tween for smooth movement
-
-		var tween = create_tween()
+		
+		if move_tween: move_tween.kill()
+		move_tween = create_tween()
 
 		# TRANS_SINE + EASE_OUT gives a natural slide
 
-		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		move_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-		tween.tween_property(self, "global_position", target_world_pos, move_duration)
+		move_tween.tween_property(self, "global_position", target_world_pos, move_duration)
 
-		tween.tween_callback(on_movement_finished)
+		move_tween.tween_callback(on_movement_finished)
 
 
 func on_movement_finished():
@@ -551,6 +552,15 @@ func can_move_to(target_pos: Vector2i) -> bool:
 
 	return true
 
+var move_tween: Tween
+
+func reset_state():
+	# 1. Stop Movement
+	if move_tween: move_tween.kill()
+	is_moving = false
+	
+	set_sprite_texture(texture_still)
+	
 func die():
 	remove_mask()
 	# Call the IngameManager's reload_level function to reset the current level
@@ -629,7 +639,8 @@ func update_mask_properties():
 
 	current_mask_still = null
 	current_mask_walking = null
-	mask_layer.visible = false
+	if mask_layer:
+		mask_layer.visible = false
 
 	match current_mask:
 		MaskType.NONE:

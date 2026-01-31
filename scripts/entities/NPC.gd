@@ -66,6 +66,7 @@ func activate(start_grid_pos: Vector2i, start_world_pos: Vector2):
 		target_player.player_moved.connect(_on_player_moved)
 		target_player.player_interacted.connect(_on_player_interacted)
 		
+	reset_state()
 	
 func deactivate():
 	is_active = false
@@ -173,11 +174,31 @@ func try_move(direction: Vector2i):
 
 		# Tween
 		var target_world_pos = grid_manager.grid_to_world(grid_position)
-		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		tween.tween_property(self, "global_position", target_world_pos, move_duration)
-		tween.tween_callback(on_movement_finished)
+		
+		if move_tween: move_tween.kill()
+		move_tween = create_tween()
 
+		# TRANS_SINE + EASE_OUT gives a natural slide
+
+		move_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+		move_tween.tween_property(self, "global_position", target_world_pos, move_duration)
+
+		move_tween.tween_callback(on_movement_finished)
+
+
+var move_tween: Tween
+
+
+
+# Add this new function
+func reset_state():
+	# 1. Stop Movement
+	if move_tween: move_tween.kill()
+	is_moving = false
+	
+	set_sprite_texture(texture_still)
+	
 func die():
 	remove_mask()
 	# Call the IngameManager's reload_level function to reset the current level

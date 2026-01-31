@@ -429,6 +429,7 @@ func generate_level(level_idx):
 				var player = get_node_or_null("/root/Ingame/Player")
 				if player:
 					player.show()
+					player.reset_state()
 					# Directly set position and internal grid reference
 					player.global_position = world_pos
 					player.grid_position = grid_pos
