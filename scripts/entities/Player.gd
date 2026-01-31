@@ -6,8 +6,8 @@ class_name Player
 @onready var sprite: Sprite2D = $Sprite
 
 # Textures
-var texture_still: Texture2D = preload("res://assets/gorgeous.png")
-var texture_walking: Texture2D = preload("res://assets/walking.png")
+var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
+var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.png")
 
 # Sprite size (slightly smaller than grid cell)
 const SPRITE_SIZE = 180.0  # pixels
@@ -110,11 +110,11 @@ func switch_dimension():
 # Try to pick up a mask at the current position
 func try_pickup():
 	var ingame = get_tree().get_root().get_node("Ingame")
-	if not ingame or not ingame.has_node("Masks"):
+	if not ingame or not ingame.has_node("LevelGenerator/Masks"):
 		return
 
 	# Check for masks at current grid position
-	for mask_obj in ingame.get_node("Masks").get_children():
+	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
 		if mask_obj.has_method("pickup"):
 			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
 			if mask_grid_pos == grid_position:

@@ -1,21 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvw8qm7xj0qqn"]
+[gd_scene format=3 uid="uid://bvw8qm7xj0qqn"]
 
-[ext_resource type="Script" path="res://scripts/entities/Player.gd" id="1_player"]
-[ext_resource type="Texture2D" uid="uid://dpivdtd0ahp0s" path="res://assets/gorgeous.png" id="2_gorgeous"]
-[ext_resource type="Texture2D" uid="uid://dgcqb8mwx8e0b" path="res://assets/walking.png" id="3_walking"]
+[ext_resource type="Script" uid="uid://o8ig778kpd1o" path="res://scripts/entities/Player.gd" id="1_player"]
+[ext_resource type="Texture2D" uid="uid://cbau38wwtig6x" path="res://assets/SpriteStillTransparent.png" id="2_g2els"]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_player")
 
-[node name="Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_gorgeous")
-
-[node name="Label" type="Label" parent="."]
-visible = false
-offset_left = -20.0
-offset_top = -10.0
-offset_right = 20.0
-offset_bottom = 10.0
-text = "NULL"
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
+texture = ExtResource("2_g2els")

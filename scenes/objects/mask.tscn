@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://brxn5px8j3xkr"]
 
-[ext_resource type="Script" path="res://scripts/objects/Mask.gd" id="1_mask"]
+[ext_resource type="Script" uid="uid://jqctimduuyrs" path="res://scripts/objects/Mask.gd" id="1_mask"]
+[ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="2_swtcn"]
 
-[node name="Mask" type="Node2D"]
+[node name="Mask" type="Node2D" unique_id=246809494]
 script = ExtResource("1_mask")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=533052826]
+offset_left = -35.0
+offset_top = -40.0
+offset_right = 37.0
+offset_bottom = 32.0
+texture = ExtResource("2_swtcn")
+expand_mode = 1

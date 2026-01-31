@@ -6,8 +6,8 @@ class_name PlayerMainMenu
 @onready var sprite: Sprite2D = $Sprite
 
 # Textures
-var texture_still: Texture2D = preload("res://assets/gorgeous.png")
-var texture_walking: Texture2D = preload("res://assets/walking.png")
+var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
+var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.png")
 
 # Sprite size (slightly smaller than grid cell)
 const SPRITE_SIZE = 360.0  # pixels

@@ -3,12 +3,12 @@ class_name GridManager
 
 # Configuration
 const TILE_SIZE = 128
-const GRID_WIDTH = 15
-const GRID_HEIGHT = 9
+const GRID_WIDTH = 15 # 1920 / 128 
+const GRID_HEIGHT = 9 # 1080 / 128
 var grid_offset = Vector2.ZERO
 
 # Define Tile Types
-enum TileType { EMPTY, WALL, WATER, OBSTACLE }
+enum TileType { EMPTY, WALL, WATER, OBSTACLE, MASK }
 
 # Storage: dimension_id -> { Vector2i: TileType }
 var grid_data: Dictionary = {} 

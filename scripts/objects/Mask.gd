@@ -1,64 +1,43 @@
-@tool
 extends GameObject
 class_name Mask
 
 # Match Player's MaskType enum
 enum MaskType { NONE, DIMENSION, WATER }
 
-@export var mask_type: MaskType = MaskType.DIMENSION
-var sprite: ColorRect
-var label: Label
+# The Generator will set this variable before adding the child
+@export var mask_type: MaskType = MaskType.NONE
 
 func _ready():
-	# Masks are not solid, player can walk through them
-
-	# Create sprite if it doesn't exist
-	if not sprite:
-		create_sprite()
-
-	# Call parent ready to register with grid
+	# 1. Setup Visuals based on the type assigned by the LevelGenerator
+	setup_visuals()
+	
 	super._ready()
 
-func create_sprite():
-	# Remove any existing children first
-	for child in get_children():
-		if child is ColorRect or child is Label:
-			child.queue_free()
+func setup_visuals():
 
-	# Create visual representation
-	sprite = ColorRect.new()
-	sprite.size = Vector2(48, 48)
-	sprite.position = Vector2(-24, -24)
-	sprite.color = get_mask_color()
-	add_child(sprite)
 
-	# Add label
-	label = Label.new()
-	label.position = Vector2(-28, 16)
+	var label = Label.new()
+	label.position = Vector2(-28, -10)
 	label.size = Vector2(56, 20)
 	label.text = get_mask_name()
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", 12)
 	add_child(label)
 
 func get_mask_color() -> Color:
 	match mask_type:
-		MaskType.DIMENSION:
-			return Color(0.8, 0.2, 0.8, 1)  # Purple
-		MaskType.WATER:
-			return Color(0.2, 0.6, 0.9, 1)  # Blue
-		_:
-			return Color(1, 1, 1, 1)
+		MaskType.DIMENSION: return Color(0.8, 0.2, 0.8, 1) # Purple
+		MaskType.WATER:     return Color(0.2, 0.6, 0.9, 1) # Blue
+		_:                  return Color(1, 1, 1, 0.5)
 
 func get_mask_name() -> String:
 	match mask_type:
-		MaskType.DIMENSION:
-			return "DIM"
-		MaskType.WATER:
-			return "WATER"
-		_:
-			return "MASK"
+		MaskType.DIMENSION: return "DIM"
+		MaskType.WATER:     return "H2O"
+		_:                  return "?"
 
 func pickup():
-	# Called when player picks up this mask
-	queue_free()
+	# Player calls this when collecting
+	var tween = create_tween()
+	tween.tween_property(self, "scale", Vector2.ZERO, 0.2)
+	tween.tween_callback(queue_free)
