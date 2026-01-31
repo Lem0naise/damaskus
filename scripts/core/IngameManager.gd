@@ -12,3 +12,6 @@ func _ready():
 	tween.tween_property($Background, "modulate:a", 1, 0.3)
 	
 	print("Ingame scene ready")
+
+func next_level():
+	$LevelGenerator.next_level()
