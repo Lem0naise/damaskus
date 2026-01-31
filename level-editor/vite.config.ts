@@ -6,5 +6,7 @@ export default defineConfig({
   server: {
     port: 57578,
     open: true,
+    allowedHosts: ['dasmaskus.josh.software'],
+    host: true
   },
 });
