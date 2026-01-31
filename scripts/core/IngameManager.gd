@@ -17,4 +17,6 @@ func next_level():
 	$LevelGenerator.next_level()
 
 func reload_level():
+	$Player.remove_mask()
+	$NPC.remove_mask()
 	$LevelGenerator.reload_level()
