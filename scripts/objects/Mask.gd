@@ -14,6 +14,11 @@ enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM}
 @export var win_mask_still: Texture2D
 @export var win_mask_walking: Texture2D
 
+@export var golem_mask_still: Texture2D
+@export var golem_mask_walking: Texture2D
+
+@export var battering_mask_still: Texture2D
+@export var battering_mask_walking: Texture2D
 
 func _ready():
 	# 1. Setup Visuals based on the type assigned by the LevelGenerator

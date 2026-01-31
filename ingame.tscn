@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://be6wlemx8vb0v"]
+[gd_scene format=3 uid="uid://oafli3v0rpi8"]
 
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="1_gridmanager"]
 [ext_resource type="Script" uid="uid://dbfxa2deqsx6x" path="res://scripts/core/IngameManager.gd" id="1_ingamemanager"]

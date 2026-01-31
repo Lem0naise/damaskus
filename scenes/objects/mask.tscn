@@ -13,6 +13,10 @@ water_mask_still = ExtResource("2_1ra8y")
 water_mask_walking = ExtResource("3_po0vf")
 win_mask_still = ExtResource("4_grsrn")
 win_mask_walking = ExtResource("5_gxyrp")
+golem_mask_still = ExtResource("2_1ra8y")
+golem_mask_walking = ExtResource("3_po0vf")
+battering_mask_still = ExtResource("2_1ra8y")
+battering_mask_walking = ExtResource("3_po0vf")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=533052826]
 offset_left = -83.0
