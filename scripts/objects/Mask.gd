@@ -11,9 +11,6 @@ var label: Label
 
 func _ready():
 	# Masks are not solid, player can walk through them
-	is_solid = false
-	is_pushable = false
-	object_type = "mask"
 
 	# Create sprite if it doesn't exist
 	if not sprite:
