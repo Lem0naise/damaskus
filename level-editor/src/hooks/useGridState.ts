@@ -77,6 +77,35 @@ export const useGridState = () => {
     setLevels([...levels, newLevel]);
   };
 
+  const reorderLevels = (startIndex: number, endIndex: number) => {
+    setLevels((prev) => {
+      const result = Array.from(prev);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      return result;
+    });
+
+    // Adjust current level index if the active level was moved
+    if (currentLevelIndex === startIndex) {
+      setCurrentLevelIndex(endIndex);
+    } else if (startIndex < currentLevelIndex && endIndex >= currentLevelIndex) {
+      setCurrentLevelIndex(currentLevelIndex - 1);
+    } else if (startIndex > currentLevelIndex && endIndex <= currentLevelIndex) {
+      setCurrentLevelIndex(currentLevelIndex + 1);
+    }
+  };
+
+  const renameLevel = (index: number, newName: string) => {
+    setLevels((prev) => {
+      const newLevels = [...prev];
+      newLevels[index] = {
+        ...newLevels[index],
+        name: newName,
+      };
+      return newLevels;
+    });
+  };
+
   const loadLevels = (newLevels: Level[]) => {
     setLevels(newLevels);
     setCurrentLevelIndex(0);
@@ -97,6 +126,8 @@ export const useGridState = () => {
     addLevel,
     removeLevel,
     duplicateLevel,
+    reorderLevels,
+    renameLevel,
     setCurrentLevelIndex,
     loadLevels,
   };
