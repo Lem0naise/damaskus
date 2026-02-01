@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://brlrekmf00txi"
-path="res://.godot/imported/damaskus.apple-touch-icon.png-e68b969e51dda4983b9cf67a62fd2ce3.ctex"
+path="res://.godot/imported/damaskus.apple-touch-icon.png-75b7a09d10000e49f1ab21c5ee1e2f10.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://export/damaskus.apple-touch-icon.png"
-dest_files=["res://.godot/imported/damaskus.apple-touch-icon.png-e68b969e51dda4983b9cf67a62fd2ce3.ctex"]
+source_file="res://docs/damaskus.apple-touch-icon.png"
+dest_files=["res://.godot/imported/damaskus.apple-touch-icon.png-75b7a09d10000e49f1ab21c5ee1e2f10.ctex"]
 
 [params]
 
