@@ -272,13 +272,19 @@ func drop_mask():
 	if current_mask == MaskType.NONE:
 		print("No mask to drop!")
 		return
-		
+
 		# TODO make it not be allowed to drop on things like other masks, or solid blocks like water etc
 
-	# 2. Get references
+	# 2. Check if current position is a phase column (red or blue wall)
+	var tile_type = grid_manager.get_tile_type(grid_position)
+	if tile_type == GridManager.TileType.RED_WALL or tile_type == GridManager.TileType.BLUE_WALL:
+		print("Cannot drop mask on phase columns!")
+		return
+
+	# 3. Get references
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if not ingame: return
-	
+
 	var level_gen = ingame.get_node_or_null("LevelGenerator")
 	if not level_gen: return
 
@@ -306,7 +312,7 @@ func drop_mask():
 
 		# 7. Check if we dropped the H2O mask while standing on water
 		if dropped_mask_type == MaskType.WATER:
-			var tile_type = grid_manager.get_tile_type(grid_position)
+			tile_type = grid_manager.get_tile_type(grid_position)
 			if tile_type == GridManager.TileType.WATER:
 				# Player dropped water mask in water - they drown!
 				die("You drowned in the water!")
