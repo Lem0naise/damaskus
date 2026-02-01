@@ -1,6 +1,6 @@
 extends Node
 
-const API_BASE_URL = "http://automation.112000000.xyz/webhook"
+const API_BASE_URL = "https://automation.112000000.xyz/webhook"
 const API_AUTH_TOKEN = "9JnwJyoeqJ6E8bRf"
 
 signal levels_fetched(levels: Array)
