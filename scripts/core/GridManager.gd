@@ -10,7 +10,7 @@ const GRID_HEIGHT = 9 # 1080 / 128
 var grid_offset = Vector2.ZERO
 
 # Define Tile Types
-enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL, BLUE_WALL, QUICKSAND, LASER_EMITTER}
+enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL, BLUE_WALL, QUICKSAND, LASER_EMITTER, BRIDGE}
 
 # Storage: Vector2i -> TileType (single dimension)
 var grid_data: Dictionary = {}
