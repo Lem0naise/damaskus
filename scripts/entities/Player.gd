@@ -11,6 +11,9 @@ signal player_interacted(action_name: String) # pickup, drop, space, etc
 
 @onready var sprite: Sprite2D = $Sprite
 
+# Tooltip
+@onready var entity_tooltip: EntityTooltip = $EntityTooltip
+
 
 const MENU_SCENE_PATH: String = "res://main_menu.tscn"
 
@@ -96,6 +99,9 @@ var is_dying: bool = false
 
 
 func _ready():
+	# Initial check
+	update_tooltip_state()
+	
 	# Snap to grid at start
 	if grid_manager:
 		global_position = grid_manager.grid_to_world(grid_position)
@@ -712,6 +718,7 @@ func move_level():
 	
 	get_parent().next_level()
 	
+
 func update_mask_properties():
 	properties.clear()
 
@@ -820,31 +827,22 @@ func has_property(property_name: String) -> bool:
 	return properties.has(property_name)
 
 func update_tooltip_state():
-	var ui = get_node_or_null("/root/Ingame/InventoryUI")
-	if not ui: return
+	if not entity_tooltip:
+		return
 
-	# 1. Check for Pickup FIRST (Priority)
+	# 1. Check for Pickup
 	var pickup_target = get_mask_at_pos(grid_position)
 	
 	if pickup_target:
 		# We are standing on a mask -> Show Pickup Tooltip
 		var m_name = "Unknown"
-		var m_desc = ""
 		if pickup_target.has_method("get_mask_name"): m_name = pickup_target.get_mask_name()
-		if pickup_target.has_method("get_mask_description"): m_desc = pickup_target.get_mask_description()
 		
-		ui.show_pickup_tooltip(m_name, m_desc)
+		entity_tooltip.show_tooltip("Press [E] to pickup %s" % m_name)
 		return
 
-	# 2. If no pickup, check if we are wearing a mask -> Show Permanent Tooltip
-	if current_mask != MaskType.NONE:
-		var m_name = get_mask_name(current_mask)
-		var m_desc = get_mask_desc(current_mask) # Or fetch a nicer description
-		ui.show_perm_tooltip(m_name, m_desc + "\n Press Q to drop")
-		return
-
-	# 3. If neither, hide everything
-	ui.hide_pickup_tooltip()
+	# 2. Otherwise hide
+	entity_tooltip.hide_tooltip()
 
 # Helper to find mask object at specific grid pos
 func get_mask_at_pos(g_pos: Vector2i) -> Node:

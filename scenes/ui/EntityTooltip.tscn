@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c8q4vj8wry4aa"]
+
+[ext_resource type="Script" uid="uid://c0e2rkhn6r8fi" path="res://scripts/ui/EntityTooltip.gd" id="1_tooltip"]
+
+[node name="EntityTooltip" type="Node2D" unique_id=1807713246]
+script = ExtResource("1_tooltip")

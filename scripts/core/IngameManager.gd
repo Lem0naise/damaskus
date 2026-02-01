@@ -13,6 +13,12 @@ func _ready():
 		$DeathLayer/Death.modulate.a = 0
 		$DeathLayer/Message.modulate.a = 0 # Hide message initially via modulate
 		$DeathLayer/Message.visible = true
+
+	# Help Layer Logic
+	if has_node("HelpLayer"):
+		$HelpLayer.visible = false
+		if %Btn_Reload:
+			%Btn_Reload.pressed.connect(reload_level)
 		
 	var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_EXPO)
 	
@@ -41,13 +47,13 @@ func trigger_death(reason: String):
 		# 2. Set the ColorRect's intrinsic color to bright red for the flash?
 		# Or just modulate it?
 		# Let's override the ColorRect color to be PURE RED for the flash
-		death_rect.color = Color(1, 0, 0, 1)
+		death_rect.color = Color(0.7, 0, 0, 1)
 		
 		var tween = create_tween()
 		
 		# 3. Flash In: Alpha 0 -> 1 (Show Pure Red) very fast
 		tween.tween_property(death_rect, "modulate:a", 1.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		tween.tween_property(death_rect, "modulate:r", 0, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(death_rect, "modulate:r", 0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		
 		# 4. "Then going to red" (maybe a darker red? or stay pure red?)
 		
@@ -57,6 +63,11 @@ func trigger_death(reason: String):
 		# 3. Wait and Reload
 		tween.tween_interval(1)
 		tween.tween_callback(reload_level)
+
+func _unhandled_input(event):
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if has_node("HelpLayer"):
+			$HelpLayer.visible = not $HelpLayer.visible
 
 func next_level():
 	grid_manager.reset_state()
@@ -69,6 +80,9 @@ func reload_level():
 	if has_node("DeathLayer"):
 		$DeathLayer/Death.modulate.a = 0
 		$DeathLayer/Message.modulate.a = 0
+	
+	if has_node("HelpLayer"):
+		$HelpLayer.visible = false
 		
 	$Player.remove_mask()
 	$NPC.remove_mask()

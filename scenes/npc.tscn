@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bgooqr5e7kfyo" path="res://assets/ramWalking.png" id="9_1h837"]
 [ext_resource type="Texture2D" uid="uid://cq7f81rqmrrc" path="res://assets/DamskusMaskStillOutline.png" id="10_gl1un"]
 [ext_resource type="Texture2D" uid="uid://csur6p4nqy12a" path="res://assets/DamskusMaskMovingOutline.png" id="11_wuru7"]
+[ext_resource type="PackedScene" uid="uid://c8q4vj8wry4aa" path="res://scenes/ui/EntityTooltip.tscn" id="11_1h837"]
 
 [node name="NPC" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_tl2vt")
@@ -38,3 +39,5 @@ offset_bottom = 90.0
 pivot_offset = Vector2(90, 90)
 texture = ExtResource("2_hwkja")
 expand_mode = 1
+
+[node name="EntityTooltip" parent="." unique_id=1723322164 instance=ExtResource("11_1h837")]
