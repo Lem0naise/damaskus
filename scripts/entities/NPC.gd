@@ -160,7 +160,7 @@ func on_movement_finished():
 	update_visuals()
 	
 	if grid_manager.is_deadly(grid_position):
-		die()
+		die("Ghost was spiked!")
 		return
 
 	# FIX: Execute buffered move immediately to keep up with player
@@ -206,17 +206,17 @@ func reset_state():
 	set_sprite_texture(texture_still)
 	is_dying = false
 
-func die():
+func die(reason: String = "Ghost died!"):
 	if is_dying: return
 	is_dying = true
 	
 	# TODO flash red
 	remove_mask()
 	var ingame = get_tree().get_root().get_node("Ingame")
-	if ingame and ingame.has_method("reload_level"):
-		ingame.reload_level()
+	if ingame and ingame.has_method("trigger_death"):
+		ingame.trigger_death(reason)
 	elif ingame and ingame.has_node("IngameManager"):
-		ingame.get_node("IngameManager").reload_level()
+		ingame.get_node("IngameManager").trigger_death(reason)
 
 func try_pickup():
 	var ingame = get_tree().get_root().get_node("Ingame")
