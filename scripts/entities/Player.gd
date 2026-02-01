@@ -498,7 +498,7 @@ func on_movement_finished():
 	# Check if the current tile is deadly and run die if so
 	if grid_manager.is_deadly(grid_position):
 		print("WOAHH")
-		die()
+		die("You were spiked!")
 		return
 
 	# If player queued a move while sliding, execute it now for responsiveness
@@ -607,7 +607,7 @@ func reset_state():
 	
 	set_sprite_texture(texture_still)
 	
-func die():
+func die(reason: String = "You died!"):
 	if is_dying: return
 	is_dying = true
 	
@@ -615,14 +615,14 @@ func die():
 	remove_mask()
 	# Call the IngameManager's reload_level function to reset the current level
 	var ingame = get_tree().get_root().get_node("Ingame")
-	if ingame and ingame.has_method("reload_level"):
+	if ingame and ingame.has_method("trigger_death"):
 		print("e")
-		ingame.reload_level()
+		ingame.trigger_death(reason)
 	elif ingame and ingame.has_node("IngameManager"):
 		var manager = ingame.get_node("IngameManager")
 		print("f")
-		if manager and manager.has_method("reload_level"):
-			manager.reload_level()
+		if manager and manager.has_method("trigger_death"):
+			manager.trigger_death(reason)
 			print("e")
 			
 	else:

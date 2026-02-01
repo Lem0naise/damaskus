@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://brxn5px8j3xkr" path="res://scenes/objects/mask.tscn" id="9_mask"]
 [ext_resource type="AudioStream" uid="uid://cooganjoa3xac" path="res://assets/mainSong.wav" id="10_snqyf"]
 [ext_resource type="PackedScene" uid="uid://bccfxi5lnt5n3" path="res://scenes/npc.tscn" id="12_boc44"]
+[ext_resource type="FontFile" uid="uid://c0im8hsey1aa4" path="res://assets/PixelifySans-Bold.ttf" id="13_w4jj2"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")
@@ -69,3 +70,22 @@ autoplay = true
 position = Vector2(1663, 807)
 scale = Vector2(0.6, 0.6)
 target_player = NodePath("../Player")
+
+[node name="Death" type="ColorRect" parent="." unique_id=1933601502]
+z_index = 100
+offset_right = 1944.0
+offset_bottom = 1092.0
+color = Color(0, 0, 0, 1)
+
+[node name="Message" type="Label" parent="Death" unique_id=1985230372]
+layout_mode = 0
+offset_left = 191.0
+offset_top = 355.0
+offset_right = 1732.0
+offset_bottom = 572.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("13_w4jj2")
+theme_override_font_sizes/font_size = 80
+text = "You died!"
+horizontal_alignment = 1
