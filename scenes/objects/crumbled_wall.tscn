@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://3k2cx0yul142"]
 
-[ext_resource type="Texture2D" uid="uid://b708nv1hxy3bb" path="res://assets/crackedBlock.png" id="1_dasad"]
+[ext_resource type="Texture2D" uid="uid://cu6ao762p3ysd" path="res://assets/crackedBlock.png" id="1_dasad"]
 
 [node name="CrumbledWall" type="Node2D" unique_id=1295761046]
 

@@ -41,6 +41,11 @@ func setup_visuals():
 	label.add_theme_font_size_override("font_size", 12)
 	add_child(label)
 	
+	# --- PARTICLE COLOR LOGIC ---
+	if has_node("GroundParticles"):
+		var particles = $GroundParticles
+		particles.color = get_mask_color()
+
 	# --- COLOR SHIFT LOGIC ---
 	# We use 'modulate' to tint the texture.
 	# Check if the node exists first to prevent crashes.
@@ -64,6 +69,15 @@ func get_mask_texture() -> Texture2D:
 		MaskType.BATTERING_RAM: return battering_mask_still
 		MaskType.DAMASCUS: return damascus_mask_still
 		_: return null
+
+func get_mask_color() -> Color:
+	match mask_type:
+		MaskType.DIMENSION: return Color(0.6, 0.2, 0.8, 0.5) # Purple
+		MaskType.WATER: return Color(0.2, 0.5, 0.8, 0.5) # Blue
+		MaskType.WINNER: return Color(1.0, 1.0, 1.0, 0.5) # Gold
+		MaskType.BATTERING_RAM: return Color(0.8, 0.3, 0.2, 0.5) # Red/Orange
+		MaskType.DAMASCUS: return Color(0.4, 0.8, 0.9, 0.5) # Cyan/Silver
+		_: return Color(1, 1, 1, 0.5)
 
 func get_mask_name() -> String:
 	match mask_type:

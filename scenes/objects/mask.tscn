@@ -26,6 +26,17 @@ battering_mask_walking = ExtResource("9_fknk0")
 damascus_mask_still = ExtResource("10_gvlla")
 damascus_mask_walking = ExtResource("11_tg8no")
 
+[node name="GroundParticles" type="CPUParticles2D" parent="." unique_id=1344864386]
+amount = 15
+lifetime = 1.5
+emission_shape = 6
+emission_ring_inner_radius = 25.0
+emission_ring_radius = 30.0
+gravity = Vector2(0, -10)
+scale_amount_min = 4.0
+scale_amount_max = 8.0
+color = Color(1, 1, 1, 0.490196)
+
 [node name="TextureRect" type="TextureRect" parent="." unique_id=533052826]
 offset_left = -83.0
 offset_top = -45.0
