@@ -40,12 +40,24 @@ function App() {
 
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-4 md:mb-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-1 md:mb-2">
-          Damaskus Level Editor
-        </h1>
-        <p className="text-sm sm:text-base text-gray-600">
-          Create game levels and publish them to the community!!
-        </p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3 md:mb-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-1 md:mb-2">
+              Damaskus Level Editor
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600">
+              Create game levels and publish them to the community!!
+            </p>
+          </div>
+          <a
+            href="https://damaskus.indigo.spot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 whitespace-nowrap flex items-center gap-2"
+          >
+            🎮 Play the Game!
+          </a>
+        </div>
       </div>
 
       {/* Layer Toggle */}
