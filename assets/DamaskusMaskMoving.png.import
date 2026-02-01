@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu6ao762p3ysd"
-path="res://.godot/imported/crackedBlock.png-74ba5dcbca9204b2c7dc486f440f4566.ctex"
+uid="uid://kgbg4cl1lpmm"
+path="res://.godot/imported/DamaskusMaskMoving.png-4f28c0cbb5ea32002ca97814a245c73f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/crackedBlock.png"
-dest_files=["res://.godot/imported/crackedBlock.png-74ba5dcbca9204b2c7dc486f440f4566.ctex"]
+source_file="res://assets/DamaskusMaskMoving.png"
+dest_files=["res://.godot/imported/DamaskusMaskMoving.png-4f28c0cbb5ea32002ca97814a245c73f.ctex"]
 
 [params]
 

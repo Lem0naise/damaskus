@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://d1ry0lcf7bcks"]
+
+[sub_resource type="Gradient" id="Gradient_jnbgo"]
+offsets = PackedFloat32Array(0, 0.5424028, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.7826855, 0.7826855, 0.7826855, 0.7826855, 0, 0, 0, 0)
+
+[node name="CrumbledwallParticle" type="Node2D" unique_id=1952927556]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=657847270]
+emitting = false
+amount = 30
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+emission_shape = 1
+emission_sphere_radius = 1.0
+spread = 180.0
+gravity = Vector2(0, 1.71)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+linear_accel_min = -60.0
+damping_max = 6.485
+angle_max = 552.3
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+color = Color(0.17, 0.13243, 0.103700005, 1)
+color_ramp = SubResource("Gradient_jnbgo")
+hue_variation_min = -0.85

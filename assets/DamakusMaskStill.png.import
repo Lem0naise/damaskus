@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cu6ao762p3ysd"
-path="res://.godot/imported/crackedBlock.png-74ba5dcbca9204b2c7dc486f440f4566.ctex"
+uid="uid://dfby5j1jmjjgg"
+path="res://.godot/imported/DamakusMaskStill.png-85897884960b577d728d571f1a6a0b29.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/crackedBlock.png"
-dest_files=["res://.godot/imported/crackedBlock.png-74ba5dcbca9204b2c7dc486f440f4566.ctex"]
+source_file="res://assets/DamakusMaskStill.png"
+dest_files=["res://.godot/imported/DamakusMaskStill.png-85897884960b577d728d571f1a6a0b29.ctex"]
 
 [params]
 
