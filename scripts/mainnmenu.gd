@@ -14,11 +14,15 @@ const GAME_SCENE_PATH: String = "res://ingame.tscn"
 @onready var return_btn: Button = %Btn_Return
 
 func _ready() -> void:
-	# 1. Connect signals
-	start_btn.pressed.connect(_on_start_pressed)
-	options_btn.pressed.connect(_on_options_pressed)
-	community_btn.pressed.connect(_on_community_pressed)
-	quit_btn.pressed.connect(_on_quit_pressed)
+	# 1. Connect signals (with null checks for win scene compatibility)
+	if start_btn:
+		start_btn.pressed.connect(_on_start_pressed)
+	if options_btn:
+		options_btn.pressed.connect(_on_options_pressed)
+	if community_btn:
+		community_btn.pressed.connect(_on_community_pressed)
+	if quit_btn:
+		quit_btn.pressed.connect(_on_quit_pressed)
 	if return_btn:
 		return_btn.pressed.connect(_on_return_pressed)
 		
