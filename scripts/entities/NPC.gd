@@ -242,6 +242,13 @@ func try_pickup():
 func drop_mask():
 	if not is_active: return
 	if current_mask == MaskType.NONE: return
+
+	# Check if current position is a phase column (red or blue wall)
+	var tile_type = grid_manager.get_tile_type(grid_position)
+	if tile_type == GridManager.TileType.RED_WALL or tile_type == GridManager.TileType.BLUE_WALL:
+		print("NPC cannot drop mask on phase columns!")
+		return
+
 	var ingame = get_tree().get_root().get_node("Ingame")
 	var level_gen = ingame.get_node_or_null("LevelGenerator")
 	if level_gen and level_gen.has_method("spawn_mask_at"):
@@ -254,7 +261,7 @@ func drop_mask():
 
 		# Check if we dropped the H2O mask while standing on water
 		if dropped_mask_type == MaskType.WATER:
-			var tile_type = grid_manager.get_tile_type(grid_position)
+			tile_type = grid_manager.get_tile_type(grid_position)
 			if tile_type == GridManager.TileType.WATER:
 				# NPC dropped water mask in water - they drown!
 				die("Ghost drowned in the water!")
