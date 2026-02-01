@@ -128,9 +128,9 @@ func check_entity_collision():
 		
 		while current != end:
 			if player and player.grid_position == current:
-				player.die("You were fried!")
+				player.die("You were fried!", 0.2)
 			if npc and npc.is_active and npc.grid_position == current:
-				npc.die("Ghost was fried!")
+				npc.die("Ghost was fried!", 0.2)
 				
 			current += direction
 

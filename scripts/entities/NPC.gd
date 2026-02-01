@@ -202,9 +202,12 @@ func reset_state():
 	set_sprite_texture(texture_still)
 	is_dying = false
 
-func die(reason: String = "Ghost died!"):
+func die(reason: String = "Partner died!", delay: float = 0.0):
 	if is_dying: return
 	is_dying = true
+	
+	if delay > 0:
+		await get_tree().create_timer(delay).timeout
 	
 	# TODO flash red
 	remove_mask()
