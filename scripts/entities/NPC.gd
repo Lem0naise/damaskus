@@ -5,6 +5,7 @@ class_name NPC
 @onready var grid_manager: GridManager = get_node("/root/Ingame/GridManager")
 @onready var sprite: Sprite2D = $Sprite
 @onready var mask_layer: TextureRect = $MaskLayer
+@onready var entity_tooltip: EntityTooltip = $EntityTooltip
 
 # --- ASSETS ---
 var texture_still: Texture2D = preload("res://assets/SpriteStillTransparent.png")
@@ -23,10 +24,8 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var golem_mask_walking: Texture2D
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
-
-@export var damascus_mask_still: Texture2D
-@export var damascus_mask_walking: Texture2D
-
+@export var steel_mask_still: Texture2D
+@export var steel_mask_walking: Texture2D
 
 # --- MOVEMENT STATE ---
 var grid_position: Vector2i = Vector2i.ZERO
@@ -36,7 +35,7 @@ var move_duration: float = 0.18
 var move_tween: Tween
 
 # --- MASK STATE ---
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, DAMASCUS}
 var current_mask: MaskType = MaskType.NONE
 var current_mask_still: Texture2D = null
 var current_mask_walking: Texture2D = null
@@ -46,6 +45,10 @@ var properties: Array[String] = []
 var is_dying: bool = false
 
 func _ready():
+	# Initial check
+	update_tooltip_state()
+	
+	
 	if not is_active:
 		hide()
 		return
@@ -65,6 +68,8 @@ func activate(start_grid_pos: Vector2i, start_world_pos: Vector2):
 	reset_state()
 	
 	$Sprite.modulate = Color(0.3, 0.3, 1.0, 0.6) # Ghostly look
+
+	update_tooltip_state()
 
 	# Connect signals
 	if not target_player:
@@ -131,6 +136,15 @@ func try_move(direction: Vector2i):
 		if ingame and ingame.has_node("LevelGenerator/CrumbledWalls"):
 			for wall in ingame.get_node("LevelGenerator/CrumbledWalls").get_children():
 				if grid_manager.world_to_grid(wall.global_position) == target_grid_pos:
+					# Spawn particle effect
+					var particle_scene = preload("res://scenes/particles/crumbledwall_particle.tscn")
+					var particle = particle_scene.instantiate()
+					particle.global_position = wall.global_position
+					ingame.add_child(particle)
+					particle.get_node("CPUParticles2D").emitting = true
+					# Auto-cleanup after particles finish
+					get_tree().create_timer(1.0).timeout.connect(particle.queue_free)
+					
 					wall.queue_free()
 					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY)
 					break
@@ -162,6 +176,9 @@ func on_movement_finished():
 	if grid_manager.is_deadly(grid_position):
 		die("Ghost was spiked!")
 		return
+
+	# UPDATE TOOLTIP
+	update_tooltip_state()
 
 	# FIX: Execute buffered move immediately to keep up with player
 	if next_move != Vector2i.ZERO:
@@ -237,11 +254,27 @@ func try_pickup():
 				level_gen.spawn_mask_at(grid_position, current_mask)
 			wear_mask(mask_obj.mask_type)
 			mask_obj.pickup()
+			
+			update_tooltip_state()
 			return
 
 func drop_mask():
 	if not is_active: return
 	if current_mask == MaskType.NONE: return
+
+
+	# 3. Get references
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame: return
+
+	var level_gen = ingame.get_node_or_null("LevelGenerator")
+	
+	for mask_obj in level_gen.get_node("Masks").get_children():
+		if mask_obj.has_method("pickup"):
+			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
+			if mask_grid_pos == grid_position:
+				return
+							
 
 	# Check if current position is a phase column (red or blue wall)
 	var tile_type = grid_manager.get_tile_type(grid_position)
@@ -249,8 +282,6 @@ func drop_mask():
 		print("NPC cannot drop mask on phase columns!")
 		return
 
-	var ingame = get_tree().get_root().get_node("Ingame")
-	var level_gen = ingame.get_node_or_null("LevelGenerator")
 	if level_gen and level_gen.has_method("spawn_mask_at"):
 		level_gen.spawn_mask_at(grid_position, current_mask)
 
@@ -266,6 +297,9 @@ func drop_mask():
 				# NPC dropped water mask in water - they drown!
 				die("Ghost drowned in the water!")
 				return
+		
+		update_tooltip_state()
+		grid_manager.grid_state_changed.emit()
 
 func wear_mask(type):
 	current_mask = type
@@ -288,7 +322,7 @@ func update_mask_properties():
 		MaskType.NONE: pass
 		MaskType.DIMENSION:
 			properties = ["DIMENSION_SHIFT"]
-			current_mask_still = golem_mask_still # Placeholder?
+			current_mask_still = golem_mask_still # Placeholder, 'changed'
 			current_mask_walking = golem_mask_walking
 			if mask_layer: mask_layer.visible = true
 		MaskType.WATER:
@@ -305,21 +339,12 @@ func update_mask_properties():
 			current_mask_still = battering_mask_still
 			current_mask_walking = battering_mask_walking
 			if mask_layer: mask_layer.visible = true
-		MaskType.GOLEM:
-			properties = ["PUSH_ROCKS"]
-			current_mask_still = golem_mask_still
-			current_mask_walking = golem_mask_walking
-			if mask_layer: mask_layer.visible = true
 		MaskType.DAMASCUS:
 			properties = ["BLOCK_LASERS"]
-			current_mask_still = damascus_mask_still
-			current_mask_walking = damascus_mask_walking
+			current_mask_still = steel_mask_still
+			current_mask_walking = steel_mask_walking
 			if mask_layer: mask_layer.visible = true
-		MaskType.DAMASCUS:
-			properties = ["BLOCK_LASERS"]
-			current_mask_still = damascus_mask_still
-			current_mask_walking = damascus_mask_walking
-			if mask_layer: mask_layer.visible = true
+			
 
 	update_visuals()
 
@@ -349,3 +374,36 @@ func set_sprite_texture(texture: Texture2D):
 
 func has_property(p: String) -> bool:
 	return properties.has(p)
+
+func update_tooltip_state():
+	if not entity_tooltip: return
+	
+	# 1. Check if standing on mask
+	var pickup_target = get_mask_at_pos(grid_position)
+	if pickup_target:
+		var m_name = "Unknown"
+		if pickup_target.has_method("get_mask_name"): m_name = pickup_target.get_mask_name()
+		entity_tooltip.show_tooltip("Press [E] to pickup %s" % m_name)
+		return
+		
+	# 2. Otherwise Hide
+	entity_tooltip.hide_tooltip()
+
+func get_mask_at_pos(g_pos: Vector2i) -> Node:
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame or not ingame.has_node("LevelGenerator/Masks"): return null
+	
+	for mask_obj in ingame.get_node("LevelGenerator/Masks").get_children():
+		var m_pos = grid_manager.world_to_grid(mask_obj.global_position)
+		if m_pos == g_pos:
+			return mask_obj
+	return null
+
+func get_mask_name(type: MaskType) -> String:
+	match type:
+		MaskType.DIMENSION: return "DIMENSION"
+		MaskType.WATER: return "H2O"
+		MaskType.WINNER: return "WINNER"
+		MaskType.BATTERING_RAM: return "BATTERING RAM"
+		MaskType.DAMASCUS: return "DAMASCUS STEEL"
+		_: return "?"

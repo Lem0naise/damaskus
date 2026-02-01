@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csur6p4nqy12a"
-path="res://.godot/imported/DamskusMaskMovingOutline.png-0ace9604d930fbc8a6d41410a345ed04.ctex"
+uid="uid://dpp3c66i5stxf"
+path="res://.godot/imported/damascusStill.png-1d2eef5cec0b967674cadc6e9c244e14.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/DamskusMaskMovingOutline.png"
-dest_files=["res://.godot/imported/DamskusMaskMovingOutline.png-0ace9604d930fbc8a6d41410a345ed04.ctex"]
+source_file="res://assets/damascusStill.png"
+dest_files=["res://.godot/imported/damascusStill.png-1d2eef5cec0b967674cadc6e9c244e14.ctex"]
 
 [params]
 

@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://bus1nnist1ev5" path="res://assets/laserBlank.png" id="4_2onvh"]
 
 [node name="laserBeam" type="Node2D" unique_id=6578759]
-z_index = 99
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=2006613214]
 offset_left = -64.0

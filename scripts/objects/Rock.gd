@@ -32,7 +32,7 @@ func on_pushed(direction: Vector2i) -> bool:
 	# If rock is on water, it can ONLY be pushed to other water tiles (not back to land)
 	if is_on_water:
 		if target_tile != GridManager.TileType.WATER:
-			return false  # Can't push rock from water back onto land
+			return false # Can't push rock from water back onto land
 	else:
 		# Rock is on land, can be pushed to EMPTY or WATER tiles
 		if target_tile != GridManager.TileType.EMPTY and target_tile != GridManager.TileType.WATER:
@@ -53,9 +53,13 @@ func on_pushed(direction: Vector2i) -> bool:
 	if target_tile == GridManager.TileType.WATER:
 		is_on_water = true
 
-	# Set the new position to ROCK type
-	grid_manager.set_tile(current_grid_position, GridManager.TileType.ROCK)
+		# Set the new position to BRIDGE type
+		grid_manager.set_tile(current_grid_position, GridManager.TileType.BRIDGE)
 
+	else:
+		# Set the new position to ROCK type
+		grid_manager.set_tile(current_grid_position, GridManager.TileType.ROCK)
+	
 	# Animate the movement
 	var target_world_pos = grid_manager.grid_to_world(current_grid_position)
 	var tween = create_tween()

@@ -2,8 +2,6 @@ extends CanvasLayer
 
 @onready var inventory_container: PanelContainer = $InventoryPanel
 @onready var masks_container: VBoxContainer = $InventoryPanel/MarginContainer/VBoxContainer
-@onready var tooltip_panel: PanelContainer = $TooltipPanel
-@onready var tooltip_label: Label = $TooltipPanel/MarginContainer/Label
 
 # Load Font
 var font = preload("res://assets/PixelifySans-Regular.ttf")
@@ -51,48 +49,6 @@ func setup_ui():
 	inventory_container.anchor_bottom = 0.0
 	inventory_container.position = Vector2(1920 - 250, 20) # Approx
 	inventory_container.size = Vector2(230, 0) # Min fixed width
-	
-	# --- Tooltip Panel ---
-	if not has_node("TooltipPanel"):
-		var t_panel = PanelContainer.new()
-		t_panel.name = "TooltipPanel"
-		add_child(t_panel)
-		
-		var t_style = StyleBoxFlat.new()
-		t_style.bg_color = Color(0.1, 0.1, 0.15, 0.95)
-		t_style.border_width_bottom = 2
-		t_style.border_width_top = 2
-		t_style.border_width_left = 2
-		t_style.border_width_right = 2
-		t_style.border_color = Color(1, 1, 1, 0.8)
-		t_style.corner_radius_top_left = 6
-		t_style.corner_radius_top_right = 6
-		t_style.corner_radius_bottom_right = 6
-		t_style.corner_radius_bottom_left = 6
-		t_panel.add_theme_stylebox_override("panel", t_style)
-		
-		var t_margin = MarginContainer.new()
-		t_margin.name = "MarginContainer"
-		t_margin.add_theme_constant_override("margin_top", 8)
-		t_margin.add_theme_constant_override("margin_bottom", 8)
-		t_margin.add_theme_constant_override("margin_left", 12)
-		t_margin.add_theme_constant_override("margin_right", 12)
-		t_panel.add_child(t_margin)
-		
-		var t_label = Label.new()
-		t_label.name = "Label"
-		t_label.add_theme_font_override("font", font)
-		t_label.add_theme_font_size_override("font_size", 24)
-		t_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		t_margin.add_child(t_label)
-
-	tooltip_panel = $TooltipPanel
-	tooltip_label = $TooltipPanel/MarginContainer/Label
-	
-	# Center Bottom Position
-	tooltip_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	tooltip_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	tooltip_panel.position.y -= 100 # Offset from bottom
 	
 	# Hide by default until updated
 	inventory_container.visible = false
@@ -188,21 +144,8 @@ func update_inventory(inventory: Array, equipped_mask):
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	masks_container.add_child(footer)
 
-# --- Tooltip API ---
-func show_pickup_tooltip(mask_name: String, description: String):
-	tooltip_label.text = "Press [E] to pickup %s\n%s" % [mask_name, description]
-	tooltip_panel.visible = true
-
-func show_perm_tooltip(mask_name: String, description: String):
-	tooltip_label.text = "Wearing %s\n%s" % [mask_name, description]
-	tooltip_panel.visible = true
-	
-func show_tooltip(title: String, description: String):
-	tooltip_label.text = "%s\n%s" % [title.capitalize(), description]
-	tooltip_panel.visible = true
-
 func hide_pickup_tooltip():
-	tooltip_panel.visible = false
+	pass
 
 # --- Helpers ---
 func get_mask_name_internal(mask_type) -> String:
@@ -212,8 +155,7 @@ func get_mask_name_internal(mask_type) -> String:
 		2: return "WATER"
 		3: return "WINNER"
 		4: return "BATTERING_RAM"
-		5: return "GOLEM"
-		6: return "DAMASCUS"
+		5: return "DAMASCUS"
 		_: return "UNKNOWN"
 
 func get_mask_display_name(mask_type) -> String:
@@ -222,8 +164,7 @@ func get_mask_display_name(mask_type) -> String:
 		2: return "Water"
 		3: return "Equip to Win!"
 		4: return "Battering Ram"
-		5: return "Golem"
-		6: return "Damascus Steel"
+		5: return "Damascus Steel"
 		_: return "Unknown"
 
 func get_mask_color(mask_type) -> Color:
@@ -232,7 +173,5 @@ func get_mask_color(mask_type) -> Color:
 		2: return Color(0.2, 0.6, 0.9, 1) # Blue for WATER
 		3: return Color(0.827, 0.667, 0.326, 1.0) # Gold for WINNER
 		4: return Color(0.8, 0.3, 0.2, 1) # Red/Orange for RAM
-		# 5: return Color(0.335, 0.539, 0.429, 1.0) # Greenish? for GOLEM -- Updating to match pattern
-		5: return Color(0.335, 0.539, 0.429, 1.0)
-		6: return Color(0.7, 0.7, 0.75, 1.0) # Steel/Silver for DAMASCUS
+		5: return Color(0.7, 0.7, 0.75, 1.0) # Steel/Silver for DAMASCUS
 		_: return Color(1, 1, 1, 1)

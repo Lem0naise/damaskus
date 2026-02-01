@@ -10,10 +10,12 @@
 [ext_resource type="Texture2D" uid="uid://b663uj7osxa27" path="res://assets/golemWalking.png" id="7_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://djlox6rnf2b2h" path="res://assets/ram.png" id="8_y4r1p"]
 [ext_resource type="Texture2D" uid="uid://bgooqr5e7kfyo" path="res://assets/ramWalking.png" id="9_d2wvv"]
-[ext_resource type="Texture2D" uid="uid://cq7f81rqmrrc" path="res://assets/DamskusMaskStillOutline.png" id="10_3v2ag"]
-[ext_resource type="Texture2D" uid="uid://csur6p4nqy12a" path="res://assets/DamskusMaskMovingOutline.png" id="11_jej6c"]
+[ext_resource type="Texture2D" uid="uid://dbug0eh7ye7cx" path="res://assets/damascusWearing.png" id="10_3v2ag"]
+[ext_resource type="PackedScene" uid="uid://c8q4vj8wry4aa" path="res://scenes/ui/EntityTooltip.tscn" id="10_tooltip"]
+[ext_resource type="Texture2D" uid="uid://th8ch6l2xyku" path="res://assets/damascusWalking.png" id="11_jej6c"]
 
 [node name="Player" type="CharacterBody2D" unique_id=40229128]
+z_index = 2
 script = ExtResource("1_player")
 water_mask_still = ExtResource("4_tuyoq")
 water_mask_walking = ExtResource("2_qhqgy")
@@ -23,8 +25,8 @@ golem_mask_still = ExtResource("6_smehm")
 golem_mask_walking = ExtResource("7_ur7pv")
 battering_mask_still = ExtResource("8_y4r1p")
 battering_mask_walking = ExtResource("9_d2wvv")
-damascus_mask_still = ExtResource("10_3v2ag")
-damascus_mask_walking = ExtResource("11_jej6c")
+steel_mask_still = ExtResource("10_3v2ag")
+steel_mask_walking = ExtResource("11_jej6c")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
 scale = Vector2(0.3, 0.3)
@@ -38,3 +40,5 @@ offset_bottom = 90.0
 pivot_offset = Vector2(90, 90)
 texture = ExtResource("4_tuyoq")
 expand_mode = 1
+
+[node name="EntityTooltip" parent="." unique_id=1106824151 instance=ExtResource("10_tooltip")]

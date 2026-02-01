@@ -11,6 +11,7 @@ const GAME_SCENE_PATH: String = "res://ingame.tscn"
 @onready var community_btn: Button = %Btn_Community
 @onready var mask_overlay: TextureRect = $MaskOverlay
 @onready var fade_layer: ColorRect = $FadeLayer
+@onready var return_btn: Button = %Btn_Return
 
 func _ready() -> void:
 	# 1. Connect signals
@@ -18,7 +19,10 @@ func _ready() -> void:
 	options_btn.pressed.connect(_on_options_pressed)
 	community_btn.pressed.connect(_on_community_pressed)
 	quit_btn.pressed.connect(_on_quit_pressed)
-
+	if return_btn:
+		return_btn.pressed.connect(_on_return_pressed)
+		
+		
 	# 2. Intro Animation: Fade from black, float the mask
 	_play_intro_anim()
 
@@ -61,11 +65,13 @@ func _on_start_pressed() -> void:
 
 func _on_options_pressed() -> void:
 	# Placeholder for options menu logic
-	print("Options menu requested")
+	$HelpLayer.visible = true;
 	# You might instantiate a settings scene or show a hidden panel here
 
 func _on_community_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/ui/community_levels_browser.tscn")
+func _on_return_pressed() -> void:
+	$HelpLayer.visible = false
 
 func _on_quit_pressed() -> void:
 	# Standard quit with a quick fade for polish
