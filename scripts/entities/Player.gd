@@ -580,7 +580,7 @@ func can_move_to(target_pos: Vector2i) -> bool:
 		# Ask the NPC: "Can you move to your next spot?"
 		if npc.can_move_to(npc_future_pos):
 			# YES: The NPC will vacate this tile, so we CAN move here.
-			return true
+			pass
 		else:
 			# NO: The NPC is blocked (by a wall, etc), so we are effectively blocked.
 			return false
