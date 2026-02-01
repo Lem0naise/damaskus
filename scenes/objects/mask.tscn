@@ -22,8 +22,7 @@ golem_mask_still = ExtResource("6_po0vf")
 golem_mask_walking = ExtResource("7_grsrn")
 battering_mask_still = ExtResource("8_gxyrp")
 battering_mask_walking = ExtResource("9_fknk0")
-damascus_mask_still = ExtResource("10_fknk0")
-damascus_mask_walking = ExtResource("10_fknk0")
+steel_mask_still = ExtResource("10_fknk0")
 
 [node name="GroundParticles" type="CPUParticles2D" parent="." unique_id=1344864386]
 amount = 15

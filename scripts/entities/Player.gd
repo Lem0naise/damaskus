@@ -39,6 +39,8 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
+@export var steel_mask_still: Texture2D
+@export var steel_mask_walking: Texture2D
 
 
 
@@ -799,8 +801,8 @@ func update_mask_properties():
 			# DAMASCUS - blocks lasers
 			is_intangible = false
 			properties = ["BLOCK_LASERS"]
-			current_mask_still = battering_mask_still
-			current_mask_walking = battering_mask_walking
+			current_mask_still = steel_mask_still
+			current_mask_walking = steel_mask_walking
 			mask_layer.visible = true
 			
 			print(current_mask_still)

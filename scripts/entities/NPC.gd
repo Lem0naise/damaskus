@@ -24,7 +24,8 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var golem_mask_walking: Texture2D
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
-
+@export var steel_mask_still: Texture2D
+@export var steel_mask_walking: Texture2D
 
 # --- MOVEMENT STATE ---
 var grid_position: Vector2i = Vector2i.ZERO
@@ -340,9 +341,8 @@ func update_mask_properties():
 			if mask_layer: mask_layer.visible = true
 		MaskType.DAMASCUS:
 			properties = ["BLOCK_LASERS"]
-			print(battering_mask_still)
-			current_mask_still = battering_mask_still
-			current_mask_walking = battering_mask_walking
+			current_mask_still = steel_mask_still
+			current_mask_walking = steel_mask_walking
 			if mask_layer: mask_layer.visible = true
 			
 

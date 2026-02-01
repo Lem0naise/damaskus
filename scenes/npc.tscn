@@ -24,8 +24,8 @@ golem_mask_still = ExtResource("6_0tygy")
 golem_mask_walking = ExtResource("7_sptji")
 battering_mask_still = ExtResource("8_v4e37")
 battering_mask_walking = ExtResource("9_1h837")
-damascus_mask_still = ExtResource("10_wuru7")
-damascus_mask_walking = ExtResource("11_nyaq3")
+steel_mask_still = ExtResource("10_wuru7")
+steel_mask_walking = ExtResource("11_nyaq3")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
 scale = Vector2(0.3, 0.3)

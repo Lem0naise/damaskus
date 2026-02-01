@@ -23,6 +23,9 @@ var is_picked_up: bool = false
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
+@export var steel_mask_still: Texture2D
+
+
 func _ready():
 	# 1. Setup Visuals based on the type assigned by the LevelGenerator
 	setup_visuals()
@@ -64,7 +67,7 @@ func get_mask_texture() -> Texture2D:
 		MaskType.WATER: return water_mask_still
 		MaskType.WINNER: return win_mask_still
 		MaskType.BATTERING_RAM: return battering_mask_still
-		MaskType.DAMASCUS: return battering_mask_still
+		MaskType.DAMASCUS: return steel_mask_still
 		_: return null
 
 func get_mask_color() -> Color:
