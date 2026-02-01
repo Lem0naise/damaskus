@@ -264,14 +264,26 @@ func drop_mask():
 	if not is_active: return
 	if current_mask == MaskType.NONE: return
 
+
+	# 3. Get references
+	var ingame = get_tree().get_root().get_node("Ingame")
+	if not ingame: return
+
+	var level_gen = ingame.get_node_or_null("LevelGenerator")
+	
+	for mask_obj in level_gen.get_node("Masks").get_children():
+		if mask_obj.has_method("pickup"):
+			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
+			if mask_grid_pos == grid_position:
+				return
+							
+
 	# Check if current position is a phase column (red or blue wall)
 	var tile_type = grid_manager.get_tile_type(grid_position)
 	if tile_type == GridManager.TileType.RED_WALL or tile_type == GridManager.TileType.BLUE_WALL:
 		print("NPC cannot drop mask on phase columns!")
 		return
 
-	var ingame = get_tree().get_root().get_node("Ingame")
-	var level_gen = ingame.get_node_or_null("LevelGenerator")
 	if level_gen and level_gen.has_method("spawn_mask_at"):
 		level_gen.spawn_mask_at(grid_position, current_mask)
 

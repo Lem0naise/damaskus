@@ -82,6 +82,7 @@ damascus_mask_still = null
 damascus_mask_walking = null
 
 [node name="DeathLayer" type="CanvasLayer" parent="." unique_id=1973326566]
+visible = false
 
 [node name="Message" type="Label" parent="DeathLayer" unique_id=1985230372]
 z_index = 101
@@ -103,6 +104,7 @@ offset_bottom = 1092.0
 color = Color(0.4, 0, 0, 1)
 
 [node name="HelpLayer" type="CanvasLayer" parent="." unique_id=258941487]
+visible = false
 
 [node name="Death" type="ColorRect" parent="HelpLayer" unique_id=227988055]
 z_index = 3

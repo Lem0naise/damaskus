@@ -281,17 +281,28 @@ func drop_mask():
 
 		# TODO make it not be allowed to drop on things like other masks, or solid blocks like water etc
 
-	# 2. Check if current position is a phase column (red or blue wall)
-	var tile_type = grid_manager.get_tile_type(grid_position)
-	if tile_type == GridManager.TileType.RED_WALL or tile_type == GridManager.TileType.BLUE_WALL:
-		print("Cannot drop mask on phase columns!")
-		return
+	# Check for masks at current grid position
 
 	# 3. Get references
 	var ingame = get_tree().get_root().get_node("Ingame")
 	if not ingame: return
 
 	var level_gen = ingame.get_node_or_null("LevelGenerator")
+	
+	for mask_obj in level_gen.get_node("Masks").get_children():
+		if mask_obj.has_method("pickup"):
+			var mask_grid_pos = grid_manager.world_to_grid(mask_obj.global_position)
+			if mask_grid_pos == grid_position:
+				return
+							
+
+	# 2. Check if current position is a phase column (red or blue wall)
+	var tile_type = grid_manager.get_tile_type(grid_position)
+	if tile_type == GridManager.TileType.RED_WALL or tile_type == GridManager.TileType.BLUE_WALL:
+		print("Cannot drop mask on phase columns!")
+		return
+
+
 	if not level_gen: return
 
 	# 3. Spawn the mask item at current position
@@ -442,8 +453,6 @@ func try_move(direction: Vector2i):
 						# We have GOLEM mask - try to push the rock
 						if not rock.on_pushed(direction):
 							# Push failed, block movement
-							
-
 							player_moved.emit(direction) # emit signal for NPC
 							
 							return
@@ -451,8 +460,6 @@ func try_move(direction: Vector2i):
 						break
 					else:
 						# Rock is not on water and we don't have GOLEM - block movement
-											
-
 						player_moved.emit(direction) # emit signal for NPC
 						
 						return
