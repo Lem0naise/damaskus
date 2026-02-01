@@ -453,6 +453,15 @@ func try_move(direction: Vector2i):
 		if ingame and ingame.has_node("LevelGenerator/CrumbledWalls"):
 			for wall in ingame.get_node("LevelGenerator/CrumbledWalls").get_children():
 				if grid_manager.world_to_grid(wall.global_position) == target_grid_pos:
+					# Spawn particle effect
+					var particle_scene = preload("res://scenes/particles/crumbledwall_particle.tscn")
+					var particle = particle_scene.instantiate()
+					particle.global_position = wall.global_position
+					ingame.add_child(particle)
+					particle.get_node("CPUParticles2D").emitting = true
+					# Auto-cleanup after particles finish
+					get_tree().create_timer(1.0).timeout.connect(particle.queue_free)
+					
 					wall.queue_free()
 
 					grid_manager.set_tile(target_grid_pos, GridManager.TileType.EMPTY)
