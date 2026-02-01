@@ -41,10 +41,10 @@ function App() {
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          🎮 Damaskus Level Editor
+          Damaskus Level Editor
         </h1>
         <p className="text-gray-600">
-          Create game levels with drag-and-drop. Publish to community or export to GDScript.
+          Create game levels and publish them to the community!
         </p>
       </div>
 
