@@ -8,6 +8,7 @@ const GAME_SCENE_PATH: String = "res://ingame.tscn"
 @onready var start_btn: Button = %Btn_Start
 @onready var options_btn: Button = %Btn_Options
 @onready var quit_btn: Button = %Btn_Quit
+@onready var community_btn: Button = %Btn_Community
 @onready var mask_overlay: TextureRect = $MaskOverlay
 @onready var fade_layer: ColorRect = $FadeLayer
 @onready var return_btn: Button = %Btn_Return
@@ -16,6 +17,7 @@ func _ready() -> void:
 	# 1. Connect signals
 	start_btn.pressed.connect(_on_start_pressed)
 	options_btn.pressed.connect(_on_options_pressed)
+	community_btn.pressed.connect(_on_community_pressed)
 	quit_btn.pressed.connect(_on_quit_pressed)
 	if return_btn:
 		return_btn.pressed.connect(_on_return_pressed)
@@ -66,6 +68,8 @@ func _on_options_pressed() -> void:
 	$HelpLayer.visible = true;
 	# You might instantiate a settings scene or show a hidden panel here
 
+func _on_community_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/ui/community_levels_browser.tscn")
 func _on_return_pressed() -> void:
 	$HelpLayer.visible = false
 
