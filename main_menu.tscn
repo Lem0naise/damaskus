@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="9_iotk1"]
 [ext_resource type="Texture2D" uid="uid://djlox6rnf2b2h" path="res://assets/ram.png" id="10_w44g7"]
 [ext_resource type="Texture2D" uid="uid://djrfkddong1j8" path="res://assets/golemStill.png" id="11_cm266"]
-[ext_resource type="Texture2D" uid="uid://dfby5j1jmjjgg" path="res://assets/DamakusMaskStill.png" id="12_g8g3n"]
+[ext_resource type="Texture2D" uid="uid://dpp3c66i5stxf" path="res://assets/damascusStill.png" id="12_j5v2v"]
 
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
@@ -310,7 +310,7 @@ offset_bottom = 412.0
 z_index = 6
 position = Vector2(713, 439.99997)
 scale = Vector2(0.15726313, 0.15726314)
-texture = ExtResource("12_g8g3n")
+texture = ExtResource("12_j5v2v")
 region_enabled = true
 region_rect = Rect2(708.7427, 210.49052, 789.9553, 760.9662)
 

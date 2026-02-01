@@ -2,6 +2,9 @@ extends Node2D
 
 @onready var grid_manager: GridManager = $GridManager
 
+const MENU_SCENE_PATH: String = "res://main_menu.tscn"
+	
+	
 func _ready():
 	# Game objects now register themselves automatically
 	# No need to manually register walls and water
@@ -19,13 +22,17 @@ func _ready():
 		$HelpLayer.visible = false
 		if %Btn_Reload:
 			%Btn_Reload.pressed.connect(reload_level)
+		if %Btn_Menu:
+			%Btn_Menu.pressed.connect(main_menu)
 		
 	var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_EXPO)
 	
 	tween.tween_property($Background, "modulate:a", 1, 0.3)
 	
 	print("Ingame scene ready")
-
+func main_menu():
+	get_tree().change_scene_to_file(MENU_SCENE_PATH)
+		
 func trigger_death(reason: String):
 	print("DEATH TRIGGERED: ", reason)
 	
