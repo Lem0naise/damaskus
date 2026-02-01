@@ -13,7 +13,7 @@ export const TILES: TileDefinition[] = [
   { value: 1, name: 'Wall', color: '#784f3c', description: 'Solid obstacle - blocks movement and lasers' },
   { value: 2, name: 'Water', color: '#3498db', description: 'Water terrain (deadly without H2O mask)' },
   { value: 3, name: 'Crumbled Wall', color: '#e67e22', description: 'Destructible with RAM mask - blocks lasers' },
-  { value: 4, name: 'Rock', color: '#7f8c8d', description: 'Pushable object - blocks lasers' },
+  { value: 4, name: 'Log', color: '#8b6f47', description: 'Pushable log - blocks lasers' },
   { value: 5, name: 'Red Wall', color: '#cc3333', description: 'Phase column - DOWN in red mode, UP in blue mode - blocks lasers when raised' },
   { value: 6, name: 'Blue Wall', color: '#3333cc', description: 'Phase column - DOWN in blue mode, UP in red mode - blocks lasers when raised' },
   { value: 7, name: 'Quicksand', color: '#e59866', description: 'Deadly terrain - does not block lasers' },
