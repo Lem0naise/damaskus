@@ -44,7 +44,7 @@ function App() {
           Damaskus Level Editor
         </h1>
         <p className="text-gray-600">
-          Create game levels and publish them to the community!
+          Create game levels and publish them to the community!!
         </p>
       </div>
 
