@@ -36,11 +36,6 @@ export const sanitizeLevels = (levels: Level[]): Level[] => {
     ...level,
     maskLayout: level.maskLayout.map(row =>
       row.map((maskValue: any) => {
-        // Convert invalid mask value 5 to None (0)
-        if (maskValue === 5) {
-          console.warn('Converted legacy mask value 5 to None (0) - value 5 not supported');
-          return 0;
-        }
         return maskValue;
       })
     )

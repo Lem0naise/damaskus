@@ -32,6 +32,7 @@ export const MASKS: MaskDefinition[] = [
   { value: 2, name: 'GOLEM', color: '#9b59b6', icon: '🗿', description: 'Control phase columns - Red mode: red DOWN/blue UP. Press Space to toggle. Without this, all phase columns stay UP' },
   { value: 3, name: 'GOAL', color: '#f1c40f', icon: '👑', description: 'Equip to win the level!' },
   { value: 4, name: 'RAM', color: '#e74c3c', icon: '🔨', description: 'Smash through crumbled walls and push rocks!' },
+  { value: 5, name: 'DAMASCUS STEEL', color: '#34495e', icon: '🛡️', description: 'Blocks lasers!' },
 ];
 
 export const createEmptyLevel = (name: string = 'New Level'): Level => ({
