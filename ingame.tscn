@@ -17,7 +17,6 @@
 [ext_resource type="Texture2D" uid="uid://dld1x0obxbbea" path="res://assets/maskSpirit.png" id="15_j731u"]
 [ext_resource type="Texture2D" uid="uid://djlox6rnf2b2h" path="res://assets/ram.png" id="16_25ex3"]
 [ext_resource type="Texture2D" uid="uid://djrfkddong1j8" path="res://assets/golemStill.png" id="17_8cstj"]
-[ext_resource type="Texture2D" uid="uid://dfby5j1jmjjgg" path="res://assets/DamakusMaskStill.png" id="18_pyieu"]
 [ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="19_qwrvv"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
@@ -61,8 +60,6 @@ unique_name_in_owner = true
 [node name="Player" parent="." unique_id=1640560224 instance=ExtResource("2_player")]
 position = Vector2(184.00003, 185)
 scale = Vector2(0.6, 0.6)
-damascus_mask_still = null
-damascus_mask_walking = null
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=589967515]
 position = Vector2(954, 573)
@@ -78,8 +75,6 @@ autoplay = true
 position = Vector2(1663, 807)
 scale = Vector2(0.6, 0.6)
 target_player = NodePath("../Player")
-damascus_mask_still = null
-damascus_mask_walking = null
 
 [node name="DeathLayer" type="CanvasLayer" parent="." unique_id=1973326566]
 visible = false
@@ -253,7 +248,6 @@ offset_bottom = 412.0
 z_index = 6
 position = Vector2(713, 439.99997)
 scale = Vector2(0.15726313, 0.15726314)
-texture = ExtResource("18_pyieu")
 region_enabled = true
 region_rect = Rect2(708.7427, 210.49052, 789.9553, 760.9662)
 

@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dpp3c66i5stxf" path="res://assets/damascusStill.png" id="10_fknk0"]
 
 [node name="Mask" type="Node2D" unique_id=246809494]
+z_index = 1
 script = ExtResource("1_mask")
 mask_type = 1
 water_mask_still = ExtResource("2_1ra8y")

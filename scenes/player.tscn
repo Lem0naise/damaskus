@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://th8ch6l2xyku" path="res://assets/damascusWalking.png" id="11_jej6c"]
 
 [node name="Player" type="CharacterBody2D" unique_id=40229128]
+z_index = 2
 script = ExtResource("1_player")
 water_mask_still = ExtResource("4_tuyoq")
 water_mask_walking = ExtResource("2_qhqgy")

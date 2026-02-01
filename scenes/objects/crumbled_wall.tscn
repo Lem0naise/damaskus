@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cu6ao762p3ysd" path="res://assets/crackedBlock.png" id="1_dasad"]
 
 [node name="CrumbledWall" type="Node2D" unique_id=1295761046]
+z_index = 4
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=649072215]
 offset_left = -64.0
