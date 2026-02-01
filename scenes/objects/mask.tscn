@@ -9,7 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://b663uj7osxa27" path="res://assets/golemWalking.png" id="7_grsrn"]
 [ext_resource type="Texture2D" uid="uid://djlox6rnf2b2h" path="res://assets/ram.png" id="8_gxyrp"]
 [ext_resource type="Texture2D" uid="uid://bgooqr5e7kfyo" path="res://assets/ramWalking.png" id="9_fknk0"]
-[ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="10_fknk0"]
+[ext_resource type="Texture2D" uid="uid://dfby5j1jmjjgg" path="res://assets/DamakusMaskStill.png" id="10_gvlla"]
+[ext_resource type="Texture2D" uid="uid://kgbg4cl1lpmm" path="res://assets/DamaskusMaskMoving.png" id="11_tg8no"]
 
 [node name="Mask" type="Node2D" unique_id=246809494]
 script = ExtResource("1_mask")
@@ -22,8 +23,8 @@ golem_mask_still = ExtResource("6_po0vf")
 golem_mask_walking = ExtResource("7_grsrn")
 battering_mask_still = ExtResource("8_gxyrp")
 battering_mask_walking = ExtResource("9_fknk0")
-damascus_mask_still = ExtResource("10_fknk0")
-damascus_mask_walking = ExtResource("10_fknk0")
+damascus_mask_still = ExtResource("10_gvlla")
+damascus_mask_walking = ExtResource("11_tg8no")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=533052826]
 offset_left = -83.0

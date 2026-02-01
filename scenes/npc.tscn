@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://b663uj7osxa27" path="res://assets/golemWalking.png" id="7_sptji"]
 [ext_resource type="Texture2D" uid="uid://djlox6rnf2b2h" path="res://assets/ram.png" id="8_v4e37"]
 [ext_resource type="Texture2D" uid="uid://bgooqr5e7kfyo" path="res://assets/ramWalking.png" id="9_1h837"]
+[ext_resource type="Texture2D" uid="uid://cq7f81rqmrrc" path="res://assets/DamskusMaskStillOutline.png" id="10_gl1un"]
+[ext_resource type="Texture2D" uid="uid://csur6p4nqy12a" path="res://assets/DamskusMaskMovingOutline.png" id="11_wuru7"]
 
 [node name="NPC" type="CharacterBody2D" unique_id=40229128]
 script = ExtResource("1_tl2vt")
@@ -21,6 +23,8 @@ golem_mask_still = ExtResource("6_0tygy")
 golem_mask_walking = ExtResource("7_sptji")
 battering_mask_still = ExtResource("8_v4e37")
 battering_mask_walking = ExtResource("9_1h837")
+damascus_mask_still = ExtResource("10_gl1un")
+damascus_mask_walking = ExtResource("11_wuru7")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1243167524]
 scale = Vector2(0.3, 0.3)

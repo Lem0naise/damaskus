@@ -633,7 +633,7 @@ func generate_level(level_idx):
 
 				if cell_value == 5: # DAMASCUS MASK
 					mask.mask_type = Mask.MaskType.DAMASCUS
-
+				
 				masks_container.add_child(mask)
 	grid_manager.grid_state_changed.emit()
 	
