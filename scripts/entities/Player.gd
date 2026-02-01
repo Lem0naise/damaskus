@@ -442,11 +442,19 @@ func try_move(direction: Vector2i):
 						# We have GOLEM mask - try to push the rock
 						if not rock.on_pushed(direction):
 							# Push failed, block movement
+							
+
+							player_moved.emit(direction) # emit signal for NPC
+							
 							return
 						# Push succeeded, continue to move into old rock position
 						break
 					else:
 						# Rock is not on water and we don't have GOLEM - block movement
+											
+
+						player_moved.emit(direction) # emit signal for NPC
+						
 						return
 				# Note: If no rock found at position (shouldn't happen), movement continues
 
