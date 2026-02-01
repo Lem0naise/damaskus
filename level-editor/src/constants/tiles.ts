@@ -14,8 +14,8 @@ export const TILES: TileDefinition[] = [
   { value: 2, name: 'Water', color: '#3498db', description: 'Water terrain (deadly without H2O mask)' },
   { value: 3, name: 'Crumbled Wall', color: '#e67e22', description: 'Destructible with RAM mask - blocks lasers' },
   { value: 4, name: 'Log', color: '#8b6f47', description: 'Pushable log - blocks lasers' },
-  { value: 5, name: 'Red Wall', color: '#cc3333', description: 'Phase column - DOWN in red mode, UP in blue mode - blocks lasers when raised' },
-  { value: 6, name: 'Blue Wall', color: '#3333cc', description: 'Phase column - DOWN in blue mode, UP in red mode - blocks lasers when raised' },
+  { value: 5, name: 'Column (Down)', color: '#cc3333', description: 'Column - DOWN by default - blocks lasers when raised' },
+  { value: 6, name: 'Column (Up)', color: '#3333cc', description: 'Column - UP by default - blocks lasers when raised' },
   { value: 7, name: 'Quicksand', color: '#e59866', description: 'Deadly terrain - does not block lasers' },
   { value: 8, name: 'Laser Emitter', color: '#ff0000', description: 'Emits deadly laser to paired emitter. Blocks movement. Pairs with closest aligned emitter.' },
 ];

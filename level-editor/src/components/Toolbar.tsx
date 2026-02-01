@@ -25,7 +25,7 @@ export const Toolbar = ({
 
     return (
       <div
-        className="w-14 h-14 rounded border-2 border-gray-400 flex-shrink-0 relative overflow-hidden"
+        className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded border-2 border-gray-400 flex-shrink-0 relative overflow-hidden"
         style={baseStyle}
       >
         {/* Add visual patterns based on tile type */}
@@ -77,12 +77,12 @@ export const Toolbar = ({
   };
 
   return (
-    <div className="w-80 bg-white rounded-lg shadow-lg p-4 max-h-[calc(100vh-200px)] flex flex-col">
-      <h2 className="text-xl font-bold mb-4">
+    <div className="w-full lg:w-80 bg-white rounded-lg shadow-lg p-3 md:p-4 max-h-[50vh] lg:max-h-[calc(100vh-200px)] flex flex-col">
+      <h2 className="text-lg md:text-xl font-bold mb-3 md:mb-4">
         {isLevel ? 'Level Tiles' : 'Masks'}
       </h2>
 
-      <div className="grid grid-cols-2 gap-2 overflow-y-auto pr-2">
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-2 gap-2 overflow-y-auto pr-2">
         {isLevel ? (
           TILES.map((tile) => (
             <button
@@ -114,7 +114,7 @@ export const Toolbar = ({
               onClick={() => onMaskSelect(mask.value)}
             >
               <div
-                className="w-14 h-14 rounded border-2 border-gray-400 flex items-center justify-center text-3xl flex-shrink-0 shadow-sm"
+                className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded border-2 border-gray-400 flex items-center justify-center text-xl sm:text-2xl lg:text-3xl flex-shrink-0 shadow-sm"
                 style={{ backgroundColor: mask.color }}
               >
                 {mask.icon}
