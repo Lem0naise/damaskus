@@ -287,25 +287,36 @@ func drop_mask():
 	if level_gen.has_method("spawn_mask_at"):
 		level_gen.spawn_mask_at(grid_position, current_mask)
 		print("Dropped mask: ", MaskType.keys()[current_mask])
-		
+
+		# Store which mask we're dropping before removing it
+		var dropped_mask_type = current_mask
+
 		# 4. Remove it from player
 		remove_mask()
-		
+
 		# 5. Clear Inventory Data
 		# Since we use inventory array in your code, we should clear it
-		if inventory.has(current_mask):
-			inventory.erase(current_mask)
+		if inventory.has(dropped_mask_type):
+			inventory.erase(dropped_mask_type)
 		# Or just clear all since we only hold one
 		inventory.clear()
-		
+
 		# 6. Update UI
 		update_inventory_ui()
-		
-		# 7. Check if we are now standing on a mask (the one we just dropped)
+
+		# 7. Check if we dropped the H2O mask while standing on water
+		if dropped_mask_type == MaskType.WATER:
+			var tile_type = grid_manager.get_tile_type(grid_position)
+			if tile_type == GridManager.TileType.WATER:
+				# Player dropped water mask in water - they drown!
+				die("You drowned in the water!")
+				return
+
+		# 8. Check if we are now standing on a mask (the one we just dropped)
 		# This ensures the pickup tooltip appears immediately
 		update_tooltip_state()
-			
-				
+
+
 		grid_manager.grid_state_changed.emit()
 		
 	else:

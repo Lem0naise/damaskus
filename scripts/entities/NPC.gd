@@ -246,7 +246,19 @@ func drop_mask():
 	var level_gen = ingame.get_node_or_null("LevelGenerator")
 	if level_gen and level_gen.has_method("spawn_mask_at"):
 		level_gen.spawn_mask_at(grid_position, current_mask)
+
+		# Store which mask we're dropping before removing it
+		var dropped_mask_type = current_mask
+
 		remove_mask()
+
+		# Check if we dropped the H2O mask while standing on water
+		if dropped_mask_type == MaskType.WATER:
+			var tile_type = grid_manager.get_tile_type(grid_position)
+			if tile_type == GridManager.TileType.WATER:
+				# NPC dropped water mask in water - they drown!
+				die("Ghost drowned in the water!")
+				return
 
 func wear_mask(type):
 	current_mask = type
