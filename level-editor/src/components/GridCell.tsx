@@ -52,7 +52,7 @@ export const GridCell = memo(({
   return (
     <div
       className={clsx(
-        'relative border border-gray-300 transition-all cursor-crosshair',
+        'relative border border-gray-300 transition-all cursor-crosshair overflow-hidden',
         'hover:ring-2 hover:ring-blue-400'
       )}
       style={{
@@ -64,17 +64,37 @@ export const GridCell = memo(({
       onMouseEnter={handleMouseEnter}
       onContextMenu={handleContextMenu}
     >
+      {/* Tile sprite or background color */}
+      {tile.spriteUrl && tile.value !== 0 && (
+        <img
+          src={tile.spriteUrl}
+          alt={tile.name}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
+
       {/* Mask overlay */}
       {maskValue !== 0 && (
         <div
           className="absolute inset-0 flex items-center justify-center text-2xl font-bold"
           style={{
-            backgroundColor: layerMode === 'mask' ? mask.color : `${mask.color}99`, // Add transparency
+            backgroundColor: mask.spriteUrl ? 'transparent' : (layerMode === 'mask' ? mask.color : `${mask.color}99`),
             color: '#fff',
             textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
           }}
         >
-          {mask.icon}
+          {mask.spriteUrl ? (
+            <img
+              src={mask.spriteUrl}
+              alt={mask.name}
+              className="w-full h-full object-cover"
+              style={{
+                opacity: layerMode === 'mask' ? 1 : 0.6
+              }}
+            />
+          ) : (
+            mask.icon
+          )}
         </div>
       )}
 

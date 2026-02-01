@@ -53,9 +53,9 @@ function App() {
             href="https://damaskus.indigo.spot"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 whitespace-nowrap flex items-center gap-2"
+            className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 whitespace-nowrap flex items-center gap-2"
           >
-            🎮 Play the Game!
+            Play the Game!
           </a>
         </div>
       </div>
