@@ -4,8 +4,10 @@ extends Control
 @onready var loading_spinner: Label = $LoadingSpinner
 @onready var sort_dropdown: OptionButton = $SortDropdown
 @onready var back_button: Button = $BackButton
+@onready var submit_label: Label = $SubmitLabel
 
 var level_card_scene = preload("res://scenes/ui/level_card.tscn")
+var all_levels: Array = [] # Store all levels for client-side sorting
 
 func _ready():
 	CommunityAPI.levels_fetched.connect(_on_levels_fetched)
@@ -16,11 +18,28 @@ func _ready():
 	sort_dropdown.item_selected.connect(_on_sort_changed)
 
 	loading_spinner.show()
-	CommunityAPI.fetch_levels("popular")
+	# Fetch all levels (we'll sort them client-side)
+	CommunityAPI.fetch_levels("new", 100, 0)
 
 func _on_levels_fetched(levels: Array):
 	loading_spinner.hide()
-	_populate_level_list(levels)
+	all_levels = levels
+	_apply_current_sort()
+
+func _apply_current_sort():
+	var sorted_levels = all_levels.duplicate()
+	var sort_index = sort_dropdown.selected
+	
+	if sort_index == 0: # Popular - sort by play_count descending
+		sorted_levels.sort_custom(func(a, b):
+			var a_count = a.get("play_count", 0)
+			var b_count = b.get("play_count", 0)
+			return a_count > b_count
+		)
+	else: # New - sort by created_at descending (already comes sorted from API)
+		pass
+	
+	_populate_level_list(sorted_levels)
 
 func _populate_level_list(levels: Array):
 	# Clear existing cards
@@ -45,10 +64,8 @@ func _on_level_loaded(level_data: Dictionary):
 	# Switch to game - the ingame scene will load the community level in _ready()
 	get_tree().change_scene_to_file("res://ingame.tscn")
 
-func _on_sort_changed(index: int):
-	var sorts = ["popular", "new"]
-	loading_spinner.show()
-	CommunityAPI.fetch_levels(sorts[index])
+func _on_sort_changed(_index: int):
+	_apply_current_sort()
 
 func _on_back_pressed():
 	get_tree().change_scene_to_file("res://main_menu.tscn")

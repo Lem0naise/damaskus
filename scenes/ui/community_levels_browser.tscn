@@ -39,6 +39,18 @@ theme_override_font_sizes/font_size = 32
 text = "Community Levels"
 horizontal_alignment = 1
 
+[node name="SubmitLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 75.0
+offset_bottom = 105.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 0.9, 1.0, 1)
+text = "Create & submit levels at damaskus.josh.software"
+horizontal_alignment = 1
+
 [node name="SortDropdown" type="OptionButton" parent="."]
 layout_mode = 1
 anchors_preset = 1
