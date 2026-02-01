@@ -71,14 +71,10 @@ position = Vector2(1663, 807)
 scale = Vector2(0.6, 0.6)
 target_player = NodePath("../Player")
 
-[node name="Death" type="ColorRect" parent="." unique_id=1933601502]
-z_index = 100
-offset_right = 1944.0
-offset_bottom = 1092.0
-color = Color(0, 0, 0, 1)
+[node name="DeathLayer" type="CanvasLayer" parent="." unique_id=1973326566]
 
-[node name="Message" type="Label" parent="Death" unique_id=1985230372]
-layout_mode = 0
+[node name="Message" type="Label" parent="DeathLayer" unique_id=1985230372]
+z_index = 101
 offset_left = 191.0
 offset_top = 355.0
 offset_right = 1732.0
@@ -89,3 +85,9 @@ theme_override_fonts/font = ExtResource("13_w4jj2")
 theme_override_font_sizes/font_size = 80
 text = "You died!"
 horizontal_alignment = 1
+
+[node name="Death" type="ColorRect" parent="DeathLayer" unique_id=1933601502]
+z_index = 100
+offset_right = 1944.0
+offset_bottom = 1092.0
+color = Color(0.4, 0, 0, 1)
