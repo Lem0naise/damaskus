@@ -4,11 +4,12 @@ extends Control
 # Path to your main game scene
 const GAME_SCENE_PATH: String = "res://ingame.tscn"
 
+const MENU_SCENE_PATH: String = "res://main_menu.tscn"
+	
+
 # -- Nodes (Using Unique Names % for stability in 4.6) --
 @onready var start_btn: Button = %Btn_Start
-@onready var options_btn: Button = %Btn_Options
-@onready var quit_btn: Button = %Btn_Quit
-@onready var community_btn: Button = %Btn_Community
+@onready var menu_btn: Button = %Btn_MainMenu
 @onready var mask_overlay: TextureRect = $MaskOverlay
 @onready var fade_layer: ColorRect = $FadeLayer
 @onready var return_btn: Button = %Btn_Return
@@ -17,18 +18,16 @@ func _ready() -> void:
 	# 1. Connect signals (with null checks for win scene compatibility)
 	if start_btn:
 		start_btn.pressed.connect(_on_start_pressed)
-	if options_btn:
-		options_btn.pressed.connect(_on_options_pressed)
-	if community_btn:
-		community_btn.pressed.connect(_on_community_pressed)
-	if quit_btn:
-		quit_btn.pressed.connect(_on_quit_pressed)
+	if menu_btn:
+		menu_btn.pressed.connect(main_menu)
 	if return_btn:
 		return_btn.pressed.connect(_on_return_pressed)
 		
 	# 2. Intro Animation: Fade from black, float the mask
 	_play_intro_anim()
-
+func main_menu():
+	get_tree().change_scene_to_file(MENU_SCENE_PATH)
+		
 func _play_intro_anim() -> void:
 	# Ensure fade layer starts black a   nd fades out
 	fade_layer.color = Color.BLACK

@@ -1,19 +1,17 @@
 [gd_scene format=3 uid="uid://cdll1fgjhg4qo"]
 
-[ext_resource type="Script" uid="uid://ctsvm15dv038b" path="res://scripts/mainnmenu.gd" id="1_uxvcs"]
+[ext_resource type="Script" uid="uid://coopigjakqgu4" path="res://scripts/win.gd" id="1_8e1nn"]
 [ext_resource type="FontFile" uid="uid://c0im8hsey1aa4" path="res://assets/PixelifySans-Bold.ttf" id="2_d8ejm"]
 [ext_resource type="Texture2D" uid="uid://c28f11wxipbai" path="res://assets/background.png" id="3_am31m"]
 [ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="4_po0ld"]
 [ext_resource type="AudioStream" uid="uid://b01fau2lyyjsj" path="res://assets/mainmenunew.wav" id="5_wmsxl"]
-[ext_resource type="Script" uid="uid://bjvbyqnuj0xmx" path="res://scripts/entities/PlayerMainMenu.gd" id="6_vbxid"]
-[ext_resource type="Texture2D" uid="uid://dnm3cowsiyvey" path="res://assets/gorgeous.png" id="7_cenvs"]
 [ext_resource type="Script" uid="uid://b1b838dtpkty8" path="res://scripts/core/GridManager.gd" id="8_4oewu"]
 [ext_resource type="PackedScene" uid="uid://cnqvj8wry4nxi" path="res://scenes/ui/inventory_ui.tscn" id="9_d8ejm"]
 
-[node name="MainMenu" type="Control" unique_id=1050467227]
+[node name="Win" type="Control" unique_id=1050467227]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_uxvcs")
+script = ExtResource("1_8e1nn")
 
 [node name="Black" type="ColorRect" parent="." unique_id=951688467]
 layout_mode = 0
@@ -103,36 +101,21 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 20
 theme_override_fonts/font = ExtResource("4_po0ld")
 theme_override_font_sizes/font_size = 100
-text = "PLAY AGAIN"
+text = "START AGAIN"
 flat = true
 
-[node name="Btn_Quit" type="Button" parent="UI_Layer/MenuBox" unique_id=627072692]
+[node name="Btn_MainMenu" type="Button" parent="UI_Layer/MenuBox" unique_id=627072692]
 unique_name_in_owner = true
-offset_left = 1169.0
+offset_left = 541.0
 offset_top = 669.0
-offset_right = 1665.0
+offset_right = 1037.0
 offset_bottom = 833.0
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 15
 theme_override_fonts/font = ExtResource("4_po0ld")
 theme_override_font_sizes/font_size = 40
-text = "QUIT"
-flat = true
-
-[node name="Btn_Options" type="Button" parent="UI_Layer/MenuBox" unique_id=1263669460]
-unique_name_in_owner = true
-visible = false
-offset_left = -168.0
-offset_top = 662.0
-offset_right = 251.0
-offset_bottom = 814.0
-size_flags_vertical = 3
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 15
-theme_override_fonts/font = ExtResource("4_po0ld")
-theme_override_font_sizes/font_size = 40
-text = "OPTIONS"
+text = "QUIT TO MENU"
 flat = true
 
 [node name="TitleLabel3" type="Label" parent="UI_Layer/MenuBox" unique_id=1041114125]
@@ -151,26 +134,6 @@ horizontal_alignment = 1
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1153583541]
 stream = ExtResource("5_wmsxl")
 autoplay = true
-
-[node name="Player2" type="CharacterBody2D" parent="." unique_id=906236154]
-position = Vector2(352, 352)
-scale = Vector2(0.3, 0.3)
-script = ExtResource("6_vbxid")
-
-[node name="Sprite" type="Sprite2D" parent="Player2" unique_id=1341756427]
-position = Vector2(-69.99999, -299.99994)
-scale = Vector2(1.7, 1.8666669)
-texture = ExtResource("7_cenvs")
-
-[node name="Label" type="Label" parent="Player2" unique_id=1005981589]
-visible = false
-offset_left = -20.0
-offset_top = -10.0
-offset_right = 20.0
-offset_bottom = 10.0
-text = "NULL"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="GridManager" type="Node" parent="." unique_id=897976182]
 script = ExtResource("8_4oewu")

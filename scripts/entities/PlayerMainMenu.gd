@@ -68,7 +68,7 @@ func _process(delta):
 	
 	var action = walk_into_menu()
 	if action != "":
-		ui.show_tooltip(action, "Press E!")
+a		ui.show_tooltip(action, "Press E!")
 	else:
 		ui.hide_pickup_tooltip()
 		

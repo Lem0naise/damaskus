@@ -1,6 +1,6 @@
 extends Node2D
 
-var level = 0
+var level = 20
 
 # TODO death animations
 # animations
