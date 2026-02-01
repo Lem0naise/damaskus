@@ -59,9 +59,12 @@ func trigger_death(reason: String):
 		tween.tween_callback(reload_level)
 
 func next_level():
+	grid_manager.reset_state()
 	$LevelGenerator.next_level()
 
 func reload_level():
+	grid_manager.reset_state()
+	
 	# Reset death screen for next time (though scene reload might handle this, safer to return values)
 	if has_node("DeathLayer"):
 		$DeathLayer/Death.modulate.a = 0

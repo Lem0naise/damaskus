@@ -16,10 +16,15 @@ enum TileType {EMPTY, WALL, CRUMBLED_WALL, WATER, OBSTACLE, MASK, ROCK, RED_WALL
 var grid_data: Dictionary = {}
 
 # Universal dimension state (shared by all entities)
-var is_red_mode: bool = true  # true = red dimension, false = blue dimension
+var is_red_mode: bool = true # true = red dimension, false = blue dimension
 
 func _ready():
 	pass
+
+func reset_state():
+	is_red_mode = true
+	grid_state_changed.emit()
+
 
 # --- Conversion Helpers ---
 func world_to_grid(world_pos: Vector2) -> Vector2i:
