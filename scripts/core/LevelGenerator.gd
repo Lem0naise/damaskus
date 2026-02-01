@@ -1,6 +1,6 @@
 extends Node2D
 
-var level = 15
+var level = 20
 
 # TODO death animations
 # animations
@@ -528,6 +528,9 @@ func reload_level():
 func next_level():
 	level += 1
 	if level > len(level_masks) - 1:
+		var player = get_node_or_null("/root/Ingame/Player")
+		if player:
+			player.queue_free()
 		get_tree().change_scene_to_file(WIN_SCENE_PATH)
 	else:
 		clear_level()

@@ -17,7 +17,8 @@ func _ready() -> void:
 	start_btn.pressed.connect(_on_start_pressed)
 	options_btn.pressed.connect(_on_options_pressed)
 	quit_btn.pressed.connect(_on_quit_pressed)
-	return_btn.pressed.connect(_on_return_pressed)
+	if return_btn:
+		return_btn.pressed.connect(_on_return_pressed)
 		
 		
 	# 2. Intro Animation: Fade from black, float the mask
