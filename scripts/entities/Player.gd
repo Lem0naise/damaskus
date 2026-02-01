@@ -36,6 +36,9 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
+@export var damascus_mask_still: Texture2D
+@export var damascus_mask_walking: Texture2D
+
 
 var current_mask_still: Texture2D = null
 var current_mask_walking: Texture2D = null
@@ -75,7 +78,7 @@ var last_held_direction: Vector2i = Vector2i.ZERO
 
 
 # Mask system
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
 var current_mask: MaskType = MaskType.NONE
 
 var inventory: Array[MaskType] = [] # Masks the player has collected
@@ -744,6 +747,14 @@ func update_mask_properties():
 			current_mask_walking = battering_mask_walking
 			mask_layer.visible = true # Make sure to show it!
 
+		MaskType.DAMASCUS:
+			# DAMASCUS - blocks lasers
+			is_intangible = false
+			properties = ["BLOCK_LASERS"]
+			current_mask_still = damascus_mask_still
+			current_mask_walking = damascus_mask_walking
+			mask_layer.visible = true
+
 
 	# Force a visual update immediately so it doesn't wait for movement
 	update_visuals()
@@ -827,6 +838,7 @@ func get_mask_name(type: MaskType) -> String:
 		MaskType.WINNER: return "WINNER"
 		MaskType.BATTERING_RAM: return "BATTERING RAM"
 		MaskType.GOLEM: return "GOLEM"
+		MaskType.DAMASCUS: return "DAMASCUS STEEL"
 		_: return "?"
 		
 func get_mask_desc(type: MaskType) -> String:
@@ -836,4 +848,5 @@ func get_mask_desc(type: MaskType) -> String:
 		MaskType.WINNER: return "YOU'VE WON!"
 		MaskType.BATTERING_RAM: return "Smash through crumbling walls and push logs out the way!"
 		MaskType.GOLEM: return "Push that rock out the way!"
+		MaskType.DAMASCUS: return "Blocks lasers!"
 		_: return "?"

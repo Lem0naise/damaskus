@@ -2,7 +2,7 @@ extends GameObject
 class_name Mask
 
 # Match Player's MaskType enum
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
 
 # The Generator will set this variable before adding the child
 @export var mask_type: MaskType = MaskType.NONE
@@ -23,6 +23,9 @@ var is_picked_up: bool = false
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
+@export var damascus_mask_still: Texture2D
+@export var damascus_mask_walking: Texture2D
+
 func _ready():
 	# 1. Setup Visuals based on the type assigned by the LevelGenerator
 	setup_visuals()
@@ -33,7 +36,7 @@ func setup_visuals():
 	var label = Label.new()
 	label.position = Vector2(-28, -10)
 	label.size = Vector2(56, 20)
-	label.text =""
+	label.text = ""
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 12)
 	add_child(label)
@@ -46,7 +49,7 @@ func setup_visuals():
 			$TextureRect.hide()
 			$CrownRect.show()
 			$CrownRect.texture = get_mask_texture()
-		else :
+		else:
 			$TextureRect.show()
 			$CrownRect.hide()
 			$TextureRect.texture = get_mask_texture()
@@ -56,10 +59,11 @@ func setup_visuals():
 func get_mask_texture() -> Texture2D:
 	match mask_type:
 		MaskType.DIMENSION: return golem_mask_still # Purple
-		MaskType.WATER:     return water_mask_still
-		MaskType.WINNER:    return win_mask_still
+		MaskType.WATER: return water_mask_still
+		MaskType.WINNER: return win_mask_still
 		MaskType.BATTERING_RAM: return battering_mask_still
-		_:                  return null
+		MaskType.DAMASCUS: return damascus_mask_still
+		_: return null
 
 func get_mask_name() -> String:
 	match mask_type:
@@ -67,6 +71,7 @@ func get_mask_name() -> String:
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "GOAL"
 		MaskType.BATTERING_RAM: return "RAM"
+		MaskType.DAMASCUS: return "DAMASCUS STEEL"
 		_: return "?"
 
 func get_mask_description() -> String:
@@ -75,6 +80,7 @@ func get_mask_description() -> String:
 		MaskType.WATER: return "Walk on water"
 		MaskType.BATTERING_RAM: return "Smash through crumbled walls and push logs!"
 		MaskType.WINNER: return "Equip to win!"
+		MaskType.DAMASCUS: return "Blocks lasers!"
 		_: return ""
 
 func pickup():

@@ -23,7 +23,7 @@ func _exit_tree():
 
 func _on_grid_update():
 	# --- FIX 1: STOP ZOMBIE EXECUTION ---
-	if is_queued_for_deletion(): 
+	if is_queued_for_deletion():
 		return
 	# ------------------------------------
 	
@@ -42,7 +42,7 @@ func find_pair():
 
 	var level_gen = get_node_or_null("/root/Ingame/LevelGenerator")
 	if not level_gen or not level_gen.has_node("LaserEmitters"):
-		if get_parent().name == "LaserEmitters": pass 
+		if get_parent().name == "LaserEmitters": pass
 		else: return
 
 	var all_emitters = level_gen.get_node("LaserEmitters").get_children()
@@ -83,7 +83,7 @@ func _generate_beams_for_pair(paired: LaserEmitter):
 		else:
 			beam_sprite.rotation_degrees = 0
 			
-		beam_sprite.visible = false 
+		beam_sprite.visible = false
 		
 		laser_beams_container.add_child(beam_sprite)
 		sprites.append(beam_sprite)
@@ -94,7 +94,7 @@ func _generate_beams_for_pair(paired: LaserEmitter):
 func update_laser_visibility():
 	for paired in paired_emitters:
 		# --- FIX 2: IGNORE DYING PAIRS ---
-		if not is_instance_valid(paired) or paired.is_queued_for_deletion(): 
+		if not is_instance_valid(paired) or paired.is_queued_for_deletion():
 			continue
 		# ---------------------------------
 		
@@ -114,7 +114,7 @@ func check_entity_collision():
 
 	for paired in paired_emitters:
 		# --- FIX 2 REPEATED: IGNORE DYING PAIRS ---
-		if not is_instance_valid(paired) or paired.is_queued_for_deletion(): 
+		if not is_instance_valid(paired) or paired.is_queued_for_deletion():
 			continue
 		# ------------------------------------------
 		
@@ -141,7 +141,7 @@ func is_path_complete(start: Vector2i, end: Vector2i) -> bool:
 	if direction == Vector2i.ZERO: return true
 
 	var current = start + direction
-	var safety_counter = 0 
+	var safety_counter = 0
 	
 	while current != end:
 		safety_counter += 1
@@ -155,12 +155,28 @@ func is_path_complete(start: Vector2i, end: Vector2i) -> bool:
 func blocks_laser(pos: Vector2i) -> bool:
 	var tile = grid_manager.get_tile_type(pos)
 	
-	if tile in [GridManager.TileType.WALL, GridManager.TileType.CRUMBLED_WALL, GridManager.TileType.ROCK]:
+	if tile in [GridManager.TileType.WALL, GridManager.TileType.CRUMBLED_WALL, GridManager.TileType.ROCK, GridManager.TileType.LASER_EMITTER]:
 		return true
 
 	if tile in [GridManager.TileType.RED_WALL, GridManager.TileType.BLUE_WALL]:
 		return is_phase_column_raised(pos, tile)
+	
+	# Check for entities blocking the laser (DAMASCUS mask)
+	if is_entity_blocking(pos):
+		return true
 
+	return false
+
+func is_entity_blocking(pos: Vector2i) -> bool:
+	var player = get_node_or_null("/root/Ingame/Player")
+	var npc = get_node_or_null("/root/Ingame/NPC")
+	
+	if player and player.grid_position == pos and player.has_property("BLOCK_LASERS"):
+		return true
+		
+	if npc and npc.is_active and npc.grid_position == pos and npc.has_property("BLOCK_LASERS"):
+		return true
+		
 	return false
 
 func is_phase_column_raised(pos: Vector2i, tile_type: GridManager.TileType) -> bool:
@@ -171,10 +187,10 @@ func is_phase_column_raised(pos: Vector2i, tile_type: GridManager.TileType) -> b
 	var npc_has = npc and npc.is_active and npc.has_property("DIMENSION_SHIFT")
 	var power_active = player_has or npc_has
 
-	if not power_active: return true 
+	if not power_active: return true
 
 	var is_red_wall = (tile_type == GridManager.TileType.RED_WALL)
-	if is_red_wall and grid_manager.is_red_mode: return false 
+	if is_red_wall and grid_manager.is_red_mode: return false
 	elif not is_red_wall and not grid_manager.is_red_mode: return false
 
 	return true

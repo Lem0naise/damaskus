@@ -24,6 +24,10 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
+@export var damascus_mask_still: Texture2D
+@export var damascus_mask_walking: Texture2D
+
+
 # --- MOVEMENT STATE ---
 var grid_position: Vector2i = Vector2i.ZERO
 var is_moving: bool = false
@@ -32,7 +36,7 @@ var move_duration: float = 0.18
 var move_tween: Tween
 
 # --- MASK STATE ---
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
 var current_mask: MaskType = MaskType.NONE
 var current_mask_still: Texture2D = null
 var current_mask_walking: Texture2D = null
@@ -286,6 +290,16 @@ func update_mask_properties():
 			properties = ["PUSH_ROCKS"]
 			current_mask_still = golem_mask_still
 			current_mask_walking = golem_mask_walking
+			if mask_layer: mask_layer.visible = true
+		MaskType.DAMASCUS:
+			properties = ["BLOCK_LASERS"]
+			current_mask_still = damascus_mask_still
+			current_mask_walking = damascus_mask_walking
+			if mask_layer: mask_layer.visible = true
+		MaskType.DAMASCUS:
+			properties = ["BLOCK_LASERS"]
+			current_mask_still = damascus_mask_still
+			current_mask_walking = damascus_mask_walking
 			if mask_layer: mask_layer.visible = true
 
 	update_visuals()
