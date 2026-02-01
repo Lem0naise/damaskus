@@ -48,7 +48,11 @@ func _init_definitions():
 @export var quicksand_scene: PackedScene = preload("res://scenes/objects/quicksand.tscn")
 @export var laser_emitter_scene: PackedScene = preload("res://scenes/objects/laser_emitter.tscn")
 
-var level_layouts = [
+enum LevelSource {CAMPAIGN, COMMUNITY}
+var current_source: LevelSource = LevelSource.CAMPAIGN
+var community_level_data: Dictionary = {}
+
+var campaign_level_layouts = [
 		[ # LEVEL 1
 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 	[1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -260,7 +264,7 @@ var level_layouts = [
 ],
 ]
 
-var level_masks = [
+var campaign_level_masks = [
 		[ # LEVEL 1
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -477,17 +481,43 @@ const WIN_SCENE_PATH: String = "res://win.tscn"
 
 func _ready():
 	_init_definitions() # Setup the rules
-	generate_level(level)
+	
+	# Check if there's a pending community level to load
+	if CommunityAPI and not CommunityAPI.pending_community_level.is_empty():
+		load_community_level(CommunityAPI.pending_community_level)
+		CommunityAPI.pending_community_level = {} # Clear after loading
+	else:
+		load_campaign_level(level)
+
+func load_campaign_level(level_idx: int):
+	current_source = LevelSource.CAMPAIGN
+	level = level_idx
+	clear_level()
+	_generate_from_arrays(campaign_level_layouts[level_idx], campaign_level_masks[level_idx])
+
+func load_community_level(json_data: Dictionary):
+	current_source = LevelSource.COMMUNITY
+	community_level_data = json_data
+	clear_level()
+	_generate_from_arrays(json_data["levelLayout"], json_data["maskLayout"])
+
 func reload_level():
 	clear_level()
-	generate_level(level)
-func next_level():
-	level += 1
-	if level > len(level_masks) - 1:
-		get_tree().change_scene_to_file(WIN_SCENE_PATH)
+	if current_source == LevelSource.CAMPAIGN:
+		_generate_from_arrays(campaign_level_layouts[level], campaign_level_masks[level])
 	else:
-		clear_level()
-		generate_level(level)
+		_generate_from_arrays(community_level_data["levelLayout"], community_level_data["maskLayout"])
+
+func next_level():
+	if current_source == LevelSource.CAMPAIGN:
+		level += 1
+		if level > len(campaign_level_masks) - 1:
+			get_tree().change_scene_to_file(WIN_SCENE_PATH)
+		else:
+			load_campaign_level(level)
+	else:
+		# For community levels, return to browser
+		get_tree().change_scene_to_file("res://scenes/ui/community_levels_browser.tscn")
 func clear_level():
 	# 1. Clear Visual Nodes (The Sprites)
 	for child in walls_container.get_children():
@@ -551,14 +581,14 @@ func get_neighbours(layout: Array, grid_pos: Vector2i, whatami: int) -> Dictiona
 	return neighbours
 	
 	
-func generate_level(level_idx):
+func _generate_from_arrays(level_layout: Array, mask_layout: Array):
 	var npc = get_node_or_null("/root/Ingame/NPC")
 	if npc:
 		npc.deactivate()
-				
-	for y in range(level_layouts[level_idx].size()):
-		for x in range(level_layouts[level_idx][y].size()):
-			var cell_value = level_layouts[level_idx][y][x]
+
+	for y in range(level_layout.size()):
+		for x in range(level_layout[y].size()):
+			var cell_value = level_layout[y][x]
 			var grid_pos = Vector2i(x, y)
 			var world_pos = grid_manager.grid_to_world(grid_pos)
 			
@@ -572,7 +602,7 @@ func generate_level(level_idx):
 				
 				
 				# Check neighbors to determine texture
-				var neighbours = get_neighbours(level_layouts[level], grid_pos, 1)
+				var neighbours = get_neighbours(level_layout, grid_pos, 1)
 				# We defer this slightly or call immediate if script is ready
 				if wall.has_method("update_appearance"):
 					wall.update_appearance(neighbours)
@@ -586,7 +616,7 @@ func generate_level(level_idx):
 				
 				
 				# Check neighbors to determine texture
-				var neighbours = get_neighbours(level_layouts[level], grid_pos, 2)
+				var neighbours = get_neighbours(level_layout, grid_pos, 2)
 				# We defer this slightly or call immediate if script is ready
 				if water.has_method("update_appearance"):
 					water.update_appearance(neighbours)
@@ -660,7 +690,7 @@ func generate_level(level_idx):
 
 
 				# Check neighbors to determine texture
-				var neighbours = get_neighbours(level_layouts[level], grid_pos, 7)
+				var neighbours = get_neighbours(level_layout, grid_pos, 7)
 				# We defer this slightly or call immediate if script is ready
 				if quicksand.has_method("update_appearance"):
 					quicksand.update_appearance(neighbours)
@@ -680,9 +710,9 @@ func generate_level(level_idx):
 				grid_manager.set_tile(grid_pos, GridManager.TileType.LASER_EMITTER)
 					
 
-	for y in range(level_masks[level].size()):
-		for x in range(level_masks[level][y].size()):
-			var cell_value = level_masks[level][y][x]
+	for y in range(mask_layout.size()):
+		for x in range(mask_layout[y].size()):
+			var cell_value = mask_layout[y][x]
 			var grid_pos = Vector2i(x, y)
 			var world_pos = grid_manager.grid_to_world(grid_pos)
 			
