@@ -39,8 +39,7 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
-@export var damascus_mask_still: Texture2D
-@export var damascus_mask_walking: Texture2D
+
 
 
 var current_mask_still: Texture2D = null
@@ -81,7 +80,7 @@ var last_held_direction: Vector2i = Vector2i.ZERO
 
 
 # Mask system
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, DAMASCUS}
 var current_mask: MaskType = MaskType.NONE
 
 var inventory: Array[MaskType] = [] # Masks the player has collected
@@ -450,7 +449,7 @@ func try_move(direction: Vector2i):
 						# Allow walking on it - skip the push logic
 						break
 					elif has_property("PUSH_ROCKS"):
-						# We have GOLEM mask - try to push the rock
+						# We have BATTERING RAM mask - try to push the rock
 						if not rock.on_pushed(direction):
 							# Push failed, block movement
 							player_moved.emit(direction) # emit signal for NPC
@@ -459,7 +458,7 @@ func try_move(direction: Vector2i):
 						# Push succeeded, continue to move into old rock position
 						break
 					else:
-						# Rock is not on water and we don't have GOLEM - block movement
+						# Rock is not on water and we don't have BATTERING RAM - block movement
 						player_moved.emit(direction) # emit signal for NPC
 						
 						return
@@ -754,7 +753,7 @@ func update_mask_properties():
 			# DIMENSION - allows switching between dimensions with spacebar
 			is_intangible = false
 			properties = ["DIMENSION_SHIFT"]
-			# Assign Dimension textures here if you have them later
+			# Assign Dimension textures here (they're called golem but theyre dimension fr)
 			current_mask_still = golem_mask_still
 			current_mask_walking = golem_mask_walking
 			mask_layer.visible = true # Make sure to show it!
@@ -796,12 +795,15 @@ func update_mask_properties():
 			mask_layer.visible = true # Make sure to show it!
 
 		MaskType.DAMASCUS:
+			print("Damascus mask picking up!")
 			# DAMASCUS - blocks lasers
 			is_intangible = false
 			properties = ["BLOCK_LASERS"]
-			current_mask_still = damascus_mask_still
-			current_mask_walking = damascus_mask_walking
+			current_mask_still = battering_mask_still
+			current_mask_walking = battering_mask_walking
 			mask_layer.visible = true
+			
+			print(current_mask_still)
 
 
 	# Force a visual update immediately so it doesn't wait for movement
@@ -876,7 +878,6 @@ func get_mask_name(type: MaskType) -> String:
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "WINNER"
 		MaskType.BATTERING_RAM: return "BATTERING RAM"
-		MaskType.GOLEM: return "GOLEM"
 		MaskType.DAMASCUS: return "DAMASCUS STEEL"
 		_: return "?"
 		
@@ -886,6 +887,5 @@ func get_mask_desc(type: MaskType) -> String:
 		MaskType.WATER: return "Go on, walk on water!"
 		MaskType.WINNER: return "YOU'VE WON!"
 		MaskType.BATTERING_RAM: return "Smash through crumbling walls and push logs out the way!"
-		MaskType.GOLEM: return "Push that rock out the way!"
 		MaskType.DAMASCUS: return "Blocks lasers!"
 		_: return "?"

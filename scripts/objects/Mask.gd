@@ -2,7 +2,7 @@ extends GameObject
 class_name Mask
 
 # Match Player's MaskType enum
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, DAMASCUS}
 
 # The Generator will set this variable before adding the child
 @export var mask_type: MaskType = MaskType.NONE
@@ -22,9 +22,6 @@ var is_picked_up: bool = false
 
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
-
-@export var damascus_mask_still: Texture2D
-@export var damascus_mask_walking: Texture2D
 
 func _ready():
 	# 1. Setup Visuals based on the type assigned by the LevelGenerator
@@ -67,14 +64,14 @@ func get_mask_texture() -> Texture2D:
 		MaskType.WATER: return water_mask_still
 		MaskType.WINNER: return win_mask_still
 		MaskType.BATTERING_RAM: return battering_mask_still
-		MaskType.DAMASCUS: return damascus_mask_still
+		MaskType.DAMASCUS: return battering_mask_still
 		_: return null
 
 func get_mask_color() -> Color:
 	match mask_type:
 		MaskType.DIMENSION: return Color(0.6, 0.2, 0.8, 0.5) # Purple
 		MaskType.WATER: return Color(0.2, 0.5, 0.8, 0.5) # Blue
-		MaskType.WINNER: return Color(1.0, 1.0, 1.0, 0.5) # Gold
+		MaskType.WINNER: return Color(1.0, 1.0, 1.0, 0.5) # White
 		MaskType.BATTERING_RAM: return Color(0.8, 0.3, 0.2, 0.5) # Red/Orange
 		MaskType.DAMASCUS: return Color(0.4, 0.8, 0.9, 0.5) # Cyan/Silver
 		_: return Color(1, 1, 1, 0.5)

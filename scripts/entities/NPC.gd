@@ -25,9 +25,6 @@ var texture_walking: Texture2D = preload("res://assets/SpriteMovingTransparent.p
 @export var battering_mask_still: Texture2D
 @export var battering_mask_walking: Texture2D
 
-@export var damascus_mask_still: Texture2D
-@export var damascus_mask_walking: Texture2D
-
 
 # --- MOVEMENT STATE ---
 var grid_position: Vector2i = Vector2i.ZERO
@@ -37,7 +34,7 @@ var move_duration: float = 0.18
 var move_tween: Tween
 
 # --- MASK STATE ---
-enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, GOLEM, DAMASCUS}
+enum MaskType {NONE, DIMENSION, WATER, WINNER, BATTERING_RAM, DAMASCUS}
 var current_mask: MaskType = MaskType.NONE
 var current_mask_still: Texture2D = null
 var current_mask_walking: Texture2D = null
@@ -324,7 +321,7 @@ func update_mask_properties():
 		MaskType.NONE: pass
 		MaskType.DIMENSION:
 			properties = ["DIMENSION_SHIFT"]
-			current_mask_still = golem_mask_still # Placeholder?
+			current_mask_still = golem_mask_still # Placeholder, 'changed'
 			current_mask_walking = golem_mask_walking
 			if mask_layer: mask_layer.visible = true
 		MaskType.WATER:
@@ -341,21 +338,13 @@ func update_mask_properties():
 			current_mask_still = battering_mask_still
 			current_mask_walking = battering_mask_walking
 			if mask_layer: mask_layer.visible = true
-		MaskType.GOLEM:
-			properties = ["PUSH_ROCKS"]
-			current_mask_still = golem_mask_still
-			current_mask_walking = golem_mask_walking
-			if mask_layer: mask_layer.visible = true
 		MaskType.DAMASCUS:
 			properties = ["BLOCK_LASERS"]
-			current_mask_still = damascus_mask_still
-			current_mask_walking = damascus_mask_walking
+			print(battering_mask_still)
+			current_mask_still = battering_mask_still
+			current_mask_walking = battering_mask_walking
 			if mask_layer: mask_layer.visible = true
-		MaskType.DAMASCUS:
-			properties = ["BLOCK_LASERS"]
-			current_mask_still = damascus_mask_still
-			current_mask_walking = damascus_mask_walking
-			if mask_layer: mask_layer.visible = true
+			
 
 	update_visuals()
 
@@ -416,6 +405,5 @@ func get_mask_name(type: MaskType) -> String:
 		MaskType.WATER: return "H2O"
 		MaskType.WINNER: return "WINNER"
 		MaskType.BATTERING_RAM: return "BATTERING RAM"
-		MaskType.GOLEM: return "GOLEM"
 		MaskType.DAMASCUS: return "DAMASCUS STEEL"
 		_: return "?"
