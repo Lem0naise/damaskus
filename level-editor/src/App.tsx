@@ -162,6 +162,73 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* Credits Section */}
+      <div className="max-w-7xl mx-auto mt-4 md:mt-6 bg-white rounded-lg shadow p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-bold mb-3">Credits</h3>
+
+        {/* Website Creator - Prominent */}
+        <div className="mb-4 p-4 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-lg border border-teal-200">
+          <p className="text-gray-800">
+            <span className="font-semibold">Level Editor & Website</span> made by{' '}
+            <a
+              href="https://josh.software"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-teal-600 hover:text-teal-800 font-bold underline decoration-2 underline-offset-2"
+            >
+              Josh Wilcox
+            </a>
+            {' — '}
+            <a
+              href="https://josh.software/blog/damaskus-game-jam-2026"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-teal-500 hover:text-teal-700 underline underline-offset-2"
+            >
+              see my blog post
+            </a>
+          </p>
+        </div>
+
+        {/* Game Collaborators */}
+        <div className="text-gray-700">
+          <p className="text-sm text-gray-500 mb-2">Game Collaborators:</p>
+          <div className="flex flex-wrap gap-x-1 gap-y-2 items-center">
+            <a
+              href="https://indigo.spot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-600 hover:text-purple-800 font-semibold hover:underline"
+            >
+              Indy
+            </a>
+            <span className="text-gray-500 text-sm">(lead programmer)</span>
+            <span className="text-gray-400">,</span>
+
+            <a
+              href="https://indigowg.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-600 hover:text-purple-800 font-semibold hover:underline"
+            >
+              Indo
+            </a>
+            <span className="text-gray-500 text-sm">(artist & sprite designer)</span>
+            <span className="text-gray-400">, and</span>
+
+            <a
+              href="https://www.dexo.games/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-600 hover:text-purple-800 font-semibold hover:underline"
+            >
+              Dexter
+            </a>
+            <span className="text-gray-500 text-sm">(chief level editor, bugfixer & beat drop genius)</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
