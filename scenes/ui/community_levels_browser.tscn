@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://community_browser"]
+[gd_scene format=3 uid="uid://8rqqly4eew2g"]
 
-[ext_resource type="Script" path="res://scripts/ui/community_levels_browser.gd" id="1_browser"]
+[ext_resource type="Script" uid="uid://bbf86xn44jq2q" path="res://scripts/ui/community_levels_browser.gd" id="1_browser"]
+[ext_resource type="Texture2D" uid="uid://c28f11wxipbai" path="res://assets/background.png" id="2_g0njy"]
+[ext_resource type="FontFile" uid="uid://c0im8hsey1aa4" path="res://assets/PixelifySans-Bold.ttf" id="3_sg4gc"]
+[ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="4_7vbi7"]
 
-[node name="CommunityLevelsBrowser" type="Control"]
+[node name="CommunityLevelsBrowser" type="Control" unique_id=568717320]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +14,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_browser")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1923091384]
+layout_mode = 0
+offset_left = -45.0
+offset_top = -145.0
+offset_right = 2150.0
+offset_bottom = 1250.0
+texture = ExtResource("2_g0njy")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1081217460]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,55 +34,47 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.15, 1)
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=856269732]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 120.0
 offset_bottom = 60.0
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("4_7vbi7")
+theme_override_font_sizes/font_size = 30
 text = "← Back"
+flat = true
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="." unique_id=240347376]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 20.0
 offset_bottom = 80.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 32
-text = "Community Levels"
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_sg4gc")
+theme_override_font_sizes/font_size = 90
+text = "COMMUNITY LEVELS"
 horizontal_alignment = 1
 
-[node name="SubmitLabel" type="Label" parent="."]
+[node name="SubmitLabel" type="Label" parent="." unique_id=1514234748]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 75.0
-offset_bottom = 105.0
+offset_top = 119.0
+offset_bottom = 149.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.7, 0.9, 1.0, 1)
+pivot_offset = Vector2(1102, 43)
+theme_override_colors/font_color = Color(0.7, 0.9, 1, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("4_7vbi7")
+theme_override_font_sizes/font_size = 25
 text = "Create & submit levels at damaskus.josh.software"
 horizontal_alignment = 1
 
-[node name="SortDropdown" type="OptionButton" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -200.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 60.0
-grow_horizontal = 0
-item_count = 2
-selected = 0
-popup/item_0/text = "Popular"
-popup/item_0/id = 0
-popup/item_1/text = "New"
-popup/item_1/id = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1060926795]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -82,12 +88,12 @@ offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LevelList" type="VBoxContainer" parent="ScrollContainer"]
+[node name="LevelList" type="VBoxContainer" parent="ScrollContainer" unique_id=751814851]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LoadingSpinner" type="Label" parent="."]
+[node name="LoadingSpinner" type="Label" parent="." unique_id=458497919]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -100,6 +106,27 @@ offset_right = 100.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 24
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("4_7vbi7")
+theme_override_font_sizes/font_size = 40
 text = "Loading..."
+horizontal_alignment = 1
+
+[node name="Black" type="ColorRect" parent="." unique_id=1031023149]
+layout_mode = 0
+offset_right = 1944.0
+offset_bottom = 1092.0
+color = Color(0, 0, 0, 1)
+
+[node name="Loading" type="Label" parent="Black" unique_id=1198645481]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 355.0
+offset_right = 1775.0
+offset_bottom = 572.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("3_sg4gc")
+theme_override_font_sizes/font_size = 180
+text = "LOADING..."
 horizontal_alignment = 1

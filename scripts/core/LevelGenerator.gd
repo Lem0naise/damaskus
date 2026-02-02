@@ -538,12 +538,17 @@ func load_campaign_level(level_idx: int):
 	level = level_idx
 	clear_level()
 	_generate_from_arrays(campaign_level_layouts[level_idx], campaign_level_masks[level_idx])
+	%Level.text = "Lvl " + str(level+1)
 
 func load_community_level(json_data: Dictionary):
 	current_source = LevelSource.COMMUNITY
 	community_level_data = json_data
 	clear_level()
 	_generate_from_arrays(json_data["levelLayout"], json_data["maskLayout"])
+	if len(json_data.name + json_data.authorName) <= 80:
+		%Level.text = (json_data.name + " by " + json_data.authorName)
+	else: 
+		%Level.text = ""
 
 func reload_level():
 	clear_level()
