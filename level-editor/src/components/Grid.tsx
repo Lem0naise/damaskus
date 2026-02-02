@@ -10,11 +10,14 @@ interface GridProps {
   onCellClear: (row: number, col: number) => void;
 }
 
-// Tiles that permanently block lasers: Wall, Crumbled Wall, Log
-const HARD_BLOCKING_TILES: TileType[] = [1, 3, 4];
+// Tiles that permanently block lasers: Wall, Log
+const HARD_BLOCKING_TILES: TileType[] = [1, 4];
 
 // Column tiles (can be toggled, so "potential" laser)
 const COLUMN_TILES: TileType[] = [5, 6];
+
+// Crumbled wall (can be destroyed with RAM mask, so "potential" laser)
+const CRUMBLED_WALL_TILE: TileType = 3;
 
 interface LaserLine {
   from: { row: number; col: number };
@@ -51,7 +54,7 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
       const minCol = Math.min(emitter.col, other.col);
       const maxCol = Math.max(emitter.col, other.col);
       let hardBlocked = false;
-      let hasOnlyOneColumnType = false;
+      let hasSoftBlocker = false;
       let columnType: TileType | null = null;
 
       for (let col = minCol + 1; col < maxCol; col++) {
@@ -60,10 +63,13 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
           hardBlocked = true;
           break;
         }
+        if (tile === CRUMBLED_WALL_TILE) {
+          hasSoftBlocker = true;
+        }
         if (COLUMN_TILES.includes(tile)) {
           if (columnType === null) {
             columnType = tile;
-            hasOnlyOneColumnType = true;
+            hasSoftBlocker = true;
           } else if (columnType !== tile) {
             // Mixed column types = fully blocked (one will always be up)
             hardBlocked = true;
@@ -77,7 +83,7 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
           from: emitter.col < other.col ? emitter : other,
           to: emitter.col < other.col ? other : emitter,
           direction: 'horizontal',
-          type: hasOnlyOneColumnType ? 'potential' : 'solid'
+          type: hasSoftBlocker ? 'potential' : 'solid'
         });
         usedPairs.add(pairKey);
       }
@@ -93,7 +99,7 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
       const minRow = Math.min(emitter.row, other.row);
       const maxRow = Math.max(emitter.row, other.row);
       let hardBlocked = false;
-      let hasOnlyOneColumnType = false;
+      let hasSoftBlocker = false;
       let columnType: TileType | null = null;
 
       for (let row = minRow + 1; row < maxRow; row++) {
@@ -102,10 +108,13 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
           hardBlocked = true;
           break;
         }
+        if (tile === CRUMBLED_WALL_TILE) {
+          hasSoftBlocker = true;
+        }
         if (COLUMN_TILES.includes(tile)) {
           if (columnType === null) {
             columnType = tile;
-            hasOnlyOneColumnType = true;
+            hasSoftBlocker = true;
           } else if (columnType !== tile) {
             // Mixed column types = fully blocked
             hardBlocked = true;
@@ -119,7 +128,7 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
           from: emitter.row < other.row ? emitter : other,
           to: emitter.row < other.row ? other : emitter,
           direction: 'vertical',
-          type: hasOnlyOneColumnType ? 'potential' : 'solid'
+          type: hasSoftBlocker ? 'potential' : 'solid'
         });
         usedPairs.add(pairKey);
       }
