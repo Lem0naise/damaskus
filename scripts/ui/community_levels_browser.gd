@@ -3,7 +3,7 @@ extends Control
 @onready var level_list: VBoxContainer = $ScrollContainer/LevelList
 @onready var loading_spinner: Label = $LoadingSpinner
 @onready var sort_dropdown: OptionButton = $SortDropdown
-@onready var back_button: Button = $BackButton
+@onready var back_button: Button = %Btn_Return
 @onready var submit_label: Label = $SubmitLabel
 
 var level_card_scene = preload("res://scenes/ui/level_card.tscn")

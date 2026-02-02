@@ -31,10 +31,10 @@ func _init_definitions():
 	
 	# Simple map for masks
 	mask_definitions = {
-		1: Mask.MaskType.WATER,
-		2: Mask.MaskType.DIMENSION,
-		3: Mask.MaskType.WINNER,
-		4: Mask.MaskType.BATTERING_RAM
+		1: Mask.MaskType.WATER, # allows to walk on water
+		2: Mask.MaskType.DIMENSION, # press space to toggle red and blue walls (they're both up by default, when you pick up the mask, you can toggle (global for both player and npc))
+		3: Mask.MaskType.WINNER, # makes you win the level, the goal
+		4: Mask.MaskType.BATTERING_RAM # allows you to break crumbled walls and push logs (which are also called rocks)
 	}
 
 # Prefabs (Assign these in Inspector)
@@ -538,7 +538,7 @@ func load_campaign_level(level_idx: int):
 	level = level_idx
 	clear_level()
 	_generate_from_arrays(campaign_level_layouts[level_idx], campaign_level_masks[level_idx])
-	%Level.text = "Lvl " + str(level+1)
+	%Level.text = "Lvl " + str(level + 1)
 
 func load_community_level(json_data: Dictionary):
 	current_source = LevelSource.COMMUNITY
@@ -547,7 +547,7 @@ func load_community_level(json_data: Dictionary):
 	_generate_from_arrays(json_data["levelLayout"], json_data["maskLayout"])
 	if len(json_data.name + json_data.authorName) <= 80:
 		%Level.text = (json_data.name + " by " + json_data.authorName)
-	else: 
+	else:
 		%Level.text = ""
 
 func reload_level():
