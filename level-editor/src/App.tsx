@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useGridState } from './hooks/useGridState';
 import { Grid } from './components/Grid';
@@ -8,7 +8,7 @@ import { ExportPanel } from './components/ExportPanel';
 import { PublishPanel } from './components/PublishPanel';
 import { LevelSelector } from './components/LevelSelector';
 import { SelectedItemTooltip } from './components/SelectedItemTooltip';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 
 function App() {
   const {
@@ -23,6 +23,7 @@ function App() {
     setSelectedMask,
     updateCell,
     clearCell,
+    clearCurrentLevel,
     addLevel,
     removeLevel,
     duplicateLevel,
@@ -33,6 +34,22 @@ function App() {
   } = useGridState();
 
   const [showDeveloperTools, setShowDeveloperTools] = useState(false);
+  const [confirmingClear, setConfirmingClear] = useState(false);
+  const clearTimeoutRef = useRef<number | null>(null);
+
+  // Reset confirming state after 5 seconds
+  useEffect(() => {
+    if (confirmingClear) {
+      clearTimeoutRef.current = window.setTimeout(() => {
+        setConfirmingClear(false);
+      }, 5000);
+    }
+    return () => {
+      if (clearTimeoutRef.current) {
+        window.clearTimeout(clearTimeoutRef.current);
+      }
+    };
+  }, [confirmingClear]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 p-2 sm:p-4 md:p-8">
@@ -91,6 +108,28 @@ function App() {
             selectedTile={selectedTile}
             selectedMask={selectedMask}
           />
+
+          {/* Clear Level Button */}
+          <button
+            onClick={() => {
+              if (confirmingClear) {
+                clearCurrentLevel();
+                setConfirmingClear(false);
+                if (clearTimeoutRef.current) {
+                  window.clearTimeout(clearTimeoutRef.current);
+                }
+              } else {
+                setConfirmingClear(true);
+              }
+            }}
+            className={`flex items-center justify-center gap-2 px-4 py-2 font-medium rounded-lg border transition-colors ${confirmingClear
+                ? 'bg-red-500 hover:bg-red-600 text-white border-red-600'
+                : 'bg-red-100 hover:bg-red-200 text-red-700 border-red-300'
+              }`}
+          >
+            <Trash2 size={18} />
+            {confirmingClear ? 'Confirm?' : 'Clear Level'}
+          </button>
         </div>
 
         {/* Right Sidebar - Publish Panel - Hidden on narrow screens */}
