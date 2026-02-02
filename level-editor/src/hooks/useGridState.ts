@@ -1,13 +1,58 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Level, LayerMode, TileType, MaskType } from '../types/level';
 import { createEmptyLevel } from '../constants/tiles';
 
+const STORAGE_KEY = 'damaskus-level-editor-state';
+
+interface StoredState {
+  levels: Level[];
+  currentLevelIndex: number;
+}
+
+const loadFromStorage = (): StoredState | null => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Validate that it has the expected structure
+      if (parsed.levels && Array.isArray(parsed.levels) && parsed.levels.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to load saved state:', e);
+  }
+  return null;
+};
+
+const saveToStorage = (state: StoredState) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn('Failed to save state:', e);
+  }
+};
+
 export const useGridState = () => {
-  const [levels, setLevels] = useState<Level[]>([createEmptyLevel('Level 1')]);
-  const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
+  // Initialize from localStorage or create default
+  const [levels, setLevels] = useState<Level[]>(() => {
+    const stored = loadFromStorage();
+    return stored?.levels ?? [createEmptyLevel('Level 1')];
+  });
+
+  const [currentLevelIndex, setCurrentLevelIndex] = useState(() => {
+    const stored = loadFromStorage();
+    return stored?.currentLevelIndex ?? 0;
+  });
+
   const [layerMode, setLayerMode] = useState<LayerMode>('level');
   const [selectedTile, setSelectedTile] = useState<TileType>(1); // Default: Wall
   const [selectedMask, setSelectedMask] = useState<MaskType>(1); // Default: WATER
+
+  // Save to localStorage whenever levels or currentLevelIndex changes
+  useEffect(() => {
+    saveToStorage({ levels, currentLevelIndex });
+  }, [levels, currentLevelIndex]);
 
   const currentLevel = levels[currentLevelIndex];
 
@@ -47,6 +92,18 @@ export const useGridState = () => {
       }
 
       newLevels[currentLevelIndex] = level;
+      return newLevels;
+    });
+  };
+
+  const clearCurrentLevel = () => {
+    setLevels((prev) => {
+      const newLevels = [...prev];
+      const currentName = newLevels[currentLevelIndex].name;
+      const emptyLevel = createEmptyLevel(currentName);
+      // Preserve the ID
+      emptyLevel.id = newLevels[currentLevelIndex].id;
+      newLevels[currentLevelIndex] = emptyLevel;
       return newLevels;
     });
   };
@@ -123,6 +180,7 @@ export const useGridState = () => {
     setSelectedMask,
     updateCell,
     clearCell,
+    clearCurrentLevel,
     addLevel,
     removeLevel,
     duplicateLevel,
