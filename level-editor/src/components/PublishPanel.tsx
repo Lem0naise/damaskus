@@ -65,58 +65,58 @@ export const PublishPanel = ({ currentLevel }: PublishPanelProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 w-full max-w-md">
-      <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 flex items-center gap-2">
-        <Upload size={20} className="md:w-6 md:h-6" />
+    <div className="bg-sand-50 rounded-2xl shadow-sand border border-sand-200 p-4 md:p-6 w-full max-w-md">
+      <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 flex items-center gap-2 text-sand-800">
+        <Upload size={20} className="md:w-6 md:h-6 text-terracotta-500" />
         Publish to Community
       </h2>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Level Name <span className="text-red-500">*</span>
+          <label className="block text-sm font-medium mb-1.5 text-sand-700">
+            Level Name <span className="text-terracotta-500">*</span>
           </label>
           <input
             type="text"
             value={levelName}
             onChange={(e) => setLevelName(e.target.value)}
             placeholder="My Amazing Level"
-            className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 border-2 border-sand-300 rounded-xl bg-white focus:ring-2 focus:ring-terracotta-500/30 focus:border-terracotta-500 transition-colors text-sand-800 placeholder:text-sand-400"
             maxLength={50}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Your Name <span className="text-red-500">*</span>
+          <label className="block text-sm font-medium mb-1.5 text-sand-700">
+            Your Name <span className="text-terracotta-500">*</span>
           </label>
           <input
             type="text"
             value={authorName}
             onChange={(e) => setAuthorName(e.target.value)}
             placeholder="Creator Name"
-            className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 border-2 border-sand-300 rounded-xl bg-white focus:ring-2 focus:ring-terracotta-500/30 focus:border-terracotta-500 transition-colors text-sand-800 placeholder:text-sand-400"
             maxLength={50}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Description</label>
+          <label className="block text-sm font-medium mb-1.5 text-sand-700">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe your level strategy..."
-            className="w-full px-3 py-2 border rounded h-24 resize-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 border-2 border-sand-300 rounded-xl h-24 resize-none bg-white focus:ring-2 focus:ring-terracotta-500/30 focus:border-terracotta-500 transition-colors text-sand-800 placeholder:text-sand-400"
             maxLength={500}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Difficulty</label>
+          <label className="block text-sm font-medium mb-1.5 text-sand-700">Difficulty</label>
           <select
             value={difficulty}
             onChange={(e) => setDifficulty(e.target.value)}
-            className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 border-2 border-sand-300 rounded-xl bg-white focus:ring-2 focus:ring-terracotta-500/30 focus:border-terracotta-500 transition-colors text-sand-800"
           >
             <option>Easy</option>
             <option>Medium</option>
@@ -128,14 +128,14 @@ export const PublishPanel = ({ currentLevel }: PublishPanelProps) => {
         <button
           onClick={handlePublish}
           disabled={isPublishing || !levelName.trim() || !authorName.trim()}
-          className="w-full py-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+          className="w-full py-3 bg-terracotta-500 text-white rounded-xl font-semibold hover:bg-terracotta-600 transition-all duration-200 shadow-sand hover:shadow-sand-lg disabled:bg-sand-300 disabled:cursor-not-allowed disabled:shadow-none"
         >
           {isPublishing ? 'Publishing...' : 'Publish Level'}
         </button>
 
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded flex gap-2">
-          <AlertCircle size={16} className="text-blue-700 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-blue-800">
+        <div className="mt-4 p-3 bg-damascus-500/10 border border-damascus-500/20 rounded-xl flex gap-2">
+          <AlertCircle size={16} className="text-damascus-600 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-damascus-600">
             Ensure your level has exactly one player spawn and at least one goal mask!
           </p>
         </div>

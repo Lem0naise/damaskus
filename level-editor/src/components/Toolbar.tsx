@@ -25,7 +25,7 @@ export const Toolbar = ({
 
     return (
       <div
-        className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded border-2 border-gray-400 flex-shrink-0 relative overflow-hidden"
+        className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg border-2 border-sand-400 flex-shrink-0 relative overflow-hidden shadow-sm"
         style={baseStyle}
       >
         {tile.spriteUrl ? (
@@ -47,8 +47,8 @@ export const Toolbar = ({
   };
 
   return (
-    <div className="w-full lg:w-80 bg-white rounded-lg shadow-lg p-3 md:p-4 max-h-[50vh] lg:max-h-[calc(100vh-200px)] flex flex-col">
-      <h2 className="text-lg md:text-xl font-bold mb-3 md:mb-4">
+    <div className="w-full lg:w-80 bg-sand-50 rounded-2xl shadow-sand border border-sand-200 p-3 md:p-4 max-h-[50vh] lg:max-h-[calc(100vh-200px)] flex flex-col">
+      <h2 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-sand-800">
         {isLevel ? 'Level Tiles' : 'Masks'}
       </h2>
 
@@ -58,16 +58,16 @@ export const Toolbar = ({
             <button
               key={tile.value}
               className={clsx(
-                'p-2 rounded-lg flex flex-col items-center gap-2 transition-all text-center',
+                'p-2 rounded-xl flex flex-col items-center gap-2 transition-all text-center',
                 'hover:scale-105 border-2',
                 selectedTile === tile.value
-                  ? 'border-blue-500 shadow-lg bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-terracotta-500 shadow-sand bg-terracotta-500/10'
+                  : 'border-sand-200 hover:border-sand-400 bg-sand-100/50'
               )}
               onClick={() => onTileSelect(tile.value)}
             >
               {renderTileVisual(tile)}
-              <div className="text-xs font-semibold leading-tight">{tile.name}</div>
+              <div className="text-xs font-semibold leading-tight text-sand-700">{tile.name}</div>
             </button>
           ))
         ) : (
@@ -75,16 +75,16 @@ export const Toolbar = ({
             <button
               key={mask.value}
               className={clsx(
-                'p-2 rounded-lg flex flex-col items-center gap-2 transition-all text-center',
+                'p-2 rounded-xl flex flex-col items-center gap-2 transition-all text-center',
                 'hover:scale-105 border-2',
                 selectedMask === mask.value
-                  ? 'border-blue-500 shadow-lg bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-damascus-500 shadow-sand bg-damascus-500/10'
+                  : 'border-sand-200 hover:border-sand-400 bg-sand-100/50'
               )}
               onClick={() => onMaskSelect(mask.value)}
             >
               <div
-                className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded border-2 border-gray-400 flex items-center justify-center text-xl sm:text-2xl lg:text-3xl flex-shrink-0 shadow-sm overflow-hidden"
+                className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg border-2 border-sand-400 flex items-center justify-center text-xl sm:text-2xl lg:text-3xl flex-shrink-0 shadow-sm overflow-hidden"
                 style={{ backgroundColor: mask.color }}
               >
                 {mask.spriteUrl ? (
@@ -97,7 +97,7 @@ export const Toolbar = ({
                   mask.icon
                 )}
               </div>
-              <div className="text-xs font-semibold leading-tight">{mask.name}</div>
+              <div className="text-xs font-semibold leading-tight text-sand-700">{mask.name}</div>
             </button>
           ))
         )}
