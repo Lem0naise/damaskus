@@ -1,41 +1,69 @@
-[gd_scene load_steps=2 format=3 uid="uid://community_level_card"]
+[gd_scene format=3 uid="uid://cl00leqftk6mu"]
 
-[ext_resource type="Script" path="res://scripts/ui/level_card.gd" id="1_level_card"]
+[ext_resource type="Script" uid="uid://o8c6g0gvrlur" path="res://scripts/ui/level_card.gd" id="1_level_card"]
+[ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="2_bclti"]
 
-[node name="LevelCard" type="PanelContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.15, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.5, 0.8, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="LevelCard" type="PanelContainer" unique_id=800403541]
 custom_minimum_size = Vector2(800, 80)
+offset_right = 800.0
+offset_bottom = 94.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 script = ExtResource("1_level_card")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=395975833]
 layout_mode = 2
+theme_override_constants/separation = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1328765247]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="NameLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=3846735]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("2_bclti")
+theme_override_font_sizes/font_size = 30
 text = "Level Name"
 
-[node name="AuthorLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="AuthorLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=831970612]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_bclti")
 theme_override_font_sizes/font_size = 14
 text = "by Author"
 
-[node name="TagsLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="TagsLabel" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1630714886]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_bclti")
 theme_override_font_sizes/font_size = 12
 text = "puzzle, water"
 
-[node name="ActionContainer" type="HBoxContainer" parent="HBoxContainer"]
+[node name="ActionContainer" type="HBoxContainer" parent="HBoxContainer" unique_id=1739419032]
 layout_mode = 2
 
-[node name="PlayCountLabel" type="Label" parent="HBoxContainer/ActionContainer"]
+[node name="PlayCountLabel" type="Label" parent="HBoxContainer/ActionContainer" unique_id=341657978]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_bclti")
 theme_override_font_sizes/font_size = 14
 text = "0 plays"
 
-[node name="PlayButton" type="Button" parent="HBoxContainer/ActionContainer"]
+[node name="PlayButton" type="Button" parent="HBoxContainer/ActionContainer" unique_id=923283003]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_bclti")
+theme_override_font_sizes/font_size = 35
 text = "Play"
+flat = true

@@ -10,12 +10,12 @@ var level_card_scene = preload("res://scenes/ui/level_card.tscn")
 var all_levels: Array = [] # Store all levels for client-side sorting
 
 func _ready():
+	$Black.hide()
 	CommunityAPI.levels_fetched.connect(_on_levels_fetched)
 	CommunityAPI.level_loaded.connect(_on_level_loaded)
 	CommunityAPI.error_occurred.connect(_on_error)
 
 	back_button.pressed.connect(_on_back_pressed)
-	sort_dropdown.item_selected.connect(_on_sort_changed)
 
 	loading_spinner.show()
 	# Fetch all levels (we'll sort them client-side)
@@ -28,16 +28,6 @@ func _on_levels_fetched(levels: Array):
 
 func _apply_current_sort():
 	var sorted_levels = all_levels.duplicate()
-	var sort_index = sort_dropdown.selected
-	
-	if sort_index == 0: # Popular - sort by play_count descending
-		sorted_levels.sort_custom(func(a, b):
-			var a_count = a.get("play_count", 0)
-			var b_count = b.get("play_count", 0)
-			return a_count > b_count
-		)
-	else: # New - sort by created_at descending (already comes sorted from API)
-		pass
 	
 	_populate_level_list(sorted_levels)
 
@@ -54,6 +44,8 @@ func _populate_level_list(levels: Array):
 		card.play_pressed.connect(_on_play_level.bind(level_data["id"]))
 
 func _on_play_level(level_id: String):
+	$Black.show()
+	
 	loading_spinner.show()
 	CommunityAPI.fetch_level(level_id)
 
