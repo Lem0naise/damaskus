@@ -35,26 +35,38 @@ function App() {
   const [showDeveloperTools, setShowDeveloperTools] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 p-2 sm:p-4 md:p-8">
       <Toaster position="top-right" />
 
       {/* Header */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          Damaskus Level Editor
-        </h1>
-        <p className="text-gray-600">
-          Create game levels and publish them to the community!!
-        </p>
+      <div className="max-w-7xl mx-auto mb-4 md:mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-3 md:mb-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-1 md:mb-2">
+              Damaskus Level Editor
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600">
+              Create game levels and publish them to the community!!
+            </p>
+          </div>
+          <a
+            href="https://damaskus.indigo.spot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 whitespace-nowrap flex items-center gap-2"
+          >
+            Play the Game!
+          </a>
+        </div>
       </div>
 
       {/* Layer Toggle */}
-      <div className="max-w-7xl mx-auto mb-6 flex justify-center">
+      <div className="max-w-7xl mx-auto mb-4 md:mb-6 flex justify-center">
         <LayerToggle layerMode={layerMode} onToggle={setLayerMode} />
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto flex gap-6">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-4 md:gap-6">
         {/* Toolbar */}
         <Toolbar
           layerMode={layerMode}
@@ -65,7 +77,7 @@ function App() {
         />
 
         {/* Grid */}
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="flex-1 flex flex-col gap-4 order-first lg:order-none">
           <Grid
             level={currentLevel}
             layerMode={layerMode}
@@ -81,16 +93,21 @@ function App() {
           />
         </div>
 
-        {/* Right Sidebar - Publish Panel */}
-        <div className="flex flex-col gap-6">
+        {/* Right Sidebar - Publish Panel - Hidden on narrow screens */}
+        <div className="hidden xl:flex flex-col gap-4 md:gap-6">
           <PublishPanel currentLevel={currentLevel} />
         </div>
       </div>
 
+      {/* Mobile Publish Panel - Shows only on narrow screens */}
+      <div className="max-w-7xl mx-auto mt-4 md:mt-6 xl:hidden">
+        <PublishPanel currentLevel={currentLevel} />
+      </div>
+
       {/* Instructions */}
-      <div className="max-w-7xl mx-auto mt-8 bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-bold mb-2">Instructions</h3>
-        <ul className="list-disc list-inside space-y-1 text-gray-700">
+      <div className="max-w-7xl mx-auto mt-4 md:mt-8 bg-white rounded-lg shadow p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-bold mb-2">Instructions</h3>
+        <ul className="list-disc list-inside space-y-1 text-sm md:text-base text-gray-700">
           <li><strong>Left-click</strong> to place selected tile/mask</li>
           <li><strong>Right-click</strong> to erase tile/mask</li>
           <li><strong>Click and drag</strong> to paint multiple cells</li>
@@ -99,16 +116,16 @@ function App() {
         </ul>
 
         <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
-          <h4 className="font-semibold text-blue-900 mb-1">Phase Walls (Red/Blue)</h4>
-          <p className="text-sm text-blue-800">
-            Phase columns block until player gets GOLEM mask. With GOLEM: Red mode = red DOWN/blue UP.
-            Press Space to toggle modes.
+          <h4 className="text-sm md:text-base font-semibold text-blue-900 mb-1">Columns</h4>
+          <p className="text-xs md:text-sm text-blue-800">
+            Red columns start DOWN (raised in blue mode). Blue columns start UP (lowered in blue mode).
+            Get GOLEM mask to control them - press Space to toggle between modes.
           </p>
         </div>
       </div>
 
       {/* Developer Tools Section */}
-      <div className="max-w-7xl mx-auto mt-6 bg-white rounded-lg shadow">
+      <div className="max-w-7xl mx-auto mt-4 md:mt-6 bg-white rounded-lg shadow">
         <button
           onClick={() => setShowDeveloperTools(!showDeveloperTools)}
           className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition rounded-lg"

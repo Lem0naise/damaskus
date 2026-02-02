@@ -15,9 +15,9 @@ export const Grid = ({ level, layerMode, onCellUpdate, onCellClear }: GridProps)
   const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number } | null>(null);
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-100 rounded-lg">
+    <div className="flex flex-col items-center p-2 md:p-4 bg-gray-100 rounded-lg overflow-x-auto">
       <div
-        className="inline-block border-4 border-gray-800 rounded"
+        className="inline-block border-2 md:border-4 border-gray-800 rounded"
         onMouseDown={() => setIsMouseDown(true)}
         onMouseUp={() => setIsMouseDown(false)}
         onMouseLeave={() => setIsMouseDown(false)}

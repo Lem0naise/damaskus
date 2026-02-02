@@ -6,6 +6,7 @@ export interface TileDefinition {
   name: string;
   color: string;
   description: string;
+  spriteUrl?: string;
 }
 
 export interface MaskDefinition {
@@ -14,6 +15,7 @@ export interface MaskDefinition {
   color: string;
   icon: string;
   description: string;
+  spriteUrl?: string;
 }
 
 export type LevelLayout = TileType[][];

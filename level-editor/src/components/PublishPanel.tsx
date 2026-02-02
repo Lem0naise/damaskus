@@ -65,9 +65,9 @@ export const PublishPanel = ({ currentLevel }: PublishPanelProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-        <Upload size={24} />
+    <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 w-full max-w-md">
+      <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 flex items-center gap-2">
+        <Upload size={20} className="md:w-6 md:h-6" />
         Publish to Community
       </h2>
 
