@@ -49,7 +49,7 @@ func create_visuals():
 	label = Label.new()
 	label.name = "Label"
 	label.add_theme_font_override("font", font)
-	label.add_theme_font_size_override("font_size", 20) # Smaller font
+	label.add_theme_font_size_override("font_size", 40) # Smallish font
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	margin.add_child(label)
 	

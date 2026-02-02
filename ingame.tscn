@@ -68,6 +68,21 @@ zoom = Vector2(1.1, 1.1)
 
 [node name="InventoryUI" parent="." unique_id=451476197 instance=ExtResource("8_inventory")]
 
+[node name="Level" type="Label" parent="InventoryUI" unique_id=1241990365]
+unique_name_in_owner = true
+z_index = 5
+offset_left = 8.0
+offset_top = -5.0
+offset_right = 1911.0
+offset_bottom = 212.0
+pivot_offset = Vector2(69, 60)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("13_w4jj2")
+theme_override_font_sizes/font_size = 50
+text = "Lvl 1"
+horizontal_alignment = 1
+
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=592283684]
 stream = ExtResource("10_snqyf")
 autoplay = true
@@ -100,6 +115,7 @@ offset_bottom = 1092.0
 color = Color(0.4, 0, 0, 1)
 
 [node name="HelpLayer" type="CanvasLayer" parent="." unique_id=258941487]
+visible = false
 
 [node name="Death" type="ColorRect" parent="HelpLayer" unique_id=227988055]
 z_index = 3
