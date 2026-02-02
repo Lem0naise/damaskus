@@ -10,14 +10,17 @@ interface GridProps {
   onCellClear: (row: number, col: number) => void;
 }
 
-// Tiles that permanently block lasers: Wall, Log
-const HARD_BLOCKING_TILES: TileType[] = [1, 4];
+// Tiles that permanently block lasers: Wall only
+const HARD_BLOCKING_TILES: TileType[] = [1];
 
-// Column tiles (can be toggled, so "potential" laser)
+// Column tiles (can be toggled with GOLEM mask, so "potential" laser)
 const COLUMN_TILES: TileType[] = [5, 6];
 
 // Crumbled wall (can be destroyed with RAM mask, so "potential" laser)
 const CRUMBLED_WALL_TILE: TileType = 3;
+
+// Log (can be pushed with RAM mask, so "potential" laser)
+const LOG_TILE: TileType = 4;
 
 interface LaserLine {
   from: { row: number; col: number };
@@ -63,7 +66,7 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
           hardBlocked = true;
           break;
         }
-        if (tile === CRUMBLED_WALL_TILE) {
+        if (tile === CRUMBLED_WALL_TILE || tile === LOG_TILE) {
           hasSoftBlocker = true;
         }
         if (COLUMN_TILES.includes(tile)) {
@@ -108,7 +111,7 @@ const calculateLaserLines = (levelLayout: TileType[][]): LaserLine[] => {
           hardBlocked = true;
           break;
         }
-        if (tile === CRUMBLED_WALL_TILE) {
+        if (tile === CRUMBLED_WALL_TILE || tile === LOG_TILE) {
           hasSoftBlocker = true;
         }
         if (COLUMN_TILES.includes(tile)) {
