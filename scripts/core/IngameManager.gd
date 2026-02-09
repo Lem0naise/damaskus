@@ -24,7 +24,8 @@ func _ready():
 			%Btn_Reload.pressed.connect(reload_level)
 		if %Btn_Menu:
 			%Btn_Menu.pressed.connect(main_menu)
-		
+		if %Btn_Resume:
+			%Btn_Resume.pressed.connect(_toggle_help)
 	var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_EXPO)
 	
 	tween.tween_property($Background, "modulate:a", 1, 0.3)
@@ -32,6 +33,17 @@ func _ready():
 	print("Ingame scene ready")
 func main_menu():
 	get_tree().change_scene_to_file(MENU_SCENE_PATH)
+		
+		
+func _toggle_help():
+	if has_node("HelpLayer"):
+		$HelpLayer.visible = not $HelpLayer.visible	
+		if GameSettings.mobile_controls_enabled:
+			$MobileControls.visible = not $MobileControls.visible
+
+func _process(delta): 
+	if Input.is_action_just_pressed("pause") :
+		_toggle_help()
 		
 func trigger_death(reason: String):
 	print("DEATH TRIGGERED: ", reason)
@@ -73,9 +85,7 @@ func trigger_death(reason: String):
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		if has_node("HelpLayer"):
-			$HelpLayer.visible = not $HelpLayer.visible
-
+		pass
 func next_level():
 	grid_manager.reset_state()
 	$LevelGenerator.next_level()
