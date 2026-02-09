@@ -770,7 +770,7 @@ func update_mask_properties():
 			mask_layer.visible = true # Make sure to show it!
 				
 		MaskType.WINNER:
-			if waiting_on_win:
+			if waiting_on_win or is_dying:
 				return
 			else:
 				# Win condition logic...
