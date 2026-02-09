@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://bis6tusa4rmqv"]
+
+[ext_resource type="Script" uid="uid://xmk0aln1icby" path="res://scripts/ui/MobileControlsOverlay.gd" id="1_vw0r4"]
+[ext_resource type="Script" uid="uid://btmgnrlbmspie" path="res://scripts/ui/MobileInputButton.gd" id="2_as1np"]
+[ext_resource type="FontFile" uid="uid://c0im8hsey1aa4" path="res://assets/PixelifySans-Bold.ttf" id="3_as1np"]
+
+[node name="MobileControls" type="CanvasLayer" unique_id=117399408]
+script = ExtResource("1_vw0r4")
+
+[node name="Drop" type="Button" parent="." unique_id=838246559]
+offset_left = 1667.0
+offset_top = 767.0
+offset_right = 1818.0
+offset_bottom = 848.0
+pivot_offset = Vector2(65, 35)
+theme_override_fonts/font = ExtResource("3_as1np")
+theme_override_font_sizes/font_size = 60
+text = "Drop"
+script = ExtResource("2_as1np")
+action_name = "drop_mask"
+
+[node name="Drop2" type="Button" parent="." unique_id=527793447]
+offset_left = 1638.0
+offset_top = 881.0
+offset_right = 1838.0
+offset_bottom = 962.0
+pivot_offset = Vector2(65, 35)
+theme_override_fonts/font = ExtResource("3_as1np")
+theme_override_font_sizes/font_size = 60
+text = "Pickup"
+script = ExtResource("2_as1np")
+action_name = "pickup"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1744063342]
+visible = false
+offset_left = 249.0
+offset_top = 702.0
+offset_right = 499.0
+offset_bottom = 952.0
+
+[node name="Control" type="Control" parent="." unique_id=1861409680]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Right" type="Button" parent="Control" unique_id=255521450]
+layout_mode = 0
+offset_left = 489.0
+offset_top = 699.0
+offset_right = 593.0
+offset_bottom = 954.0
+pivot_offset = Vector2(30, 20)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_as1np")
+theme_override_font_sizes/font_size = 160
+text = ">"
+flat = true
+script = ExtResource("2_as1np")
+action_name = "ui_d"
+
+[node name="Left" type="Button" parent="Control" unique_id=158568971]
+layout_mode = 0
+offset_left = 154.0
+offset_top = 705.0
+offset_right = 258.0
+offset_bottom = 948.0
+pivot_offset = Vector2(30, 20)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_as1np")
+theme_override_font_sizes/font_size = 160
+text = "<"
+flat = true
+script = ExtResource("2_as1np")
+action_name = "ui_a"
+
+[node name="Up" type="Button" parent="Control" unique_id=1745799544]
+layout_mode = 0
+offset_left = 293.24796
+offset_top = 556.0
+offset_right = 397.24796
+offset_bottom = 801.0172
+rotation = -1.5707964
+pivot_offset = Vector2(56.094666, 99.527435)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_as1np")
+theme_override_font_sizes/font_size = 160
+text = ">"
+flat = true
+script = ExtResource("2_as1np")
+action_name = "ui_w"
+
+[node name="Down" type="Button" parent="Control" unique_id=293037776]
+layout_mode = 0
+offset_left = 448.7163
+offset_top = 951.0
+offset_right = 552.7163
+offset_bottom = 1200.7163
+rotation = 1.5707964
+pivot_offset = Vector2(30, 20)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_as1np")
+theme_override_font_sizes/font_size = 160
+text = ">"
+flat = true
+script = ExtResource("2_as1np")
+action_name = "ui_s"

@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://djrfkddong1j8" path="res://assets/golemStill.png" id="17_8cstj"]
 [ext_resource type="Texture2D" uid="uid://dpp3c66i5stxf" path="res://assets/damascusStill.png" id="18_qwrvv"]
 [ext_resource type="FontFile" uid="uid://cgtsjkccqjl0h" path="res://assets/PixelifySans-Regular.ttf" id="19_qwrvv"]
+[ext_resource type="PackedScene" uid="uid://bis6tusa4rmqv" path="res://scenes/ui/mobile_controls.tscn" id="20_apxp4"]
 
 [node name="Ingame" type="Node2D" unique_id=1079480780]
 script = ExtResource("1_ingamemanager")
@@ -315,3 +316,6 @@ theme_override_fonts/font = ExtResource("19_qwrvv")
 theme_override_font_sizes/font_size = 60
 text = "QUIT TO MENU"
 flat = true
+
+[node name="MobileControls" parent="." unique_id=117399408 instance=ExtResource("20_apxp4")]
+visible = false

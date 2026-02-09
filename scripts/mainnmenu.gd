@@ -12,6 +12,7 @@ const GAME_SCENE_PATH: String = "res://ingame.tscn"
 @onready var mask_overlay: TextureRect = $MaskOverlay
 @onready var fade_layer: ColorRect = $FadeLayer
 @onready var return_btn: Button = %Btn_Return
+@onready var mobile_btn: Button = %Btn_Mobile
 
 func _ready() -> void:
 	# 1. Connect signals (with null checks for win scene compatibility)
@@ -25,9 +26,22 @@ func _ready() -> void:
 		quit_btn.pressed.connect(_on_quit_pressed)
 	if return_btn:
 		return_btn.pressed.connect(_on_return_pressed)
+	if mobile_btn:
+		mobile_btn.pressed.connect(_on_mobile_pressed)
 		
 	# 2. Intro Animation: Fade from black, float the mask
 	_play_intro_anim()
+	_update_mobile_controls_text()
+
+func _on_mobile_pressed():
+	GameSettings.toggle_mobile_controls()
+	_update_mobile_controls_text()
+
+func _update_mobile_controls_text() -> void:
+	if mobile_btn:
+		var state = "ON" if GameSettings.mobile_controls_enabled else "OFF"
+		mobile_btn.text = "Mobile Controls: " + state
+
 
 func _play_intro_anim() -> void:
 	# Ensure fade layer starts black a   nd fades out
@@ -58,7 +72,7 @@ func _on_start_pressed() -> void:
 	# 2. Fade UI out quickly
 	tween.tween_property(%MenuBox, "modulate:a", 0.0, 0.3)
 	
-	tween.tween_property($Player2, "modulate:a", 0.0, 0.3)#
+	tween.tween_property($Player2, "modulate:a", 0.0, 0.3) #
 	tween.tween_property($Background, "modulate:a", 0.0, 0.3)
 	tween.tween_property($Black/Loading, "modulate:a", 1, 0.8)
 	

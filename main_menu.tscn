@@ -16,6 +16,8 @@
 [node name="MainMenu" type="Control" unique_id=1050467227]
 layout_mode = 3
 anchors_preset = 0
+offset_top = 1.0
+offset_bottom = 1.0
 script = ExtResource("1_06t4h")
 
 [node name="Black" type="ColorRect" parent="." unique_id=951688467]
@@ -121,6 +123,20 @@ theme_override_constants/outline_size = 15
 theme_override_fonts/font = ExtResource("3_qe12f")
 theme_override_font_sizes/font_size = 50
 text = "COMMUNITY LEVELS"
+flat = true
+
+[node name="Btn_Mobile" type="Button" parent="UI_Layer/MenuBox" unique_id=899769279]
+unique_name_in_owner = true
+offset_left = 356.0
+offset_top = 681.0
+offset_right = 1150.0
+offset_bottom = 807.0
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_qe12f")
+theme_override_font_sizes/font_size = 40
+text = "MOBILE CONTROLS: OFF"
 flat = true
 
 [node name="Btn_Options" type="Button" parent="UI_Layer/MenuBox" unique_id=2081321731]
